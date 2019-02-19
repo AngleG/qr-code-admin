@@ -1,16 +1,9 @@
 import axios from 'axios';
-
+import qs from 'qs';
 const loginkey = localStorage.getItem('loginkey');
 const singOut = () => {
   window.location.href = '/';
 };
-
-axios.interceptors.request.use(config => {
-  config.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
-  return config
-}, error => {
-  return Promise.reject(error)
-});
 
 axios.interceptors.response.use(data => {
   if (data.data.code === 900) {
@@ -23,48 +16,18 @@ axios.interceptors.response.use(data => {
 
 const getResult = res => {
   let result = res.data;
-  let code = result.code;
-  if (!res.config.baseURL) {
+  if (result.state === 'success') {
     return {
       flags: 'success',
-      data: result.results || result.result,
+      data: result.data,
       message: '成功'
     }
-  }
-  if (Object.prototype.toString.call(result).indexOf('Blob') > -1) {
+  } else if(result.state === 'error') {
     return {
-      flags: 'success',
-      data: result,
-      message: '成功'
-    };
-  }
-  if (result && (code === 0 || code === 404)) {
-    let data = code === 0 ? (result.results || result.result) : null;
-    return {
-      flags: 'success',
-      data,
-      message: result.message,
-      code
-    };
-  } else if (result && code === 400) {
-    let {message, results} = result;
-    if (results && results.length) {
-      message = results.reduce((startValue, currentValue) => [...startValue, currentValue.message], []).toString();
+      flags: 'fail',
+      data: null,
+      message: result.error
     }
-    return {
-      flags: 'fail',
-      code,
-      message
-    };
-  } else if (result && code === 900) {
-    singOut();
-  }
-  else {
-    return {
-      flags: 'fail',
-      message: result.message,
-      code
-    };
   }
 };
 /**
@@ -76,14 +39,17 @@ const getResult = res => {
  * @returns {Promise}
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
+    data = url === '/login' ? data : Object.assign({}, data, {loginkey});
     return axios(Object.assign({
         baseURL: 'http://data.jedge.cn:81',
         url,
-        data,
-        params: Object.assign({}, params, {loginkey}),
-        timeout: 60000,
-        options
-    }))
+        data: qs.stringify(data),
+        params,
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        timeout: 60000
+    }, options))
     .then(getResult)
     .catch(err => {
       if (!err.response || ![401, 422].includes(err.response.status)) {
