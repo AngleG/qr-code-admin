@@ -1,5 +1,14 @@
 <template>
   <div class="login-container">
+    <div class="login-content">
+      <p class="form-label">
+        <el-input size="medium" prefix-icon="iconfont icon-yonghu" placeholder="请输入账号" v-model="username"/>
+      </p>
+      <p class="form-label">
+        <el-input size="medium" prefix-icon="iconfont icon-mima" type="password" placeholder="请输入密码" v-model="password"/>
+      </p>
+      <el-button class="confirm" type="primary" round>登录</el-button>
+    </div>
     <!--<el-row >-->
       <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple"></div></el-col>-->
       <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple-light"></div></el-col>-->
@@ -12,17 +21,48 @@
 
 <script>
 	export default {
-		name: "login"
+    data() {
+      return {
+        username: null,
+        password: null
+      }
+    },
 	}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
-    background-image: url("../../../static/assets/login-bg.jpg");
-    background-position: center center;
+    background: url("../../../static/assets/login-bg.jpg") center center no-repeat;
+    .login-content{
+      box-sizing: border-box;
+      padding-top: 150px;
+      width: 658px;
+      height: 466px;
+      background: url("../../../static/images/login-form.png") center center no-repeat;
+      text-align: center;
+      .form-label{
+        margin-top: 25px;
+        .iconfont{
+          font-size: 14px;
+          color: #fff;
+        }
+        /deep/ .el-input{
+          display: inline-block;
+          width: 400px;
+        }
+      }
+      .confirm{
+        margin-top: 40px;
+        padding: 9px 50px;
+      }
+    }
   }
+
   .el-row {
     margin-bottom: 20px;
     &:last-child {

@@ -1,7 +1,3 @@
-@import "../../static/css/reset.css";
-body,html{
-  height: 100%;
-}
-#app{
-  height: 100%;
-}
+@import "./reset.css";
+@import "../icon-font/iconfont.css";
+@import "./style.css";

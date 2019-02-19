@@ -1,0 +1,23 @@
+body,html{
+  height: 100%;
+}
+#app{
+  height: 100%;
+}
+/*改变el-input默认样式*/
+.el-input, .el-input__inner{
+  background-color: #253046;
+  border: 1px solid #323c54;
+  border-radius: 20px;
+  color: #fff;
+}
+.el-input__prefix{
+  left: 15px;
+}
+.el-input--prefix .el-input__inner{
+  padding-left: 40px;
+}
+/*改变el-button圆角默认样式*/
+.el-button.is-round{
+  padding: 9px 23px;
+}
