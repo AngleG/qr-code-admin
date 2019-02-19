@@ -31,7 +31,13 @@
     methods: {
       async login() {
         let res = await webApi.login({user: this.username, pass: this.password});
-        console.log(res);
+        if (res.flags === 'success') {
+          if (res.data) {
+            localStorage.setItem('loginkey', res.data.loginkey)
+          }
+        } else {
+          alert(res.message)
+        }
       }
     },
 	}
