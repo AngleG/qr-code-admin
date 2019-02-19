@@ -7,7 +7,7 @@
       <p class="form-label">
         <el-input size="medium" prefix-icon="iconfont icon-mima" type="password" placeholder="请输入密码" v-model="password"/>
       </p>
-      <el-button class="confirm" type="primary" round>登录</el-button>
+      <el-button class="confirm" @click="login" type="primary" round>登录</el-button>
     </div>
     <!--<el-row >-->
       <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple"></div></el-col>-->
@@ -20,11 +20,18 @@
 </template>
 
 <script>
+  import webApi from '../../../lib/api'
 	export default {
     data() {
       return {
-        username: null,
-        password: null
+        username: 'testadmin',
+        password: 1
+      }
+    },
+    methods: {
+      async login() {
+        let res = await webApi.login({user: this.username, pass: this.password});
+        console.log(res);
       }
     },
 	}
