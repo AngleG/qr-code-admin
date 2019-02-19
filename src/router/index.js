@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router);
-
+import Login from '../views/pages/global/login'
 export default new Router({
   routes: [
     {
@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import(/*webpackChunkName: 'login'*/'../views/pages/global/login')
+      component: Login
     }
   ]
 })
