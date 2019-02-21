@@ -4,6 +4,10 @@ body,html{
 #app{
   height: 100%;
 }
+/*layout自定义样式*/
+.el-container{
+  height: 100%;
+}
 /*改变el-input默认样式*/
 .el-input, .el-input__inner{
   background-color: #253046;

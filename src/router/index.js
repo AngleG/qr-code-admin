@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router);
 import Login from '../views/pages/global/login'
+import Index from '../views/pages/index'
 export default new Router({
   routes: [
     {
@@ -12,6 +13,18 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/',
+      name: '企业信息',
+      component: Index,
+      children: [
+        {
+          path: '/company-info',
+          name: '客户账单',
+          component: () => import(/*webpackChunkName: 'company-info'*/'../views/pages/company/index.vue')
+        }
+      ]
     }
   ]
 })

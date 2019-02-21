@@ -30,13 +30,21 @@
     },
     methods: {
       async login() {
+        let params = {user: this.username, pass: this.password};
+        if (!params.user) {
+          return this.$toast('请输入账号')
+        }
+        if (!params.user) {
+          return this.$toast('请输入密码')
+        }
         let res = await webApi.login({user: this.username, pass: this.password});
         if (res.flags === 'success') {
           if (res.data) {
-            localStorage.setItem('loginkey', res.data.loginkey)
+            localStorage.setItem('loginkey', res.data.loginkey);
+            this.$router.push('/company-info');
           }
         } else {
-          alert(res.message)
+          this.$toast(res.message, 'error');
         }
       }
     },
