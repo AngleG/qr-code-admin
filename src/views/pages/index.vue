@@ -3,8 +3,8 @@
     <el-aside style="width: auto;">
       <side-bar/>
       <ul class="options">
-        <li></li>
-        <li></li>
+        <li><span><i class="iconfont icon-tuichu"></i>退出登录</span></li>
+        <li><span><i class="iconfont icon-xiugaimima"></i>修改密码</span></li>
       </ul>
     </el-aside>
     <el-container>
@@ -26,21 +26,27 @@
 	}
 </script>
 
-<style>
-  .el-header {
-    background-color: #101421;
-    color: #909090;
-    line-height: 60px;
-    text-align: right;
-  }
-  .el-aside {
-    background-color: #191d2a;
-    text-align: center;
-  }
-  .el-main {
-    background-color: #060b17;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
+<style lang="scss">
+  .options{
+    position: absolute;
+    width: 100%;
+    bottom: 30px;
+    left: 0;
+    i{
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    li {
+      height: 40px;
+      line-height: 40px;
+      text-align: left;
+      padding: 0 50px;
+      font-size: 14px;
+      color: rgb(144, 144, 144);
+      background-color: rgb(25, 29, 42);
+    }
+    span{
+      cursor: pointer;
+    }
   }
 </style>

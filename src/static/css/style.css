@@ -9,6 +9,24 @@ body,html{
 .el-container{
   height: 100%;
 }
+.el-header {
+  background-color: #101421;
+  color: #909090;
+  line-height: 60px;
+  text-align: right;
+}
+.el-aside {
+  position: relative;
+  background-color: #191d2a;
+  text-align: center;
+  overflow: hidden;
+}
+.el-main {
+  background-color: #060b17;
+  color: #333;
+  text-align: center;
+  line-height: 160px;
+}
 /*左侧导航颜色*/
 .el-container .el-aside .el-menu .el-menu-item.is-active {
   background-color: #060b17 !important;
