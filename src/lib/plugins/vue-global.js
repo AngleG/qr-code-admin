@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { Message } from 'element-ui'
+import _ from 'lodash'
 /**
  * 自定义Vue全局toast方法 element message
  * @param message 用户自定义内容
@@ -12,3 +13,5 @@ Vue.prototype.$toast = function (message, type = 'warning') {
       customClass: 'custom-toast'
     })
 };
+
+Vue.prototype.$_ = _;

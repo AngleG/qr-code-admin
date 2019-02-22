@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside style="width: auto;">
+      <side-bar/>
+    </el-aside>
     <el-container>
       <el-header>Header</el-header>
       <el-main>Main</el-main>
@@ -10,7 +12,11 @@
 </template>
 
 <script>
+  import sideBar from '../../views/common/app-nav'
 	export default {
+    components: {
+      sideBar
+    }
 	}
 </script>
 
