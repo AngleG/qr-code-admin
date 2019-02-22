@@ -1,5 +1,6 @@
 body,html{
   height: 100%;
+  font-family: "Microsoft YaHei", "微软雅黑", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
 }
 #app{
   height: 100%;
@@ -7,6 +8,23 @@ body,html{
 /*layout自定义样式*/
 .el-container{
   height: 100%;
+}
+/*左侧导航颜色*/
+.el-container .el-aside .el-menu .el-menu-item.is-active {
+  background-color: #060b17 !important;
+}
+.el-menu-item{
+  padding: 0 50px !important;
+}
+.el-menu-item, .el-submenu__title{
+  height: 40px;
+  line-height: 40px;
+}
+.el-container .el-aside .el-menu i{
+  margin-right: 10px;
+}
+.el-container .el-aside .el-menu .is-active i{
+  color: #2c97fb;
 }
 /*改变el-input默认样式*/
 .el-input, .el-input__inner{

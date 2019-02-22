@@ -10,8 +10,9 @@
       </div>
       <el-menu
         mode="vertical"
-        text-color="#fff"
-        :active-text-color="isCollapse ? '#ffd04b' :'#fff'"
+        background-color="#191d2a"
+        active-text-color="#fff"
+        text-color="#909090"
         :default-active="defaultIndex"
         :default-openeds="defaultOpens"
         class="el-menu-vertical-demo"
@@ -41,33 +42,33 @@
             menus: [
               {
                 description: "企业信息",
-                iconClass: "iconfont el-icon-exp-diannao",
+                iconClass: "iconfont icon-qiye",
                 id: 1,
                 path: "/company-info",
                 subMenuList: [],
                 type: 1
               },
               {
-                description: "企业信息1",
-                iconClass: "iconfont el-icon-exp-diannao",
+                description: "礼劵管理",
+                iconClass: "iconfont icon-youhuiquan",
                 id: 1,
-                path: "/company-info",
+                path: "/company-info?123",
                 subMenuList: [],
                 type: 1
               },
               {
-                description: "企业信息1",
-                iconClass: "iconfont el-icon-exp-diannao",
+                description: "经销商",
+                iconClass: "iconfont icon-jingxiaoshang",
                 id: 1,
-                path: "/company-info",
+                path: "/company-info?312",
                 subMenuList: [],
                 type: 1
               },
               {
-                description: "企业信息1",
-                iconClass: "iconfont el-icon-exp-diannao",
+                description: "问题排查",
+                iconClass: "iconfont icon-paicha",
                 id: 1,
-                path: "/company-info",
+                path: "/company-info?312321",
                 subMenuList: [],
                 type: 1
               }
@@ -175,7 +176,7 @@
       height: 100%;
       overflow: hidden;
       overflow-y: auto;
-      width: 160px;
+      width: 185px;
       transition: width .3s ease;
     }
     .nav.active{
@@ -188,9 +189,8 @@
       margin-right: 5px;
     }
     .collapse{
-      height: 49px;
-      line-height: 49px;
-      border-bottom: 1px solid rgba(155, 155, 155, .5);
+      height: 60px;
+      line-height: 60px;
     }
     .collapse span{
         color: #1890FF;
