@@ -26,6 +26,7 @@ body,html{
   color: #333;
   text-align: center;
   line-height: 160px;
+  padding: 0;
 }
 /*左侧导航颜色*/
 .el-container .el-aside .el-menu .el-menu-item.is-active {
@@ -45,19 +46,69 @@ body,html{
   color: #2c97fb;
 }
 /*改变el-input默认样式*/
-.el-input, .el-input__inner{
-  background-color: #253046;
-  border: 1px solid #323c54;
+.el-input .el-input__inner{
+  background-color: #24304A;
   border-radius: 20px;
   color: #fff;
 }
+.el-input__inner{
+  border: 1px solid #323c54;
+}
 .el-input__prefix{
   left: 15px;
+  border-right: 1px solid #323c54;
+  padding-right: 5px;
 }
 .el-input--prefix .el-input__inner{
-  padding-left: 40px;
+  padding-left: 45px;
+}
+.el-input__inner:focus{
+  border-color:#2c97fb;
+}
+.el-input__inner:focus + .el-input__prefix{
+  border-right: 1px solid #2c97fb;
+}
+.el-input__inner:hover{
+  border-color:#2c97fb
+}
+.el-input__inner:hover + .el-input__prefix{
+  border-right: 1px solid #2c97fb;
+}
+/*更改el-input size为small的默认样式*/
+.el-input--small .el-input__inner{
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+}
+.el-input--small .el-input__icon{
+  line-height: 26px;
+}
+/*更改el-select size为small的默认样式*/
+.el-select.el-select--samll .el-input__inner, .el-select.el-select--samll .el-input__icon{
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+}
+.el-select.el-select--samll .el-input.is-focus .el-input__inner{
+  border-color:#2c97fb
+}
+.el-select.el-select--samll .el-input .el-input__inner:hover{
+  border-color:#2c97fb
+}
+.el-select-dropdown{
+  background-color: #24304A;
+  border: 1px solid #323c54;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after{
+  border-bottom-color: #24304A;
+}
+.el-popper[x-placement^=bottom] .popper__arrow{
+  border-bottom-color: #323c54;
 }
 /*改变el-button圆角默认样式*/
 .el-button.is-round{
-  padding: 9px 23px;
+  padding: 5px 15px;
+}
+.el-button--text{
+  padding: 0;
 }

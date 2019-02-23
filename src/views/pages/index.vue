@@ -10,7 +10,9 @@
     <el-container>
       <el-header>欢迎登陆智能唯一二维码系统</el-header>
       <el-main>
-        <router-view/>
+        <div class="el-main-content">
+          <router-view/>
+        </div>
       </el-main>
     </el-container>
   </el-container>
@@ -48,5 +50,10 @@
     span{
       cursor: pointer;
     }
+  }
+  .el-main-content{
+    box-sizing: border-box;
+    padding: 30px 50px;
+    height: 100%;
   }
 </style>
