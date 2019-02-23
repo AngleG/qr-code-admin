@@ -52,7 +52,7 @@
                 description: "礼劵管理",
                 iconClass: "iconfont icon-youhuiquan",
                 id: 1,
-                path: "/company-info?123",
+                path: "/gift-certificate",
                 subMenuList: [],
                 type: 1
               },
