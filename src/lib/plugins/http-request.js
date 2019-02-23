@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
-const loginkey = localStorage.getItem('loginkey');
 const singOut = () => {
+  localStorage.removeItem('loginkey');
   window.location.href = '/';
 };
 
@@ -16,6 +16,11 @@ axios.interceptors.response.use(data => {
 
 const getResult = res => {
   let result = res.data;
+  let failResult = {
+    flags: 'fail',
+    data: null,
+    message: result.error
+  };
   if (result.state === 'success') {
     return {
       flags: 'success',
@@ -23,11 +28,13 @@ const getResult = res => {
       message: '成功'
     }
   } else if(result.state === 'error') {
-    return {
-      flags: 'fail',
-      data: null,
-      message: result.error
+    return failResult
+  } else if (result.state === 'fail'){
+    let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台'];
+    if (logoutErrorList.includes(result.error)|| result.error.indexOf("禁用") !== -1) {
+      return singOut();
     }
+    return failResult
   }
 };
 /**
@@ -39,6 +46,7 @@ const getResult = res => {
  * @returns {Promise}
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
+    let loginkey = localStorage.getItem('loginkey');
     data = url === '/login' ? data : Object.assign({}, data, {loginkey});
     return axios(Object.assign({
         baseURL: 'http://data.jedge.cn:81',

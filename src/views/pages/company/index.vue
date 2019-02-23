@@ -7,17 +7,23 @@
           <el-button class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
         </div>
         <div class="company-form">
-          <el-input size="small" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
-          <el-input size="small" prefix-icon="iconfont icon-dizhi" placeholder="企业地址"/>
-          <el-input size="small" prefix-icon="iconfont icon-yonghu" placeholder="企业联系人姓名"/>
-          <el-input size="small" prefix-icon="iconfont icon-shouji" placeholder="企业联系人电话"/>
-          <el-input size="small" prefix-icon="iconfont icon-youxiang" placeholder="企业邮箱"/>
-          <el-input size="small" prefix-icon="iconfont icon-wangzhan" placeholder="企业官网"/>
+          <el-input v-model="requestParams.ename" size="small" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
+          <el-input v-model="requestParams.eaddr" size="small" prefix-icon="iconfont icon-dizhi" placeholder="企业地址"/>
+          <el-input v-model="requestParams.econtact" size="small" prefix-icon="iconfont icon-yonghu" placeholder="企业联系人姓名"/>
+          <el-input v-model="requestParams.ephone" size="small" prefix-icon="iconfont icon-shouji" placeholder="企业联系人电话"/>
+          <el-input v-model="requestParams.email" size="small" prefix-icon="iconfont icon-youxiang" placeholder="企业邮箱"/>
+          <el-input v-model="requestParams.eweb" size="small" prefix-icon="iconfont icon-wangzhan" placeholder="企业官网"/>
           <div class="company-address">
-            <i class="iconfont icon-dizhi1"></i>发货省<el-select size="samll"></el-select>发货市<el-select  size="samll"></el-select>发货区县<el-select  size="samll"></el-select>
+            <div class="company-address-select">
+              <i class="iconfont icon-dizhi1"></i>
+              发货省<el-select @change="changeProvinceFn" size="samll" v-model="requestParams.sendprovince"><el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/></el-select>
+              发货市<el-select @change="changeCityFn" size="samll" v-model="requestParams.sendcity"><el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/></el-select>
+              发货区县<el-select  size="samll" v-model="requestParams.sendcounty"><el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/></el-select>
+            </div>
+            <el-input v-model="requestParams.sendstreet" size="small" placeholder="发货详细街道地址"/>
           </div>
-          <el-input size="small" prefix-icon="iconfont icon-yonghu" placeholder="发货联系人姓名"/>
-          <el-input size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
+          <el-input v-model="requestParams.sendcontact" size="small" prefix-icon="iconfont icon-yonghu" placeholder="发货联系人姓名"/>
+          <el-input v-model="requestParams.sendphone" size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
         </div>
       </div>
       <el-button class="confirm" type="primary" round>保存修改</el-button>
@@ -25,8 +31,76 @@
 </template>
 
 <script>
+  import cityData from './data/city'
+  import webApi from '../../../lib/api'
 	export default {
-		name: "index"
+    data() {
+      return {
+        cityData,
+        requestParams: {
+          companykey: null,
+          eaddr: null,
+          econtact: null,
+          elogo: null,
+          email: null,
+          ename: null,
+          ephone: null,
+          eweb: null,
+          sendcity: null,
+          sendcontact: null,
+          sendcounty: null,
+          sendphone: null,
+          sendprovince: null,
+          sendstreet: null
+        },
+        configObject: {
+          cityList: [],
+          countyList: []
+        }
+      }
+    },
+    created() {
+      this.getCompanyInfo();
+    },
+    methods: {
+      async getCompanyInfo() {
+        let res = await webApi.getCompanyInfo();
+        if (res.flags === 'success') {
+          if (res.data) {
+            this.requestParams = res.data;
+          }
+          this.init();
+        } else {
+          this.$toast(res.message, 'error');
+        }
+      },
+      init() {
+        let sendProvince = this.requestParams.sendprovince;
+        let sendCounty = this.requestParams.sendcounty;
+        if (sendProvince) {
+          this.changeProvinceFn();
+        }
+        if (sendCounty) {
+          this.changeCityFn();
+        }
+      },
+      changeProvinceFn(province) {
+        if (province) {
+          this.requestParams.sendcity = null;
+          this.requestParams.sendcounty = null;
+        }
+        let sendProvince = this.requestParams.sendprovince;
+        this.configObject.cityList =  !sendProvince ? [] : this.cityData.find(province => province.name === sendProvince).children;
+      },
+      changeCityFn(city) {
+        if (city) {
+          this.requestParams.sendcounty = null;
+        }
+        let sendCity = this.requestParams.sendcity;
+        let cityList = this.configObject.cityList;
+        this.configObject.countyList =  !sendCity || !cityList.length ? [] : cityList.find(city => city.name === sendCity).children;
+      }
+    }
 	}
 </script>
 
@@ -36,7 +110,7 @@
     background-color: rgb(24, 35, 55);
     border-radius: 5px;
     border: 1px solid rgb(26, 39, 58);
-    width: 600px;
+    width: 650px;
     line-height: 24px;
     .company-content{
       overflow: auto;
@@ -62,21 +136,29 @@
         padding: 0 25px;
         text-align: left;
         .el-input{
+          display: block;
           margin-bottom: 10px;
           width: 230px;
         }
         .company-address{
           font-size: 12px;
           margin-bottom: 10px;
-          .el-select{
-            margin: 0 5px;
-            width: 90px;
+          .el-input{
+            display: inline-block;
+            margin: 0 0 0 60px;
+          }
+          .company-address-select{
+            margin-bottom: 10px;
+            .el-select{
+              margin: 0 5px;
+              width: 90px;
+            }
           }
         }
       }
     }
     .confirm{
-      margin-top: 40px;
+      margin-top: 20px;
       padding: 5px 30px;
     }
   }
