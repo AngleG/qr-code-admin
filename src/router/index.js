@@ -25,6 +25,18 @@ export default new Router({
           component: () => import(/*webpackChunkName: 'company-info'*/'../views/pages/company/index.vue')
         }
       ]
-    }
+    },
+    {
+      path: '/',
+      name: '礼券管理',
+      component: Index,
+      children: [
+        {
+          path: '/gift-certificate',
+          name: '',
+          component: () => import(/*webpackChunkName: 'gift-certificate'*/'../views/pages/gift-certificate/index.vue')
+        }
+      ]
+    },
   ]
 })
