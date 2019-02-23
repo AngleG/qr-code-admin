@@ -103,7 +103,7 @@ body,html{
   border-bottom-color: #24304A;
 }
 .el-popper[x-placement^=bottom] .popper__arrow{
-  border-bottom-color: #323c54;
+  border-bottom-color: #323c54
 }
 /*改变el-button圆角默认样式*/
 .el-button.is-round{
