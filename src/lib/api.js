@@ -4,5 +4,8 @@ let webApi = {
   login(data) {
     return httpRequest(`/login`, data)
   },
+  getCompanyInfo() {
+    return httpRequest(`/rcc`, {eid: 'test'})
+  }
 };
 export default webApi;
