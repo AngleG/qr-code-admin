@@ -47,8 +47,8 @@ const getResult = res => {
  * @returns {Promise}
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
-    let loginkey = localStorage.getItem('loginkey');
-    data =  ['/login', '/mccl'].includes(url) ? data : Object.assign({}, data, {loginkey});
+    let loginkey = JSON.parse(localStorage.getItem('loginkey'));
+    data =  ['/login', '/mccl'].includes(url) ? data : Object.assign({}, data, loginkey);
     return axios(Object.assign({
         baseURL: config.BASE_URL,
         url,
