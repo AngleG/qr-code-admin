@@ -4,12 +4,17 @@
         <el-input size="small" placeholder="礼券名称"></el-input>
         <el-button type="primary" size="small" round="">创建礼券</el-button>
       </div>
-      <!--<base-gift-certificate></base-gift-certificate>-->
-      <el-row>
-        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+      <div class="gift-certificate_content">
+        <div class="fl">
           <base-gift-certificate></base-gift-certificate>
-        </el-col>
-      </el-row>
+        </div>
+        <div class="fl">
+          <base-gift-certificate></base-gift-certificate>
+        </div>
+        <div class="fl">
+          <base-gift-certificate></base-gift-certificate>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -35,6 +40,9 @@
       width: 300px;
       margin-right: 5px;
     }
+  }
+  .gift-certificate_content{
+    overflow: auto;
   }
 }
 </style>

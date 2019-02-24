@@ -26,7 +26,7 @@
           <el-input v-model="requestParams.sendphone" size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
         </div>
       </div>
-      <el-button class="confirm" type="primary" round>保存修改</el-button>
+      <el-button class="confirm" type="primary" size="small" round>保存修改</el-button>
     </div>
 </template>
 
