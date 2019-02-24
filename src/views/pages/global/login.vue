@@ -41,7 +41,7 @@
         let res = await webApi.login({user: this.username, pass: this.password});
         if (res.flags === 'success') {
           if (res.data) {
-            localStorage.setItem('loginkey', res.data.loginkey);
+            localStorage.setItem('loginkey', JSON.stringify(res.data));
             this.$router.push('/company-info');
           }
         } else {

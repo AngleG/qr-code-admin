@@ -1,4 +1,5 @@
 import axios from 'axios';
+import config from '../../conf/config'
 import qs from 'qs';
 const singOut = () => {
   localStorage.removeItem('loginkey');
@@ -46,12 +47,12 @@ const getResult = res => {
  * @returns {Promise}
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
-    let loginkey = localStorage.getItem('loginkey');
-    data = url === '/login' ? data : Object.assign({}, data, {loginkey});
+    let loginkey = JSON.parse(localStorage.getItem('loginkey'));
+    data =  ['/login', '/mccl'].includes(url) ? data : Object.assign({}, data, loginkey);
     return axios(Object.assign({
-        baseURL: 'http://data.jedge.cn:81',
+        baseURL: config.BASE_URL,
         url,
-        data: qs.stringify(data),
+        data: url === '/mccl' ? data : qs.stringify(data),
         params,
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

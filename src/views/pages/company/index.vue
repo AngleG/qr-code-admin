@@ -2,9 +2,10 @@
     <div class="company-wrap">
       <div class="company-content">
         <div class="company-upload">
-          <div class="file-box"></div>
-          <el-button type="text">浏览..</el-button>
-          <el-button class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
+          <div class="file-box"><img width="100%" height="100%" :src="logoUrl" v-if="requestParams.elogo || logoCacheUrl"></div>
+          <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="visibility: hidden;width: 0;height: 0;"/>
+          <label for="file"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
+          <el-button @click="upload" class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
         </div>
         <div class="company-form">
           <el-input v-model="requestParams.ename" size="small" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
@@ -26,17 +27,21 @@
           <el-input v-model="requestParams.sendphone" size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
         </div>
       </div>
-      <el-button class="confirm" type="primary" size="small" round>保存修改</el-button>
+      <el-button @click="saveCompanyInfo" class="confirm" type="primary" size="small" round>保存修改</el-button>
     </div>
 </template>
 
 <script>
   import cityData from './data/city'
+  import config from '../../../conf/config'
   import webApi from '../../../lib/api'
 	export default {
     data() {
       return {
+        config,
         cityData,
+        logoFile: null,
+        logoCacheUrl: null,
         requestParams: {
           companykey: null,
           eaddr: null,
@@ -59,10 +64,19 @@
         }
       }
     },
+    computed: {
+      logoUrl() {
+        return this.logoCacheUrl ? this.logoCacheUrl : `${this.config.DOWNLOAD_URL}${this.requestParams.elogo}`;
+      }
+    },
     created() {
       this.getCompanyInfo();
     },
     methods: {
+      /**
+       * 获取公司信息
+       * @returns {Promise<void>}
+       */
       async getCompanyInfo() {
         let res = await webApi.getCompanyInfo();
         if (res.flags === 'success') {
@@ -74,6 +88,42 @@
           this.$toast(res.message, 'error');
         }
       },
+      /**
+       * 上传文件
+       * @returns {Promise<void>}
+       */
+      async upload() {
+        if (!this.logoFile) {
+          return this.$toast('请浏览图片后上传')
+        }
+        let res = await webApi.upload(this.logoFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey, companykey: this.requestParams.companykey});
+        if (res.flags === 'success') {
+          if (res.data) {
+            this.requestParams.elogo = res.data.picpath;
+          }
+          this.init();
+        } else {
+          this.$toast(res.message, 'error');
+        }
+      },
+      /**
+       * 保存公司信息
+       * @returns {Promise<void>}
+       */
+      async saveCompanyInfo() {
+        let params = this.$_.cloneDeep(this.requestParams);
+        delete params.companykey;
+        delete params.elogo;
+        let res = await webApi.saveCompanyInfo(params);
+        if (res.flags === 'success') {
+          this.$toast('保存成功', 'success');
+        } else {
+          this.$toast(res.message, 'error');
+        }
+      },
+      /**
+       * 公司页面初始化函数
+       */
       init() {
         let sendProvince = this.requestParams.sendprovince;
         let sendCounty = this.requestParams.sendcounty;
@@ -84,6 +134,10 @@
           this.changeCityFn();
         }
       },
+      /**
+       * 切换省份触发方法
+       * @param province
+       */
       changeProvinceFn(province) {
         if (province) {
           this.requestParams.sendcity = null;
@@ -92,6 +146,10 @@
         let sendProvince = this.requestParams.sendprovince;
         this.configObject.cityList =  !sendProvince ? [] : this.cityData.find(province => province.name === sendProvince).children;
       },
+      /**
+       * 切换城市触发方法
+       * @param city
+       */
       changeCityFn(city) {
         if (city) {
           this.requestParams.sendcounty = null;
@@ -99,6 +157,32 @@
         let sendCity = this.requestParams.sendcity;
         let cityList = this.configObject.cityList;
         this.configObject.countyList =  !sendCity || !cityList.length ? [] : cityList.find(city => city.name === sendCity).children;
+      },
+      /**
+       * 兼容性获取图片本地缓存地址
+       * @param file
+       * @returns {*}
+       */
+      getObjectURL(file) {
+        let url = null ;
+        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+        if (window.createObjectURL) { // basic
+          url = window.createObjectURL(file)
+        } else if (window.URL) { // mozilla(firefox)
+          url = window.URL.createObjectURL(file)
+        } else if (window.webkitURL) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file)
+        }
+        return url ;
+      },
+      /**
+       * 获取上传文件信息
+       * @param event
+       */
+      getCacheFile(event) {
+        let files = event.target.files[0];
+        this.logoCacheUrl = this.getObjectURL(files);
+        this.logoFile = files
       }
     }
 	}
