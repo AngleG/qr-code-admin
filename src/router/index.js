@@ -32,9 +32,9 @@ export default new Router({
       component: Index,
       children: [
         {
-          path: '/gift-certificate',
+          path: '/coupon',
           name: '',
-          component: () => import(/*webpackChunkName: 'gift-certificate'*/'../views/pages/gift-certificate/index.vue')
+          component: () => import(/*webpackChunkName: 'coupon'*/'../views/pages/coupon/index.vue')
         }
       ]
     },

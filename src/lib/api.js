@@ -1,5 +1,5 @@
 import {httpRequest} from './plugins/http-request';
-let eid = JSON.parse(localStorage.getItem('loginkey')).eid;
+let eid = localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).eid : '';
 let webApi = {
   //用户登录
   login(data) {
@@ -12,6 +12,19 @@ let webApi = {
   //保存公司信息
   saveCompanyInfo(data) {
     return httpRequest(`/mcc`, data)
+  },
+  //礼券管理
+  //创建礼券
+  createCoupon(data){
+    return httpRequest(`/cc`, data)
+  },
+  //获取礼券列表
+  getCouponList(data){
+    return httpRequest(`/rc`, data)
+  },
+  //获取礼券列表
+  modifyCoupon(data){
+    return httpRequest(`/mc`, data)
   },
   //上传文件
   upload(file, params) {
