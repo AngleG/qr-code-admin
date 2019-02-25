@@ -78,6 +78,7 @@
 <style lang="scss" scoped>
 .coupon{
   width: 100%;
+  padding: 30px 50px;
   /*height: auto;*/
   .coupon_header{
     width: 100%;

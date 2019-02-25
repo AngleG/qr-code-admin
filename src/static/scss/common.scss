@@ -1,0 +1,10 @@
+$listPadding: 20px;
+$listBgColor: rgb(24, 35, 55);
+$listBorder: 1px solid rgb(26, 39, 58);
+$listBorderRadius: 5px;
+@mixin list-layout {
+  padding: $listPadding;
+  background-color: $listBgColor;
+  border: $listBorder;
+  border-radius: $listBorderRadius;
+}

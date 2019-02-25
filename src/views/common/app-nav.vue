@@ -6,7 +6,7 @@
         <span
           @click="changeCollapse"
           :title="isCollapse ? '打开侧边栏'  : '缩小侧边栏'"
-          :class="['iconfont', 'el-icon-exp-hidesidebarhoriz', isCollapse ? 'close' : '']"></span>
+          :class="['iconfont', 'el-fonts-exp-hidesidebarhoriz', isCollapse ? 'close' : '']"></span>
       </div>
       <el-menu
         mode="vertical"
@@ -42,7 +42,7 @@
             menus: [
               {
                 description: "企业信息",
-                iconClass: "iconfont icon-qiye",
+                iconClass: "iconfont fonts-qiye",
                 id: 1,
                 path: "/company-info",
                 subMenuList: [],
@@ -50,24 +50,24 @@
               },
               {
                 description: "礼劵管理",
-                iconClass: "iconfont icon-youhuiquan",
-                id: 1,
+                iconClass: "iconfont fonts-youhuiquan",
+                id: 2,
                 path: "/coupon",
                 subMenuList: [],
                 type: 1
               },
               {
                 description: "经销商",
-                iconClass: "iconfont icon-jingxiaoshang",
-                id: 1,
-                path: "/company-info?312",
+                iconClass: "iconfont fonts-jingxiaoshang",
+                id: 3,
+                path: "/dealer",
                 subMenuList: [],
                 type: 1
               },
               {
                 description: "问题排查",
-                iconClass: "iconfont icon-paicha",
-                id: 1,
+                iconClass: "iconfont fonts-paicha",
+                id: 4,
                 path: "/company-info?312321",
                 subMenuList: [],
                 type: 1
@@ -92,9 +92,9 @@
           },
         },
         mounted() {
-            this.$nextTick(() => {
-              window.addEventListener('resize', this.resizeHandler, false)
-            })
+            // this.$nextTick(() => {
+            //   window.addEventListener('resize', this.resizeHandler, false)
+            // })
         },
         methods: {
           resizeHandler() {
