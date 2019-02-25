@@ -31,6 +31,11 @@ let webApi = {
     let data = new FormData();
     data.append('file', file);
     return httpRequest(`/mccl`, data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}}, Object.assign(params, {eid}))
+  },
+  uploadCoupon(file, params){
+    let data = new FormData();
+    data.append('file', file);
+    return httpRequest(`/mcp`, data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}}, params)
   }
 };
 export default webApi;

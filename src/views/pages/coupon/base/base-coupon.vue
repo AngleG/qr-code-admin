@@ -1,9 +1,10 @@
 <template>
     <div class="base-coupon" v-if="requestParams">
       <div class="base-coupon_upload">
-        <div class="file-box"></div>
-        <el-button type="text">浏览..</el-button>
-        <el-button class="upload-btn" type="primary" size="small" round>上传产品图</el-button>
+        <div class="file-box"><img width="100%" height="100%" :src="couponCacheUrl" v-if="couponCacheUrl"></div>
+        <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="visibility: hidden;width: 0;height: 0;">
+        <label for="file"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
+        <el-button class="upload-btn" type="primary" size="small" round @click="upload">上传产品图</el-button>
       </div>
       <div class="base-coupon_form">
         <p><el-input size="small" style="width: 50%;" v-model="requestParams.name" maxlength="50"></el-input></p>
@@ -23,7 +24,7 @@
           <el-input size="small" style="width: 50px;" v-model="requestParams.nextdiscount"></el-input> 折
         </p>
         <p>原价:
-          <el-input size="small" style="width: 100px;" v-model="requestParams.value"></el-input> 元
+          <el-input size="small" style="width: 105px;" v-model="requestParams.value"></el-input> 元
         </p>
         <p>
           <el-date-picker
@@ -68,14 +69,15 @@
           paramsDefault: {
             loginkey: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).loginkey : '',
             eid: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).eid : ''
-          }
+          },
+          couponCacheUrl: null,
+          couponFile: null
         }
       },
       created(){
         this.requestParams = JSON.parse(JSON.stringify(this.couponDetail));
         delete this.requestParams.couponid;
         this.requestParams = Object.assign({}, this.requestParams, this.paramsDefault);
-        console.log(this.requestParams, 123);
       },
       methods: {
         /**
@@ -89,6 +91,48 @@
           }else {
             this.$toast(res.message, 'error');
           }
+        },
+        /**
+         * 获取上传文件信息
+         * @param event
+         */
+        getCacheFile(event){
+          let files = event.target.files[0];
+          this.couponCacheUrl = this.getObjectURL(files);
+          this.couponFile = files;
+        },
+        /**
+         * 兼容性获取图片本地缓存地址
+         * @param file
+         * @returns {*}
+         */
+        getObjectURL(file) {
+          let url = null;
+          // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+          if (window.createObjectURL) { // basic
+            url = window.createObjectURL(file)
+          } else if (window.URL) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file)
+          } else if (window.webkitURL) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file)
+          }
+          return url ;
+        },
+        /**
+         * 上传产品图
+         */
+        async upload(){
+          console.log(this.couponFile);
+          if (!this.couponFile) {
+            return this.$toast('请浏览图片后上传')
+          }
+
+          let res = await webApi.uploadCoupon(this.couponFile, Object.assign({}, this.paramsDefault, {couponkey: this.couponDetail.couponkey} ));
+          if (res.flags === 'success') {
+            this.$toast('请浏览图片后上传')
+          } else {
+            this.$toast(res.message, 'error');
+          }
         }
       }
     }
@@ -97,7 +141,7 @@
 
 <style lang="scss" scoped>
 .base-coupon{
-  width: 465px;
+  width: 500px;
   background-color: rgb(24, 35, 55);
   border-radius: 5px;
   border: 1px solid rgb(26, 39, 58);
@@ -105,7 +149,7 @@
   color: #FEFEFE;
   font-size: 12px;
   overflow: auto;
-  margin: 0 40px 30px 0;
+  margin: 0 35px 25px 0;
   .base-coupon_upload{
     float: left;
     width: 105px;
