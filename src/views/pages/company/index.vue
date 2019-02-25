@@ -1,4 +1,5 @@
 <template>
+  <div class="company-layout">
     <div class="company-wrap">
       <div class="company-content">
         <div class="company-upload">
@@ -29,6 +30,7 @@
       </div>
       <el-button @click="saveCompanyInfo" class="confirm" type="primary" size="small" round>保存修改</el-button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -189,61 +191,63 @@
 </script>
 
 <style lang="scss" scoped>
-  .company-wrap{
-    padding: 20px;
-    background-color: rgb(24, 35, 55);
-    border-radius: 5px;
-    border: 1px solid rgb(26, 39, 58);
-    width: 650px;
-    line-height: 24px;
-    .company-content{
-      overflow: auto;
-      color: #909090;
-      .company-upload{
-        float: left;
-        width: 105px;
-        text-align: center;
-        .file-box{
-          width: 100%;
-          height: 105px;
-          border: 1px solid rgb(22, 28, 42);
-          border-radius: 5px;
-          background-color: rgb(40, 49, 66);
-        }
-        .upload-btn{
-          margin: 5px 0 0 0;
-        }
-      }
-      .company-form{
-        position: relative;
-        margin-left: 105px;
-        padding: 0 25px;
-        text-align: left;
-        .el-input{
-          display: block;
-          margin-bottom: 10px;
-          width: 230px;
-        }
-        .company-address{
-          font-size: 12px;
-          margin-bottom: 10px;
-          .el-input{
-            display: inline-block;
-            margin: 0 0 0 60px;
+  .company-layout{
+    height: 100%;
+    padding: 30px 50px;
+    .company-wrap{
+      width: 650px;
+      line-height: 24px;
+      @include list-layout;
+      .company-content{
+        overflow: auto;
+        color: #909090;
+        .company-upload{
+          float: left;
+          width: 105px;
+          text-align: center;
+          .file-box{
+            width: 100%;
+            height: 105px;
+            border: 1px solid rgb(22, 28, 42);
+            border-radius: 5px;
+            background-color: rgb(40, 49, 66);
           }
-          .company-address-select{
+          .upload-btn{
+            margin: 5px 0 0 0;
+          }
+        }
+        .company-form{
+          position: relative;
+          margin-left: 105px;
+          padding: 0 25px;
+          text-align: left;
+          .el-input{
+            display: block;
             margin-bottom: 10px;
-            .el-select{
-              margin: 0 5px;
-              width: 90px;
+            width: 230px;
+          }
+          .company-address{
+            font-size: 12px;
+            margin-bottom: 10px;
+            .el-input{
+              display: inline-block;
+              margin: 0 0 0 60px;
+            }
+            .company-address-select{
+              margin-bottom: 10px;
+              .el-select{
+                margin: 0 5px;
+                width: 90px;
+              }
             }
           }
         }
       }
-    }
-    .confirm{
-      margin-top: 20px;
-      padding: 5px 30px;
+      .confirm{
+        margin-top: 20px;
+        padding: 5px 30px;
+      }
     }
   }
+
 </style>
