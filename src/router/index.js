@@ -38,5 +38,17 @@ export default new Router({
         }
       ]
     },
+    {
+      path: '/',
+      name: '经销商',
+      component: Index,
+      children: [
+        {
+          path: '/dealer',
+          name: '',
+          component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/index.vue')
+        }
+      ]
+    },
   ]
 })
