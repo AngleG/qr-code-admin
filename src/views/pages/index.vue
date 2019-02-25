@@ -10,9 +10,7 @@
     <el-container>
       <el-header>欢迎登陆智能唯一二维码系统</el-header>
       <el-main>
-        <div class="el-main-content">
-          <router-view/>
-        </div>
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
