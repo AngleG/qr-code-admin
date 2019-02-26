@@ -48,11 +48,11 @@ const getResult = res => {
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
     let loginkey = JSON.parse(localStorage.getItem('loginkey'));
-    data =  ['/login', '/mccl'].includes(url) ? data : Object.assign({}, data, loginkey);
+    data =  ['/login', '/mccl', '/mcp'].includes(url) ? data : Object.assign({}, data, loginkey);
     return axios(Object.assign({
         baseURL: config.BASE_URL,
         url,
-        data: url === '/mccl' ? data : qs.stringify(data),
+        data: ['/mccl', '/mcp'].includes(url) ? data : qs.stringify(data),
         params,
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

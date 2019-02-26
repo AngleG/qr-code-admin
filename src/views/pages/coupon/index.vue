@@ -6,7 +6,7 @@
       </div>
       <div class="coupon_content">
         <div class="fl" v-if="couponList.length" v-for="item in couponList">
-          <base-coupon :coupon-detail="item" @callback="updateCouponList"></base-coupon>
+          <base-coupon :coupon-detail="item" @callback="updateCouponList"/>
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@
           let res = await webApi.getCouponList(params);
           if(res.flags === 'success'){
             if(res.data && res.data.length){
-              this.couponList = res.data;
+              this.couponList = res.data.reverse();
             }
           }else {
             this.$toast(res.message, 'error');

@@ -1,9 +1,9 @@
 <template>
-    <div class="base-coupon" v-if="requestParams">
+    <div class="base-coupon">
       <div class="base-coupon_upload">
-        <div class="file-box"><img width="100%" height="100%" :src="couponCacheUrl" v-if="couponCacheUrl"></div>
-        <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="visibility: hidden;width: 0;height: 0;">
-        <label for="file"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
+        <div class="file-box"><img width="100%" height="100%" :src="logoUrl" v-if="couponDetail.picture || couponCacheUrl"></div>
+        <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" :id="`file_${couponDetail.couponid}`" style="visibility: hidden;width: 0;height: 0;">
+        <label :for="`file_${couponDetail.couponid}`"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
         <el-button class="upload-btn" type="primary" size="small" round @click="upload">上传产品图</el-button>
       </div>
       <div class="base-coupon_form">
@@ -55,6 +55,7 @@
 
 <script>
   import webApi from '../../../../lib/api'
+  import config from '../../../../conf/config'
     export default {
       name: "base-coupon",
       props: {
@@ -65,19 +66,20 @@
       },
       data () {
         return {
+          config,
           requestParams: null,
-          paramsDefault: {
-            loginkey: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).loginkey : '',
-            eid: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).eid : ''
-          },
           couponCacheUrl: null,
           couponFile: null
+        }
+      },
+      computed:{
+        logoUrl() {
+          return this.couponCacheUrl ? this.couponCacheUrl : this.couponDetail.picture ? `${this.config.DOWNLOAD_URL}${this.couponDetail.picture}` : null;
         }
       },
       created(){
         this.requestParams = JSON.parse(JSON.stringify(this.couponDetail));
         delete this.requestParams.couponid;
-        this.requestParams = Object.assign({}, this.requestParams, this.paramsDefault);
       },
       methods: {
         /**
@@ -97,9 +99,9 @@
          * @param event
          */
         getCacheFile(event){
-          let files = event.target.files[0];
-          this.couponCacheUrl = this.getObjectURL(files);
-          this.couponFile = files;
+          let file = event.target.files[0];
+          this.couponCacheUrl = this.getObjectURL(file);
+          this.couponFile = file;
         },
         /**
          * 兼容性获取图片本地缓存地址
@@ -122,14 +124,13 @@
          * 上传产品图
          */
         async upload(){
-          console.log(this.couponFile);
           if (!this.couponFile) {
             return this.$toast('请浏览图片后上传')
           }
-
-          let res = await webApi.uploadCoupon(this.couponFile, Object.assign({}, this.paramsDefault, {couponkey: this.couponDetail.couponkey} ));
+          let res = await webApi.upload(this.couponFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey, couponkey: this.requestParams.couponkey},`/mcp`);
           if (res.flags === 'success') {
-            this.$toast('请浏览图片后上传')
+            this.couponDetail.picture = res.data.picpath;
+            this.$toast('上传图片成功', 'success');
           } else {
             this.$toast(res.message, 'error');
           }

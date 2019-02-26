@@ -98,10 +98,11 @@
         if (!this.logoFile) {
           return this.$toast('请浏览图片后上传')
         }
-        let res = await webApi.upload(this.logoFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey, companykey: this.requestParams.companykey});
+        let res = await webApi.upload(this.logoFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey, companykey: this.requestParams.companykey}, `/mccl`);
         if (res.flags === 'success') {
           if (res.data) {
             this.requestParams.elogo = res.data.picpath;
+            this.$toast('上传图片成功', 'success');
           }
           this.init();
         } else {
