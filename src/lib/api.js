@@ -30,7 +30,6 @@ let webApi = {
   upload(file, params, url) {
     let data = new FormData();
     data.append('file', file);
-    console.log(data, file)
     return httpRequest(url, data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}}, Object.assign(params, {eid}))
   },
   //获取经销商列表

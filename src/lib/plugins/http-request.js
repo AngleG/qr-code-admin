@@ -38,6 +38,11 @@ const getResult = res => {
     return failResult
   }
 };
+const getFinallyRequestData = (url, data) => {
+  let loginkey = JSON.parse(localStorage.getItem('loginkey'));
+  data = config.FREE_LOGIN_KEY_URL.includes(url) ? data : Object.assign({}, data, loginkey);
+  return config.FILE_URL.includes(url) ? data : qs.stringify(data);
+};
 /**
  * 基于axios的http请求，默认方式为post
  * @param url
@@ -47,12 +52,10 @@ const getResult = res => {
  * @returns {Promise}
  */
 export const httpRequest = (url, data = {}, options = { method : 'post' }, params) => {
-    let loginkey = JSON.parse(localStorage.getItem('loginkey'));
-    data =  ['/login', '/mccl', '/mcp'].includes(url) ? data : Object.assign({}, data, loginkey);
     return axios(Object.assign({
         baseURL: config.BASE_URL,
         url,
-        data: ['/mccl', '/mcp'].includes(url) ? data : qs.stringify(data),
+        data: getFinallyRequestData(url, data),
         params,
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
