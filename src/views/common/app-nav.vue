@@ -98,6 +98,7 @@
         },
         methods: {
           resizeHandler() {
+            return null;
             (this.$_.throttle(() => {
               if (!document.hidden) {
                 this.isCollapse = this.isMobile();

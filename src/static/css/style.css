@@ -101,6 +101,10 @@ body,html{
   background-color: #24304A;
   border: 1px solid #323c54;
 }
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover{
+  background-color: transparent;
+  color: #2c97fb;
+}
 .el-picker-panel{
   background-color: #24304A;
   border: 1px solid #323c54;

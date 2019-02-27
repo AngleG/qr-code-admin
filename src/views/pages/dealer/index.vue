@@ -21,12 +21,12 @@
               <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-dizhi" placeholder="联系人姓名"/>
               <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-yonghu" placeholder="联系人电话"/>
               <div class="clearfix" style="text-align: right;">
-                <el-select size="small" style="width: 120px;float: left;" v-model="dealer.status">
+                <el-select size="small" style="width: 80px;float: left;" v-model="dealer.status">
                   <el-option v-for="option in options" :label="option.label" :value="option.value" :key="option.value" />
                 </el-select>
                 <el-button type="primary" size="small" @click="saveDealerByCompanyKey(dealer)" round>保存修改</el-button>
               </div>
-              <div class="clearfix dealer-user"><span>主账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPassword(dealer)" type="primary" size="small" round>重置密码</el-button></div>
+              <div class="clearfix dealer-user"><span>主账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPasswordConfirm(dealer)" type="primary" size="small" round>重置密码</el-button></div>
               <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass | filterDealerList }}</template>&nbsp;</p>
             </div>
           </el-col>
@@ -118,6 +118,15 @@
           this.$toast(res.message, 'error');
         }
       },
+      resetDealerPasswordConfirm(dealer) {
+        this.$confirm('密码重置后，该账号下次登录时需使用新密码，确定重置吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => this.resetDealerPassword(dealer)).catch(() => {
+          this.$toast('已取消重置密码', 'info');
+        });
+      },
       async resetDealerPassword(dealer) {
         if (!dealer) {
           return this.$toast('经销商信息不存在');
@@ -163,6 +172,9 @@
       height: 100%;
       padding: 20px 30px;
       overflow-y: auto;
+      .el-row{
+        padding-bottom: 45px;
+      }
       .dealer-list{
         width: 100%;
         margin-bottom: 20px;
@@ -184,9 +196,10 @@
               display: inline-block;
               border: 1px solid #323c54;
               border-radius: 15px;
-              padding: 0 15px;
+              padding: 0 12px;
               color: #c0c4cc;
-              font-size: 14px;
+              font-size: 13px;
+              line-height: 24px;
             }
           }
         }
