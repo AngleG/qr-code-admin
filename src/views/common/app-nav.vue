@@ -68,7 +68,7 @@
                 description: "问题排查",
                 iconClass: "iconfont fonts-paicha",
                 id: 4,
-                path: "/company-info?312321",
+                path: "/troubleshoot",
                 subMenuList: [],
                 type: 1
               }

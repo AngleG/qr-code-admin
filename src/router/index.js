@@ -50,5 +50,17 @@ export default new Router({
         }
       ]
     },
+    {
+      path: '/',
+      name: '问题排查',
+      component: Index,
+      children: [
+        {
+          path: '/troubleshoot',
+          name: '',
+          component: () => import(/*webpackChunkName: 'troubleshoot'*/'../views/pages/troubleshoot/index.vue')
+        }
+      ]
+    },
   ]
 })

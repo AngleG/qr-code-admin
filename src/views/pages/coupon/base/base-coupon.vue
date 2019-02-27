@@ -150,7 +150,7 @@
   color: #FEFEFE;
   font-size: 12px;
   overflow: auto;
-  margin: 0 35px 25px 0;
+  margin: 0 30px 25px 0;
   .base-coupon_upload{
     float: left;
     width: 105px;
