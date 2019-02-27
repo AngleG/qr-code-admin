@@ -27,7 +27,7 @@
                 <el-button type="primary" size="small" @click="saveDealerByCompanyKey(dealer)" round>保存修改</el-button>
               </div>
               <div class="clearfix dealer-user"><span>主账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPasswordConfirm(dealer)" type="primary" size="small" round>重置密码</el-button></div>
-              <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass | filterDealerList }}</template>&nbsp;</p>
+              <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass }}</template>&nbsp;</p>
             </div>
           </el-col>
         </el-row>
