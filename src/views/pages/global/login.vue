@@ -2,20 +2,13 @@
   <div class="login-container">
     <div class="login-content">
       <p class="form-label">
-        <el-input size="medium" prefix-icon="iconfont icon-yonghu" placeholder="请输入账号" v-model="username" maxlength="20"/>
+        <el-input @keyup.enter.native="login" size="medium" prefix-icon="iconfont icon-yonghu" placeholder="请输入账号" v-model="username" maxlength="20"/>
       </p>
       <p class="form-label">
-        <el-input size="medium" prefix-icon="iconfont icon-mima" type="password" placeholder="请输入密码" v-model="password" maxlength="20"/>
+        <el-input @keyup.enter.native="login" size="medium" prefix-icon="iconfont icon-mima" type="password" placeholder="请输入密码" v-model="password" maxlength="20"/>
       </p>
       <el-button class="confirm" @click="login" type="primary" round>登录</el-button>
     </div>
-    <!--<el-row >-->
-    <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple-light"></div></el-col>-->
-    <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content" style="background-color: red"></div></el-col>-->
-    <!--<el-col :span="5" :offset="1" :xs="{span: 24, offset: 0}" :sm="{span: 7, offset: 1}" :lg="{span: 5, offset: 1}" :xl="{span: 4, offset: 0.8}"><div class="grid-content" style="background-color: yellow"></div></el-col>-->
-    <!--</el-row>-->
   </div>
 </template>
 
@@ -41,8 +34,16 @@
         let res = await webApi.login({user: this.username, pass: this.password});
         if (res.flags === 'success') {
           if (res.data) {
+            let firstPageRouter =  '/coupon';
             localStorage.setItem('loginkey', JSON.stringify(res.data));
-            this.$router.push('/company-info');
+            let currentActiveRouter = sessionStorage.getItem('menuOptions');
+            currentActiveRouter = currentActiveRouter ? JSON.parse(currentActiveRouter) : {
+              defaultIndex: null,
+              defaultOpens: []
+            };
+            currentActiveRouter.defaultIndex = firstPageRouter;
+            sessionStorage.setItem('menuOptions', JSON.stringify(currentActiveRouter));
+            this.$router.push(firstPageRouter);
           }
         } else {
           this.$toast(res.message, 'error');
