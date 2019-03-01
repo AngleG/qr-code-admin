@@ -35,8 +35,8 @@
 
 <script>
   import cityData from './data/city'
-  import config from '../../../conf/config'
-  import webApi from '../../../lib/api'
+  import config from '../../../../conf/config'
+  import webApi from '../../../../lib/api'
 	export default {
     data() {
       return {

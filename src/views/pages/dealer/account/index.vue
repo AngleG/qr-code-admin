@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import webApi from '../../../lib/api'
+  import webApi from '../../../../lib/api'
 	export default {
 	  data() {
 	    return {

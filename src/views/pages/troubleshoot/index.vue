@@ -132,7 +132,7 @@
 </template>
 
 <script>
-  import cityData from '../company/data/city'
+  import cityData from '../account/company/data/city'
     export default {
       name: "index",
       data(){

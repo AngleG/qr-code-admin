@@ -34,7 +34,7 @@
         let res = await webApi.login({user: this.username, pass: this.password});
         if (res.flags === 'success') {
           if (res.data) {
-            let firstPageRouter =  '/coupon';
+            let firstPageRouter =  '/company-info';
             localStorage.setItem('loginkey', JSON.stringify(res.data));
             let currentActiveRouter = sessionStorage.getItem('menuOptions');
             currentActiveRouter = currentActiveRouter ? JSON.parse(currentActiveRouter) : {
