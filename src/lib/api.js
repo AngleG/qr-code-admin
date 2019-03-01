@@ -9,6 +9,10 @@ let webApi = {
   getCompanyInfo() {
     return httpRequest(`/rcc`, {})
   },
+  //创建公司信息
+  createCompanyInfo(data) {
+    return httpRequest(`/ccc`, data)
+  },
   //保存公司信息
   saveCompanyInfo(data) {
     return httpRequest(`/mcc`, data)
