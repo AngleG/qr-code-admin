@@ -1,6 +1,5 @@
 import axios from 'axios';
 import config from '../../conf/config'
-import { Message } from 'element-ui'
 import qs from 'qs';
 const singOut = () => {
   localStorage.removeItem('loginkey');

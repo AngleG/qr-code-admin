@@ -118,6 +118,12 @@ body,html{
 .el-popper[x-placement^=bottom] .popper__arrow{
   border-bottom-color: #323c54
 }
+.el-popper[x-placement^=top] .popper__arrow::after{
+  border-top-color: #24304A;
+}
+.el-popper[x-placement^=top] .popper__arrow{
+  border-top-color: #323c54
+}
 /*改变el-button圆角默认样式*/
 .el-button.is-round{
   padding: 5px 15px;

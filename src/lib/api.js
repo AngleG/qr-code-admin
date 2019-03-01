@@ -51,6 +51,13 @@ let webApi = {
   //创建经销商用户
   createDealer(data) {
     return httpRequest(`/cac`, data)
+  },
+  //保存修改订单（问题排查）
+  saveQuestionExChangedOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'deliver'}))
+  },
+  //删除兑换订单（问题排查）
+  deleteQuestionExChangedOrder() {
   }
 };
 export default webApi;

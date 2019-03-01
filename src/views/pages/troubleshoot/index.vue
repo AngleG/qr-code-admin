@@ -1,129 +1,135 @@
 <template>
     <div class="troubleshoot">
       <div class="troubleshoot-search">
-          <input type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="font-size: 12px;">
-        <el-button size="small" type="primary" round style="margin-right: 20px;">上传二维码查询</el-button>
-          <!--<label for="file"><span class="file-button">请选择文件</span></label>-->
+        <span class="file-name" v-if="qrCodeFile">{{ qrCodeFile.name }}</span>
+        <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_troubleshoot" style="visibility: hidden;width: 0;height: 0;">
+        <label for="file_troubleshoot"><span class="el-button el-button--primary el-button--small is-round" style="margin-right: 20px;">上传二维码查询</span></label>
         <el-input size="small" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
         <el-button size="small" type="primary" round>查询</el-button>
       </div>
       <div class="troubleshoot-content">
-        <div class="troubleshoot-content-item">
+        <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
-            <span style="color: #909090">状态:</span> 已支付
+            <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText }}</template>
             <span class="fr">
-              <el-button type="success" size="small" round>手工激活</el-button>
-              <el-button type="danger" size="small" round>删除支付订单</el-button>
+              <el-button type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
+              <el-button type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
             </span>
           </p>
           <p>
             <span class="label">经销商名称:</span>
-            <span class="text-field">傻逼</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.agentcompany }}</span>
             <span class="label">支付账号:</span>
-            <span class="text-field">foolish</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.accountuser }}</span>
           </p>
           <p>
             <span class="label">折扣:</span>
-            <span class="text-field">88 折</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.discount }}<template v-if="troubleshootDetail.payorderinfo.discount">折</template></span>
             <span class="label">支付金额:</span>
-            <span class="text-field">250</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.distotal }}</span>
           </p>
           <p>
             <span class="label">礼券id:</span>
-            <span class="text-field">222222222222</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponid }}</span>
             <span class="label">礼券名称:</span>
-            <span class="text-field">傻逼礼券傻逼礼券傻逼礼券傻逼礼券傻逼礼券</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponname }}</span>
           </p>
           <p>
             <span class="label">下单时间:</span>
-            <span class="text-field">2019-02-22 22:22</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.createtime }}</span>
             <span class="label">支付时间:</span>
-            <span class="text-field">2019-02-26 14:25</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.lastupdatime }}</span>
           </p>
           <p>
             <span class="label">张数:</span>
-            <span class="text-field">22</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponum }}</span>
             <span class="label">原单价:</span>
-            <span class="text-field">290</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.nodisvalue }}</span>
           </p>
           <p>
             <span class="label">来源:</span>
-            <span class="text-field">不知</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.from }}</span>
             <span class="label">昵称:</span>
-            <span class="text-field">二傻子</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.usernick }}</span>
           </p>
           <p class="avatar">
             <span class="label">性 别:</span>
-            <span class="text-field">男</span>
+            <span class="text-field">{{ troubleshootDetail.payorderinfo.usergender }}</span>
             <span class="label">头 像:</span>
-            <span class="text-field">
-              <i><img src="../../../static/images/avatar.png" alt=""></i>
+            <span class="text-field" v-if="troubleshootDetail.payorderinfo.userhead">
+              <i><img :src=" troubleshootDetail.payorderinfo.userhead"></i>
             </span>
           </p>
         </div>
-        <div class="troubleshoot-content-item custom-width">
+        <div v-if="troubleshootDetail && troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-width">
           <p class="status clearfix" style="line-height: 34px">
-            <span style="color: #909090">状态:</span> 已兑换
-            <span class="fr">
+            <span style="color: #909090">状态:</span> {{ exchange.statusText }}
+            <span class="fr" v-if="exchange.isShowOperate">
               <el-button type="danger" size="small" round>删除兑换订单</el-button>
-              <el-button type="primary" size="small" round>保存修改订单</el-button>
+              <el-button @click="saveQuestionExChangedOrder" type="primary" size="small" round>保存修改订单</el-button>
             </span>
           </p>
           <p>
             <span class="label">兑换来源:</span>
-            <span class="text-field">傻逼</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname }}</span>
             <span class="label">兑换目标:</span>
-            <span class="text-field">foolish</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}</span>
           </p>
           <p>
             <span class="label">配送地址:</span>
-            <span class="text-field">上海市长宁区延安西路2558号1号楼</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.recprov }}{{ troubleshootDetail.exorderinfo.recity }}{{ troubleshootDetail.exorderinfo.recounty }}{{ troubleshootDetail.exorderinfo.recstreet }}</span>
           </p>
           <p>
             <span class="label">收货联系人:</span>
-            <span class="text-field">某某某</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.recontact }}</span>
             <span class="label">收货人电话:</span>
-            <span class="text-field">18516114512</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.recphone }}</span>
           </p>
           <p>
             <span class="label">兑换人手机:</span>
-            <span class="text-field">18516116628</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.usermobile }}</span>
             <span class="label">祝福语:</span>
-            <span class="text-field">胖20斤</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.hello }}</span>
           </p>
           <p class="troubleshoot-content_address">
             <span class="label">发货地址:</span>
-            <el-select @change="changeProvinceFn" size="samll" v-model="requestParams.Sendprov">
+            <el-select @change="changeProvinceFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendprov">
               <el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>
             </el-select>
-            <el-select @change="changeCityFn" size="samll" v-model="requestParams.sendcity">
+            <el-select @change="changeCityFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendcity">
               <el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/>
             </el-select>
-            <el-select  size="samll" v-model="requestParams.sendcounty">
+            <el-select  size="samll" v-model="troubleshootDetail.exorderinfo.sendcounty">
               <el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/>
             </el-select>
-            <el-input size="small" style="width: 160px" v-model="requestParams.sendstreet" placeholder="请输入街道地址"></el-input>
+            <el-input size="small" style="width: 160px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>
           </p>
           <p>
             <span class="label">发货联系人:</span>
             <span class="text-field">
-              <el-input size="small" style="width: 160px" v-model="requestParams.sendontact" placeholder="请输入联系人姓名"></el-input>
+              <el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendcontact" maxlength="50" placeholder="请输入联系人姓名"></el-input>
             </span>
             <span class="label">发货人电话:</span>
             <span class="text-field">
-              <el-input size="small" style="width: 160px" v-model="requestParams.sendphone" placeholder="请输入发货人电话"></el-input>
+              <el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendphone" maxlength="50" placeholder="请输入发货人电话"></el-input>
             </span>
           </p>
           <p class="avatar">
             <span class="label">快递公司:</span>
             <span class="text-field">
-              <el-select size="samll" style="width: 160px" v-model="requestParams.delcom">
-                <el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/>
+              <el-select size="samll" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delcom">
+                <el-option v-for="item in configObject.expressCompanyList" :label="item.label" :value="item.value" :key="item.value"/>
               </el-select>
             </span>
-            <span class="label">头 像:</span>
+            <span class="label">快递单号:</span>
             <span class="text-field">
-              <i><img src="../../../static/images/avatar.png" alt=""></i>
+               <el-input size="small" maxlength="50" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delid" placeholder="请输入快递单号"></el-input>
+            </span>
+          </p>
+          <p>
+            <span class="label">写给用户:</span>
+            <span class="text-field">
+               <el-input size="small" style="width: 260px" v-model="troubleshootDetail.exorderinfo.log" placeholder="写给用户"></el-input>
             </span>
           </p>
         </div>
@@ -133,10 +139,13 @@
 
 <script>
   import cityData from '../company/data/city'
+  import webApi from '../../../lib/api'
+  import config from '../../../conf/config'
     export default {
       name: "index",
       data(){
         return {
+          config,
           cityData,
           requestParams: {
             Sendprov: null,
@@ -146,25 +155,75 @@
             sendontact: null,
             sendphone: null
           },
+          troubleshootDetail: null,
           configObject: {
             cityList: [],
-            countyList: []
-          }
+            countyList: [],
+            expressCompanyList: [
+              {label: '中通', value: 'zhongtong'},
+              {label: 'EMS', value: 'ems'}
+            ]
+          },
+          qrCodeFile: null,
+          searchType: null
         }
       },
-      created(){
+      computed: {
+        payBtnStatus() {
+          let troubleshootDetail = this.troubleshootDetail;
+          let payStatus = {isManual: false, isDelete: false, statusText: ''};
+          if (!troubleshootDetail) {
+           return payStatus
+          }
+          if (troubleshootDetail.codeinfo.payorderkey === undefined) {
+            payStatus.isManual = true;
+            payStatus.statusText = '未激活';
+          } else {
+            payStatus.isDelete = true;
+            payStatus.statusText = troubleshootDetail.paystatus === undefined ? troubleshootDetail.payorderinfo.status : troubleshootDetail.paystatus;
+          }
+          return payStatus
+        },
+        exchange() {
+          let troubleshootDetail = this.troubleshootDetail;
+          let exchangeStatus = {isShowOperate: false, statusText: ''};
+          if (!troubleshootDetail) {
+            return exchangeStatus
+          }
+          if (troubleshootDetail.codeinfo.exorderkey === undefined) {
+            exchangeStatus.isShowOperate = false;
+            exchangeStatus.statusText = '未兑换';
+          } else {
+            exchangeStatus.isShowOperate = true;
+            exchangeStatus.statusText = '已兑换';
+          }
+          return exchangeStatus;
+        }
       },
       methods: {
+        /**
+         * 公司页面初始化函数
+         */
+        init() {
+          let sendProvince = this.troubleshootDetail.exorderinfo.sendprov;
+          let sendCounty = this.troubleshootDetail.exorderinfo.sendcounty;
+          if (sendProvince) {
+            this.changeProvinceFn();
+          }
+          if (sendCounty) {
+            this.changeCityFn();
+          }
+        },
         /**
          * 切换省份触发方法
          * @param province
          */
         changeProvinceFn(province){
           if(province){
-            this.requestParams.sendcity = null;
-            this.requestParams.sendcounty = null;
+            this.troubleshootDetail.exorderinfo.sendcity = null;
+            this.troubleshootDetail.exorderinfo.sendcounty = null;
           }
-          let sendProvince = this.requestParams.Sendprov;
+          let sendProvince = this.troubleshootDetail.exorderinfo.sendprov;
           this.configObject.cityList =  !sendProvince ? [] : this.cityData.find(province => province.name === sendProvince).children;
         },
         /**
@@ -173,11 +232,66 @@
          */
         changeCityFn(city){
           if(city){
-            this.requestParams.sendcounty = null;
+            this.troubleshootDetail.exorderinfo.sendcounty = null;
           }
-          let sendCity = this.requestParams.sendcity;
+          let sendCity = this.troubleshootDetail.exorderinfo.sendcity;
           let cityList = this.configObject.cityList;
           this.configObject.countyList = !sendCity || !cityList.length ? [] : cityList.find(city => city.name === sendCity).children;
+        },
+        /**
+         * 上传文件
+         * @returns {Promise<void>}
+         */
+        async upload() {
+          if (!this.qrCodeFile) {
+            return this.$toast('请浏览图片后上传')
+          }
+          let res = await webApi.upload(this.qrCodeFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey}, `/rqrcbp`);
+          if (res.flags === 'success') {
+            if (res.data) {
+             this.troubleshootDetail = res.data;
+            }
+            this.searchType = 'file';
+            this.init();
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 获取上传文件信息
+         * @param event
+         */
+        getCacheFile(event) {
+          this.qrCodeFile = event.target.files[0];
+          if (this.qrCodeFile) {
+            this.upload();
+          }
+        },
+        /**
+         * 保存修改订单（问题排查）
+         * @returns {Promise<void>}
+         */
+        async saveQuestionExChangedOrder() {
+          let params = {};
+          if (this.troubleshootDetail) {
+            let {codekey, exorderkey} = this.troubleshootDetail.codeinfo;
+            let {recprov, recity, recounty, recstreet, recontact, recphone, delcom, delid, sendprov, sendcity, sendcounty, sendstreet, sendcontact, sendphone, log} = this.troubleshootDetail.exorderinfo;
+            params = Object.assign(params, {codekey, exorderkey}, {recprov, recity, recounty, recsteet: recstreet, recontact, recphone, delcom, delid, sendprov, sendcity, sendcounty, sendstreet, sendcontact, sendphone, log})
+          } else {
+            return this.$toast('请求参数不存在')
+          }
+          let res = await webApi.saveQuestionExChangedOrder(params);
+          if (res.flags === 'success') {
+            if (this.searchType = 'file') {
+              this.$toast('修改成功', 'success');
+              this.upload();
+            }
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        async deleteQuestionExChangedOrder() {
+
         }
       }
     }
@@ -199,6 +313,10 @@
         color: #606266;
         font-size: 12px;
         line-height: 24px
+      }
+      .file-name{
+        font-size: 12px;
+        color: #fff;
       }
     }
     .troubleshoot-content{

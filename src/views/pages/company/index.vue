@@ -4,8 +4,8 @@
       <div class="company-content">
         <div class="company-upload">
           <div class="file-box"><img width="100%" height="100%" :src="logoUrl" v-if="requestParams.elogo || logoCacheUrl"></div>
-          <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="visibility: hidden;width: 0;height: 0;"/>
-          <label for="file"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
+          <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_company" style="visibility: hidden;width: 0;height: 0;"/>
+          <label for="file_company"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
           <el-button @click="upload" class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
         </div>
         <div class="company-form">
