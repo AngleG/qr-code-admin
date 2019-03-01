@@ -57,7 +57,15 @@ let webApi = {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'deliver'}))
   },
   //删除兑换订单（问题排查）
-  deleteQuestionExChangedOrder() {
+  deleteQuestionExChangedOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'reexchange'}))
+  },
+  //删除支付订单（问题排查）
+  deleteQuestionPayOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'repay'}))
+  },
+  getTroubleshootDetail(data) {
+    return httpRequest(`/rqrcbc`, data)
   }
 };
 export default webApi;

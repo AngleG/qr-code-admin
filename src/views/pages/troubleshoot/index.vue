@@ -4,8 +4,8 @@
         <span class="file-name" v-if="qrCodeFile">{{ qrCodeFile.name }}</span>
         <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_troubleshoot" style="visibility: hidden;width: 0;height: 0;">
         <label for="file_troubleshoot"><span class="el-button el-button--primary el-button--small is-round" style="margin-right: 20px;">上传二维码查询</span></label>
-        <el-input size="small" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
-        <el-button size="small" type="primary" round>查询</el-button>
+        <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="code" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
+        <el-button size="small" type="primary" @click="getTroubleshootDetail" round>查询</el-button>
       </div>
       <div class="troubleshoot-content">
         <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
@@ -13,7 +13,7 @@
             <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText }}</template>
             <span class="fr">
               <el-button type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
-              <el-button type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
+              <el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
             </span>
           </p>
           <p>
@@ -65,7 +65,7 @@
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> {{ exchange.statusText }}
             <span class="fr" v-if="exchange.isShowOperate">
-              <el-button type="danger" size="small" round>删除兑换订单</el-button>
+              <el-button @click="deleteQuestionExChangedOrder" type="danger" size="small" round>删除兑换订单</el-button>
               <el-button @click="saveQuestionExChangedOrder" type="primary" size="small" round>保存修改订单</el-button>
             </span>
           </p>
@@ -165,7 +165,8 @@
             ]
           },
           qrCodeFile: null,
-          searchType: null
+          searchType: null,
+          code: '63e54fc5020fe5f'
         }
       },
       computed: {
@@ -239,6 +240,26 @@
           this.configObject.countyList = !sendCity || !cityList.length ? [] : cityList.find(city => city.name === sendCity).children;
         },
         /**
+         * 根据二维码查询详情
+         */
+        async getTroubleshootDetail() {
+          if (!this.code) {
+            return this.$toast('请输入二维码号码')
+          }
+          let res = await webApi.getTroubleshootDetail({code: this.code});
+          if (res.flags === 'success') {
+            if (res.data) {
+              this.troubleshootDetail = res.data;
+            }
+            this.searchType = 'code';
+            if (this.troubleshootDetail && this.troubleshootDetail.exorderinfo) {
+              this.init();
+            }
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
          * 上传文件
          * @returns {Promise<void>}
          */
@@ -252,9 +273,18 @@
              this.troubleshootDetail = res.data;
             }
             this.searchType = 'file';
-            this.init();
+            if (this.troubleshootDetail && this.troubleshootDetail.exorderinfo) {
+              this.init();
+            }
           } else {
             this.$toast(res.message, 'error');
+          }
+        },
+        getTroubleshootDetailByType() {
+          if (this.searchType === 'file') {
+            this.upload();
+          } else if (this.searchType === 'code'){
+            this.getTroubleshootDetail()
           }
         },
         /**
@@ -282,16 +312,51 @@
           }
           let res = await webApi.saveQuestionExChangedOrder(params);
           if (res.flags === 'success') {
-            if (this.searchType = 'file') {
-              this.$toast('修改成功', 'success');
-              this.upload();
-            }
+            this.$toast('修改成功', 'success');
+            this.getTroubleshootDetailByType();
           } else {
             this.$toast(res.message, 'error');
           }
         },
+        /**
+         * 删除兑换订单（问题排查）
+         * @returns {Promise<void>}
+         */
         async deleteQuestionExChangedOrder() {
-
+          let params = {};
+          if (this.troubleshootDetail) {
+            let {codekey} = this.troubleshootDetail.codeinfo;
+            params = Object.assign(params, {codekey})
+          } else {
+            return this.$toast('请求参数不存在')
+          }
+          let res = await webApi.deleteQuestionExChangedOrder(params);
+          if (res.flags === 'success') {
+            this.$toast('删除成功', 'success');
+            this.getTroubleshootDetailByType();
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 删除支付订单（问题排查）
+         * @returns {Promise<void>}
+         */
+        async deleteQuestionPayOrder() {
+          let params = {};
+          if (this.troubleshootDetail) {
+            let {codekey} = this.troubleshootDetail.codeinfo;
+            params = Object.assign(params, {codekey})
+          } else {
+            return this.$toast('请求参数不存在')
+          }
+          let res = await webApi.deleteQuestionPayOrder(params);
+          if (res.flags === 'success') {
+            this.$toast('删除成功', 'success');
+            this.getTroubleshootDetailByType();
+          } else {
+            this.$toast(res.message, 'error');
+          }
         }
       }
     }
