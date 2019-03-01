@@ -33,7 +33,10 @@ const getResult = res => {
   } else if (result.state === 'fail'){
     let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台'];
     if (logoutErrorList.includes(result.error)|| result.error.indexOf("禁用") !== -1) {
-      return singOut();
+      let timer = setTimeout(() => {
+        singOut();
+        clearTimeout(timer)
+      }, 500)
     }
     return failResult
   }

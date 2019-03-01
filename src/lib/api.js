@@ -9,6 +9,10 @@ let webApi = {
   getCompanyInfo() {
     return httpRequest(`/rcc`, {})
   },
+  //创建公司信息
+  createCompanyInfo(data) {
+    return httpRequest(`/ccc`, data)
+  },
   //保存公司信息
   saveCompanyInfo(data) {
     return httpRequest(`/mcc`, data)
@@ -47,6 +51,21 @@ let webApi = {
   //创建经销商用户
   createDealer(data) {
     return httpRequest(`/cac`, data)
+  },
+  //保存修改订单（问题排查）
+  saveQuestionExChangedOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'deliver'}))
+  },
+  //删除兑换订单（问题排查）
+  deleteQuestionExChangedOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'reexchange'}))
+  },
+  //删除支付订单（问题排查）
+  deleteQuestionPayOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'repay'}))
+  },
+  getTroubleshootDetail(data) {
+    return httpRequest(`/rqrcbc`, data)
   }
 };
 export default webApi;

@@ -4,17 +4,17 @@
       <div class="company-content">
         <div class="company-upload">
           <div class="file-box"><img width="100%" height="100%" :src="logoUrl" v-if="requestParams.elogo || logoCacheUrl"></div>
-          <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file" style="visibility: hidden;width: 0;height: 0;"/>
-          <label for="file"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
+          <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_company" style="visibility: hidden;width: 0;height: 0;"/>
+          <label for="file_company"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
           <el-button @click="upload" class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
         </div>
         <div class="company-form">
-          <el-input v-model="requestParams.ename" size="small" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
-          <el-input v-model="requestParams.eaddr" size="small" prefix-icon="iconfont icon-dizhi" placeholder="企业地址"/>
-          <el-input v-model="requestParams.econtact" size="small" prefix-icon="iconfont icon-yonghu" placeholder="企业联系人姓名"/>
-          <el-input v-model="requestParams.ephone" size="small" prefix-icon="iconfont icon-shouji" placeholder="企业联系人电话"/>
-          <el-input v-model="requestParams.email" size="small" prefix-icon="iconfont icon-youxiang" placeholder="企业邮箱"/>
-          <el-input v-model="requestParams.eweb" size="small" prefix-icon="iconfont icon-wangzhan" placeholder="企业官网"/>
+          <el-input v-model="requestParams.ename" size="small" maxlength="50" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
+          <el-input v-model="requestParams.eaddr" size="small" maxlength="100" prefix-icon="iconfont icon-dizhi" placeholder="企业地址"/>
+          <el-input v-model="requestParams.econtact" size="small" maxlength="100" prefix-icon="iconfont icon-yonghu" placeholder="企业联系人姓名"/>
+          <el-input v-model="requestParams.ephone" size="small" maxlength="20" prefix-icon="iconfont icon-shouji" placeholder="企业联系人电话"/>
+          <el-input v-model="requestParams.email" size="small" maxlength="100" prefix-icon="iconfont icon-youxiang" placeholder="企业邮箱"/>
+          <el-input v-model="requestParams.eweb" size="small" maxlength="100" prefix-icon="iconfont icon-wangzhan" placeholder="企业官网"/>
           <div class="company-address">
             <div class="company-address-select">
               <i class="iconfont icon-dizhi1"></i>
@@ -22,13 +22,13 @@
               发货市<el-select @change="changeCityFn" size="samll" v-model="requestParams.sendcity"><el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/></el-select>
               发货区县<el-select  size="samll" v-model="requestParams.sendcounty"><el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/></el-select>
             </div>
-            <el-input v-model="requestParams.sendstreet" size="small" placeholder="发货详细街道地址"/>
+            <el-input maxlength="100" v-model="requestParams.sendstreet" size="small" placeholder="发货详细街道地址"/>
           </div>
-          <el-input v-model="requestParams.sendcontact" size="small" prefix-icon="iconfont icon-yonghu" placeholder="发货联系人姓名"/>
-          <el-input v-model="requestParams.sendphone" size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
+          <el-input maxlength="50" v-model="requestParams.sendcontact" size="small" prefix-icon="iconfont icon-yonghu" placeholder="发货联系人姓名"/>
+          <el-input maxlength="50" v-model="requestParams.sendphone" size="small" prefix-icon="iconfont icon-shouji" placeholder="发货联系人电话"/>
         </div>
       </div>
-      <el-button @click="saveCompanyInfo" class="confirm" type="primary" size="small" round>保存修改</el-button>
+      <el-button @click="editCompanyInfo" class="confirm" type="primary" size="small" round>{{ isEdit ? '保存修改' : '创建' }}</el-button>
     </div>
   </div>
 </template>
@@ -63,12 +63,16 @@
         configObject: {
           cityList: [],
           countyList: []
-        }
+        },
+        preCompanyInfo: null
       }
     },
     computed: {
       logoUrl() {
         return this.logoCacheUrl ? this.logoCacheUrl : `${this.config.DOWNLOAD_URL}${this.requestParams.elogo}`;
+      },
+      isEdit() {
+        return this.preCompanyInfo && this.preCompanyInfo.ename;
       }
     },
     created() {
@@ -83,6 +87,7 @@
         let res = await webApi.getCompanyInfo();
         if (res.flags === 'success') {
           if (res.data) {
+            this.preCompanyInfo = this.$_.cloneDeep(res.data);
             this.requestParams = res.data;
           }
           this.init();
@@ -110,16 +115,16 @@
         }
       },
       /**
-       * 保存公司信息
+       * 创建或编辑公司信息
        * @returns {Promise<void>}
        */
-      async saveCompanyInfo() {
+      async editCompanyInfo() {
         let params = this.$_.cloneDeep(this.requestParams);
         delete params.companykey;
         delete params.elogo;
-        let res = await webApi.saveCompanyInfo(params);
+        let res = this.isEdit ? await webApi.saveCompanyInfo(params) : await webApi.createCompanyInfo(params);
         if (res.flags === 'success') {
-          this.$toast('保存成功', 'success');
+          this.$toast(this.isCreate ? '创建成功' : '保存成功', 'success');
         } else {
           this.$toast(res.message, 'error');
         }
