@@ -78,19 +78,22 @@
 <style lang="scss" scoped>
 .coupon{
   width: 100%;
-  padding: 30px 50px;
   /*height: auto;*/
   .coupon_header{
-    width: 100%;
-    height: 50px;
+    min-height: 50px;
+    line-height: 36px;
+    padding: 7px 30px;
     text-align: left;
+    overflow: hidden;
     .el-input{
       width: 300px;
       margin-right: 5px;
     }
   }
   .coupon_content{
-    overflow: auto;
+    height: 100%;
+    padding: 20px 30px;
+    overflow-y: auto;
   }
 }
 </style>

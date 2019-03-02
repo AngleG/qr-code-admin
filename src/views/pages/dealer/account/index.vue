@@ -17,9 +17,9 @@
         <el-row :gutter="12">
           <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4" v-for="dealer in currentDealerList" :key="dealer.companykey">
             <div class="dealer-list">
-              <el-input size="small" v-model="dealer.name" prefix-icon="iconfont icon-qiye1" placeholder="经销商名称"/>
-              <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-dizhi" placeholder="联系人姓名"/>
-              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-yonghu" placeholder="联系人电话"/>
+              <el-input size="small" v-model="dealer.name" prefix-icon="iconfont icon-A-jingxiaoshang" placeholder="经销商名称"/>
+              <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-jingxiaoshang" placeholder="联系人姓名"/>
+              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-shouji" placeholder="联系人电话"/>
               <div class="clearfix" style="text-align: right;">
                 <el-select size="small" style="width: 80px;float: left;" v-model="dealer.status">
                   <el-option v-for="option in options" :label="option.label" :value="option.value" :key="option.value" />

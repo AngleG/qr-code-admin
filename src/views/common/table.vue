@@ -29,11 +29,11 @@
             :type="column.type || null"
             :width="column.width || null"
             :label="column.title"
-            :align="column.align || center"
+            :align="column.align"
             :fixed="column.fixed || null"
             :sortable="column.sortable || null"
             :formatter="column.formatter || null"
-            :show-overflow-tooltip="column.isTooltip !== undefined ? column.isTooltip : true"
+            :show-overflow-tooltip="column.isTooltip || true"
             :key="column.title"
             :render-header="column.renderHeader || null">
             <template slot-scope="scope">
@@ -84,7 +84,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" module>
 .customize-table{
   margin-bottom: 15px;
 }
