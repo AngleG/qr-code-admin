@@ -7,6 +7,8 @@ import './lib/plugins/element'
 import './static/css/index.css'
 //引入vue全局自定义方法
 import './lib/plugins/vue-global'
+//加载全局组件
+import './lib/plugins/vue-components'
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
