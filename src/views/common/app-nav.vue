@@ -42,7 +42,7 @@
             menus: [
               {
                 description: "账号管理",
-                iconClass: "iconfont fonts-qiye",
+                iconClass: "iconfont icon-qiye1",
                 id: 1,
                 path: "/",
                 subMenuList: [
@@ -52,7 +52,7 @@
               },
               {
                 description: "礼劵管理",
-                iconClass: "iconfont fonts-youhuiquan",
+                iconClass: "iconfont icon-youhuiquan",
                 id: 2,
                 path: "/",
                 subMenuList: [
@@ -64,7 +64,7 @@
               },
               {
                 description: "经销商管理",
-                iconClass: "iconfont fonts-jingxiaoshang",
+                iconClass: "iconfont icon-jingxiaoshang",
                 id: 3,
                 path: "/",
                 subMenuList: [
@@ -76,7 +76,7 @@
               },
               {
                 description: "消费者管理",
-                iconClass: "iconfont fonts-jingxiaoshang",
+                iconClass: "iconfont icon-xiaofeizhe1",
                 id: 3,
                 path: "/",
                 subMenuList: [
@@ -87,7 +87,7 @@
               },
               {
                 description: "发货",
-                iconClass: "iconfont fonts-paicha",
+                iconClass: "iconfont icon-fahuo",
                 id: 4,
                 path: "/ship",
                 subMenuList: [],
@@ -95,7 +95,7 @@
               },
               {
                 description: "问题排查",
-                iconClass: "iconfont fonts-paicha",
+                iconClass: "iconfont icon-paicha",
                 id: 4,
                 path: "/troubleshoot",
                 subMenuList: [],

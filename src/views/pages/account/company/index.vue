@@ -124,7 +124,7 @@
         delete params.elogo;
         let res = this.isEdit ? await webApi.saveCompanyInfo(params) : await webApi.createCompanyInfo(params);
         if (res.flags === 'success') {
-          this.$toast(this.isCreate ? '创建成功' : '保存成功', 'success');
+          this.$toast(!this.isEdit ? '创建成功' : '保存成功', 'success');
         } else {
           this.$toast(res.message, 'error');
         }
