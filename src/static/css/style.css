@@ -102,7 +102,7 @@ body,html{
   border: 1px solid #323c54;
 }
 .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{
-  background-color: transparent;
+  background-color: #2F4062;
   color: #2c97fb;
 }
 .el-picker-panel{
@@ -130,4 +130,54 @@ body,html{
 }
 .el-button--text{
   padding: 0;
+}
+/*修改table默认样式*/
+.el-table{
+  background-color: #182337;
+}
+.el-table--border, .el-table--group{
+  border: 1px solid #323c54;
+}
+.el-table thead{
+  color: #eee;
+}
+.el-table th, .el-table tr{
+  background-color: #182337;
+}
+.el-table td, .el-table th.is-leaf{
+  border-bottom: 1px solid #323c54;
+}
+.el-tooltip__popper.is-dark{
+  max-width: 300px;
+  background-color: #eee;
+  line-height: 20px;
+  color: #182337;
+  white-space: normal;
+  word-break: break-word;
+}
+.el-table .customize-header-row th {
+  background-color: #182337;
+}
+.el-table__row.customize-row>td {
+  color: #828282;
+  background: #24304A;
+}
+.el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed{
+  border-right: 1px solid #323c54;
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+  background-color: #2F4062;
+}
+.el-table--border::after, .el-table--group::after, .el-table::before{
+  background-color: transparent;
+}
+/*分页默认样式修改*/
+.el-pagination .btn-next, .el-pagination .btn-prev{
+  background-color: #24304A;
+}
+.el-pagination button:disabled{
+  background-color: #2F4062;
+}
+.el-pager li{
+  background-color: #24304A;
 }

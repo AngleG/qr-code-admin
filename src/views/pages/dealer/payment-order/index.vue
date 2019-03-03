@@ -23,24 +23,30 @@
           :value="item.value">
           </el-option>
         </el-select>
-        <el-button size="small" type="primary" round>过滤</el-button>
+        <el-button size="small" type="primary" round @click="searchHandle">过滤</el-button>
         <el-button size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
       </div>
       <div class="payment-order_content">
-        <element-table :table-columns="tableColumn" :table-data="tableData"></element-table>
+        <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData"></element-table>
+        <customize-pagination ref="customizePaginationPaymentOrder" :total="total" :search-params="searchRequestParams"></customize-pagination>
       </div>
     </div>
 </template>
 
 <script>
+  import webApi from '../../../../lib/api'
     export default {
       name: "index",
       data(){
         return{
+          tableListLoading: false,
           requestParams: {
-            agentaccountuser: null,
+            pagenum: 0,  //默认从第一页开始：0
+            agentaccountuser: 'ALL',
             from: 'ALL'
           },
+          searchRequestParams: null,
+          total: 0,
           options: {
             userSourceList: [
               {label: '全部', value: 'ALL'},
@@ -53,7 +59,22 @@
             {title: '经销商名称', align: 'center', key: 'agentcompany' },
             {title: '支付时间', align: 'center', key: 'lastupdatime' },
             {title: '支付金额', align: 'center', key: 'distotal' },
-            {title: '状态', align: 'center', key: 'status' },
+            {title: '状态', align: 'center', key: 'status', render: (h, params) => {
+                let status = params.row.status;
+                let str = '';
+                if(status){
+                  if(status === 'd'){
+                    str = '已支付';
+                  } else if (status === 'i') {
+                    str = '支付中';
+                  } else if (status === 'c') {
+                    str = '已取消';
+                  } else if (status === 'f') {
+                    str = '支付失败';
+                  }
+                }
+                return <span>{ str }</span>
+              }},
             {title: '操作', align: 'center', key: 'agentcompany', render: (h, params) => {
               return h('el-button', {
                 props:{
@@ -64,12 +85,56 @@
               }
             },
           ],
-          tableData: [
-            {agentcompany: '测试经销商1测试经销商1测试经销商1测试经销商1测试经销商1测试经销商1', lastupdatime: '2019/01/22', distotal: '0.01', status: '已支付'},
-            {agentcompany: '测试经销商2', lastupdatime: '2019/01/22', distotal: '0.01', status: '已支付'},
-            {agentcompany: '测试经销商3', lastupdatime: '2019/01/22', distotal: '0.01', status: '已支付'},
-          ]
+          tableData: []
         }
+      },
+      created() {
+        this.getDealerList();
+        this.searchRequestParams = JSON.parse(JSON.stringify(this.requestParams));
+        this.getPaymentOrderList();
+      },
+      methods: {
+        /**
+         * 获取经销商列表
+         */
+        async getDealerList(){
+          let res = await webApi.getDealerList();
+          if(res.flags === 'success'){
+            if (res.data && res.data.length) {
+              res.data.map( item => this.options.dealerList.push({label: item.name, value: item.adminuser}))
+              this.options.dealerList.unshift({label: '全部经销商', value: 'ALL'})
+            }
+          }else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 获取支付订单列表
+         * @returns {Promise<void>}
+         */
+        async getPaymentOrderList(){
+          this.tableListLoading = true;
+          let res = await webApi.getPaymentOrderList(this.searchRequestParams);
+          if(res.flags === 'success'){
+            if(res.data){
+              this.tableData = res.data.pagedorders ? res.data.pagedorders : [];
+              this.total = res.data.totalitems;
+            }
+          }else {
+            this.tableData = [];
+            this.total = 0;
+            this.$toast(res.message, 'error');
+          }
+          this.tableListLoading = false;
+        },
+        /**
+         * 过滤
+         */
+        searchHandle(){
+          this.searchRequestParams = JSON.parse(JSON.stringify(this.requestParams));
+          this.getPaymentOrderList();
+        }
+
       }
     }
 </script>

@@ -102,7 +102,7 @@
             <el-select  size="samll" v-model="troubleshootDetail.exorderinfo.sendcounty">
               <el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/>
             </el-select>
-            <el-input size="small" style="width: 160px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>
+            <el-input size="small" style="width: 145px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>
           </p>
           <p>
             <span class="label">发货联系人:</span>
@@ -166,7 +166,7 @@
           },
           qrCodeFile: null,
           searchType: null,
-          code: '63e54fc5020fe5f'
+          code: '0211fbfe40'
         }
       },
       computed: {
@@ -389,21 +389,21 @@
       overflow: hidden;
         .troubleshoot-content-item{
           float: left;
-          width: 480px;
+          width: 630px;
           height: 400px;
           background-color: #182337;
           border-radius: 5px;
           border: 1px solid #1a273a;
-          padding: 30px 20px 20px;
+          padding: 20px 15px;
           color: #FEFEFE;
           font-size: 12px;
-          margin: 0 10px 25px 0;
-          &.custom-width{
-            width: 680px;
-            .text-field {
-              width: 200px;
-            }
-          }
+          margin: 0 10px 20px 0;
+          /*&.custom-width{*/
+            /*width: 680px;*/
+            /*.text-field {*/
+              /*width: 200px;*/
+            /*}*/
+          /*}*/
           p{
             padding-bottom: 5px;
             border-bottom: 1px solid #2f3743;
@@ -434,7 +434,7 @@
             text-align: left;
           }
           .text-field{
-            width: 140px;
+            width: 220px;
             line-height: 18px ;
           }
           .status{
@@ -444,7 +444,7 @@
       .troubleshoot-content_address{
         .el-select, .el-input{
           /*margin: 0 5px;*/
-          width: 130px;
+          width: 120px;
         }
       }
     }
