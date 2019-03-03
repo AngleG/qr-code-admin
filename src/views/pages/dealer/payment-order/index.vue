@@ -24,7 +24,7 @@
           </el-option>
         </el-select>
         <el-button size="small" type="primary" round @click="searchHandle">过滤</el-button>
-        <el-button size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
+        <el-button size="small" type="primary" round @click="downloadPaymentOrder">下载全部（每周一三五更新）</el-button>
       </div>
       <div class="payment-order_content">
         <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData"></element-table>
@@ -133,8 +133,18 @@
         searchHandle(){
           this.searchRequestParams = JSON.parse(JSON.stringify(this.requestParams));
           this.getPaymentOrderList();
+        },
+        /**
+         * 下载全部
+         */
+        async downloadPaymentOrder(){
+          let res = await webApi.downloadPaymentOrder();
+          if(res.flags === 'success'){
+            console.log(res);
+          }else {
+            this.$toast(res.message, 'error');
+          }
         }
-
       }
     }
 </script>

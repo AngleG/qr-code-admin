@@ -56,6 +56,10 @@ let webApi = {
   getPaymentOrderList(data){
     return httpRequest(`/rpo`, data)
   },
+  //下载支付订单
+  downloadPaymentOrder(data){
+    return httpRequest(`/dpo`, {}, {method: 'get'}, data)
+  },
   //保存修改订单（问题排查）
   saveQuestionExChangedOrder(data) {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'deliver'}))
