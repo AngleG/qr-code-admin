@@ -12,7 +12,7 @@
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
             <span class="fr">
-              <el-button type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
+              <el-button @click="manualQuestionPayOrder" type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
               <el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
             </span>
           </p>
@@ -353,6 +353,22 @@
           let res = await webApi.deleteQuestionPayOrder(params);
           if (res.flags === 'success') {
             this.$toast('删除成功', 'success');
+            this.getTroubleshootDetailByType();
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        async manualQuestionPayOrder() {
+          let params = {};
+          if (this.troubleshootDetail) {
+            let {codekey} = this.troubleshootDetail.codeinfo;
+            params = Object.assign(params, {codekey})
+          } else {
+            return this.$toast('请求参数不存在')
+          }
+          let res = await webApi.deleteQuestionPayOrder(params);
+          if (res.flags === 'success') {
+            this.$toast('激活成功', 'success');
             this.getTroubleshootDetailByType();
           } else {
             this.$toast(res.message, 'error');

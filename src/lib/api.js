@@ -71,8 +71,14 @@ let webApi = {
   deleteQuestionPayOrder(data) {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'repay'}))
   },
+  //根据二维码文本查询问题排查详情（问题排查）
   getTroubleshootDetail(data) {
     return httpRequest(`/rqrcbc`, data)
+  },
+  //手动激活支付订单（问题排查）
+  manualQuestionPayOrder(data) {
+    return httpRequest(`/mco`, Object.assign({}, data, {action: 'manual'}))
   }
+
 };
 export default webApi;
