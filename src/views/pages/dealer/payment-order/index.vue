@@ -68,8 +68,8 @@
             </span>
           </div>
         </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button size="small" @click="dialogOption.isVisible = false">关 闭</el-button>
+        <div slot="footer">
+          <el-button size="small" @click="dialogOption.isVisible = false" round>关 闭</el-button>
         </div>
       </el-dialog>
     </div>
@@ -254,9 +254,6 @@
     .text-field{
       width: 200px;
       color: #eee;
-    }
-    .dialog-footer{
-      text-align: center;
     }
   }
 }
