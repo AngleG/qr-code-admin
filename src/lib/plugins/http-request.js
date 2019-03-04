@@ -1,14 +1,12 @@
 import axios from 'axios';
 import config from '../../conf/config'
 import qs from 'qs';
-const singOut = () => {
-  localStorage.removeItem('loginkey');
-  window.location.href = '/';
-};
+import {loginOut} from "../utils";
+
 
 axios.interceptors.response.use(data => {
   if (data.data.code === 900) {
-    singOut()
+    loginOut()
   }
   return data
 }, error => {
@@ -41,7 +39,7 @@ const getResult = res => {
     let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台'];
     if (logoutErrorList.includes(result.error)|| result.error.indexOf("禁用") !== -1) {
       let timer = setTimeout(() => {
-        singOut();
+        loginOut();
         clearTimeout(timer)
       }, 500)
     }

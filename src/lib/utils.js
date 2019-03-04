@@ -26,3 +26,8 @@ export const downloadFile = (url, outName, type = 'blank', isBold = false) => {
     link.remove();
   }
 };
+
+export const loginOut = () => {
+  localStorage.removeItem('loginkey');
+  window.location.href = '/';
+};
