@@ -16,6 +16,7 @@
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       @close="closeDialog"
       width="400px">
       <div class="change-password">

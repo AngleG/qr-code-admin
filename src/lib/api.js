@@ -84,8 +84,17 @@ let webApi = {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'manual'}))
   },
   //发货管理
-  getShipList(data){
+  // 获取发货订单列表
+  getShipList(data) {
     return httpRequest(`/reotd`, data)
+  },
+  //获取兑换订单分页列表
+  getExchangeOrderList(data) {
+    return httpRequest(`/reo`, data)
+  },
+  //下载兑换订单
+  downloadExchangeOrder(data) {
+    return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
   }
 };
 export default webApi;

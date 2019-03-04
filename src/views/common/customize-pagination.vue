@@ -24,13 +24,6 @@
             return [10, 20, 30, 40, 50]
           }
         },
-        searchParams: {
-          type: Object,
-          default: function () {
-            return {}
-          },
-          required: true
-        },
         defaultPageSize: {
           type: Number,
           default: 10

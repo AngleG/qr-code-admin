@@ -8,3 +8,37 @@ $listBorderRadius: 5px;
   border: $listBorder;
   border-radius: $listBorderRadius;
 }
+@mixin customFormItem($width: 90px, $lineHeight: 32px, $labelColor: #afafaf, $contentColor: #fff, $hasMargin: true) {
+  .custom-form-item{
+    overflow: hidden;
+    margin: 0 8px 8px 0;
+    @if $hasMargin == false { margin: 0 }
+    .custom-form-item__label{
+      float: left;
+      width: $width;
+      padding-right: 8px;
+      box-sizing: border-box;
+      line-height: $lineHeight;
+      text-align: right;
+      font-size: 14px;
+      color: $labelColor;
+    }
+    .custom-form-item__content{
+      position: relative;
+      text-align: left;
+      margin-left: $width;
+      line-height: $lineHeight;
+      font-size: 14px;
+      white-space: normal;
+      word-break: break-word;
+      color: $contentColor;
+    }
+    &:before, &:after{
+      content: '';
+      display: table;
+    }
+    &:after{
+      clear: both;
+    }
+  }
+}

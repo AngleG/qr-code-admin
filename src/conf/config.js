@@ -3,5 +3,5 @@ export default {
   DOWNLOAD_URL: 'http://cdn.jedge.cn/download',
   FREE_LOGIN_KEY_URL: ['/login', '/mccl', '/mcp', '/rqrcbp'],
   FILE_URL: ['/mccl', '/mcp', '/rqrcbp'],
-  DOWNLOAD_FILE_URL: ['/dpo']
+  DOWNLOAD_FILE_URL: ['/dpo', '/deo']
 }
