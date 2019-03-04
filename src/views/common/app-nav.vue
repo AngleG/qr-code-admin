@@ -11,7 +11,7 @@
       <el-menu
         mode="vertical"
         background-color="#191d2a"
-        active-text-color="#fff"
+        active-text-color="#2c97fb"
         text-color="#909090"
         :default-active="defaultIndex"
         :default-openeds="defaultOpens"

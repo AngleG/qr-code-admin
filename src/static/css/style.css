@@ -46,7 +46,6 @@ body,html{
 /*}*/
 .el-container .el-aside .el-menu .el-menu-item.is-active {
   background-color: #060b17 !important;
-  color: #2c97fb !important;
 }
 /*.el-menu-item{*/
   /*padding: 0 50px !important;*/
