@@ -22,6 +22,13 @@ const getResult = res => {
     data: null,
     message: result.error
   };
+  if (Object.prototype.toString.call(result).indexOf('Blob') > -1) {
+    return {
+      flags: 'success',
+      data: result,
+      message: '成功'
+    };
+  }
   if (result.state === 'success') {
     return {
       flags: 'success',
@@ -46,6 +53,10 @@ const getFinallyRequestData = (url, data) => {
   data = config.FREE_LOGIN_KEY_URL.includes(url) ? data : Object.assign({}, data, loginkey);
   return config.FILE_URL.includes(url) ? data : qs.stringify(data);
 };
+const getFinallyParamsData = (url, params) => {
+  let loginkey = JSON.parse(localStorage.getItem('loginkey'));
+  return config.FILE_URL.includes(url) || config.DOWNLOAD_FILE_URL.includes(url) ? Object.assign({}, params, {loginkey: loginkey.loginkey, eid: loginkey.eid}) : params;
+};
 /**
  * 基于axios的http请求，默认方式为post
  * @param url
@@ -59,7 +70,7 @@ export const httpRequest = (url, data = {}, options = { method : 'post' }, param
         baseURL: config.BASE_URL,
         url,
         data: getFinallyRequestData(url, data),
-        params,
+        params: getFinallyParamsData(url, params),
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
