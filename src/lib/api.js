@@ -82,6 +82,10 @@ let webApi = {
   //手动激活支付订单（问题排查）
   manualQuestionPayOrder(data) {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'manual'}))
+  },
+  //发货管理
+  getShipList(data){
+    return httpRequest(`/reotd`, data)
   }
 };
 export default webApi;
