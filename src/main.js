@@ -9,6 +9,8 @@ import './static/css/index.css'
 import './lib/plugins/vue-global'
 //加载全局组件
 import './lib/plugins/vue-components'
+//加载全局filter方法
+import './lib/filters'
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
