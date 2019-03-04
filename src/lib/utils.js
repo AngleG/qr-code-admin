@@ -31,3 +31,12 @@ export const loginOut = () => {
   localStorage.removeItem('loginkey');
   window.location.href = '/';
 };
+
+//重置对象属性
+export const restObjectAttribute = obj => {
+  if (obj) {
+    Object.keys(obj).forEach(key => {
+      obj[key] = Array.isArray(obj[key]) ? [] : null;
+    })
+  }
+};

@@ -4,6 +4,10 @@ let webApi = {
   login(data) {
     return httpRequest(`/login`, data)
   },
+  //修改密码
+  changePassword(data) {
+    return httpRequest(`/cp`, data)
+  },
   //获取公司信息
   getCompanyInfo() {
     return httpRequest(`/rcc`, {})
@@ -79,6 +83,5 @@ let webApi = {
   manualQuestionPayOrder(data) {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'manual'}))
   }
-
 };
 export default webApi;

@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import { Message } from 'element-ui'
-import {downloadFile} from "../utils";
+import {
+  downloadFile,
+  restObjectAttribute} from "../utils";
 import _ from 'lodash'
 /**
  * 自定义Vue全局toast方法 element message
@@ -15,5 +17,7 @@ Vue.prototype.$toast = function (message, type = 'warning') {
     })
 };
 Vue.prototype.$downloadFile = downloadFile;
+
+Vue.prototype.$restObjectAttribute = restObjectAttribute;
 
 Vue.prototype.$_ = _;

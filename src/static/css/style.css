@@ -184,3 +184,32 @@ body,html{
 .el-pager li{
   background-color: #24304A;
 }
+/*confirm默认样式修改*/
+.el-message-box{
+  background-color: #2b354b;
+  border: 1px solid #323c54;
+}
+.el-message-box__title{
+  color: #fff;
+}
+.el-message-box p{
+  color: #fff;
+}
+/*dialog默认样式修改*/
+.el-dialog{
+  background-color: #182337;
+  border: 1px solid #323c54;
+}
+.el-dialog__title{
+  color: #fff;
+  font-size: 16px;
+}
+.el-dialog__headerbtn .el-dialog__close{
+  color: #fff;
+}
+.el-dialog__headerbtn .el-dialog__close:hover{
+  color: #fff;
+}
+.el-dialog__footer{
+  text-align: center;
+}
