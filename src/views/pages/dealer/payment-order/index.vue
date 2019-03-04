@@ -59,22 +59,7 @@
             {title: '经销商名称', align: 'center', key: 'agentcompany' },
             {title: '支付时间', align: 'center', key: 'lastupdatime' },
             {title: '支付金额', align: 'center', key: 'distotal' },
-            {title: '状态', align: 'center', key: 'status', render: (h, params) => {
-                let status = params.row.status;
-                let str = '';
-                if(status){
-                  if(status === 'd'){
-                    str = '已支付';
-                  } else if (status === 'i') {
-                    str = '支付中';
-                  } else if (status === 'c') {
-                    str = '已取消';
-                  } else if (status === 'f') {
-                    str = '支付失败';
-                  }
-                }
-                return <span>{ str }</span>
-              }},
+            {title: '状态', align: 'center', key: 'status', render: (h, params) => <span>{ this.$options.filters.paymentOrderStatusToText(params.row.status) }</span>},
             {title: '操作', align: 'center', key: 'agentcompany', render: (h, params) => {
               return h('el-button', {
                 props:{
