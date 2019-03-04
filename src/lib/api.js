@@ -1,5 +1,4 @@
 import {httpRequest} from './plugins/http-request';
-let eid = localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).eid : '';
 let webApi = {
   //用户登录
   login(data) {
@@ -34,7 +33,7 @@ let webApi = {
   upload(file, params, url) {
     let data = new FormData();
     data.append('file', file);
-    return httpRequest(url, data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}}, Object.assign(params, {eid}))
+    return httpRequest(url, data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}}, params)
   },
   //获取经销商列表
   getDealerList() {
@@ -58,7 +57,7 @@ let webApi = {
   },
   //下载支付订单
   downloadPaymentOrder(data){
-    return httpRequest(`/dpo`, {}, {method: 'get'}, data)
+    return httpRequest(`/dpo`, {}, {method: 'get', responseType: 'blob'}, data)
   },
   //保存修改订单（问题排查）
   saveQuestionExChangedOrder(data) {

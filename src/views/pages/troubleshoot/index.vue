@@ -10,7 +10,7 @@
       <div class="troubleshoot-content">
         <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
-            <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText }}</template>
+            <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
             <span class="fr">
               <el-button type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
               <el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
@@ -267,7 +267,7 @@
           if (!this.qrCodeFile) {
             return this.$toast('请浏览图片后上传')
           }
-          let res = await webApi.upload(this.qrCodeFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey}, `/rqrcbp`);
+          let res = await webApi.upload(this.qrCodeFile, {}, `/rqrcbp`);
           if (res.flags === 'success') {
             if (res.data) {
              this.troubleshootDetail = res.data;

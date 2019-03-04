@@ -127,7 +127,7 @@
           if (!this.couponFile) {
             return this.$toast('请浏览图片后上传')
           }
-          let res = await webApi.upload(this.couponFile, {loginkey: JSON.parse(localStorage.getItem('loginkey')).loginkey, couponkey: this.requestParams.couponkey},`/mcp`);
+          let res = await webApi.upload(this.couponFile, {couponkey: this.requestParams.couponkey},`/mcp`);
           if (res.flags === 'success') {
             this.couponDetail.picture = res.data.picpath;
             this.$toast('上传图片成功', 'success');
