@@ -36,7 +36,7 @@ const getResult = res => {
   } else if(result.state === 'error') {
     return failResult
   } else if (result.state === 'fail'){
-    let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台'];
+    let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台', '输入登录名和密码'];
     if (logoutErrorList.includes(result.error)|| result.error.indexOf("禁用") !== -1) {
       let timer = setTimeout(() => {
         loginOut();

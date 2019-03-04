@@ -38,6 +38,10 @@ body,html{
 .el-container .el-aside .el-menu i{
   margin-right: 10px;
 }
+.el-submenu .el-menu-item{
+  height: 40px;
+  line-height: 40px;
+}
 /*.el-container .el-aside .el-menu .is-active i{*/
   /*color: #2c97fb;*/
 /*}*/
