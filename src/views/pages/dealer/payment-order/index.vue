@@ -27,7 +27,7 @@
         <el-button size="small" type="primary" round @click="downloadPaymentOrder">下载全部（每周一三五更新）</el-button>
       </div>
       <div class="payment-order_content">
-        <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData"></element-table>
+        <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
         <customize-pagination ref="customizePaginationPaymentOrder" :total="total" :search-params="searchRequestParams"></customize-pagination>
       </div>
       <el-dialog

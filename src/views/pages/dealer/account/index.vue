@@ -163,9 +163,10 @@
       }
       .dealer-create{
         float: left;
+        margin-right: 60px;
       }
       .dealer-search{
-        float: right;
+        float: left;
       }
     }
     .dealer-content{
