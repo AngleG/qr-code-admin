@@ -82,6 +82,14 @@ let webApi = {
   //手动激活支付订单（问题排查）
   manualQuestionPayOrder(data) {
     return httpRequest(`/mco`, Object.assign({}, data, {action: 'manual'}))
+  },
+  //获取兑换订单分页列表
+  getExchangeOrderList(data) {
+    return httpRequest(`/reo`, data)
+  },
+  //下载兑换订单
+  downloadExchangeOrder(data) {
+    return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
   }
 };
 export default webApi;
