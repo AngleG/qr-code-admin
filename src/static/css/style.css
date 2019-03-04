@@ -181,3 +181,12 @@ body,html{
 .el-pager li{
   background-color: #24304A;
 }
+.el-dialog{
+  background-color: #35476C;
+}
+.el-dialog__header{
+  background: #24304A;
+}
+.el-dialog__title{
+  color: #eee;
+}
