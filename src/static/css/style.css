@@ -31,12 +31,6 @@ body,html{
   padding: 0;
 }
 /*左侧导航颜色*/
-.el-container .el-aside .el-menu .el-menu-item.is-active {
-  background-color: #060b17 !important;
-}
-.el-menu-item{
-  padding: 0 50px !important;
-}
 .el-menu-item, .el-submenu__title{
   height: 40px;
   line-height: 40px;
@@ -44,9 +38,22 @@ body,html{
 .el-container .el-aside .el-menu i{
   margin-right: 10px;
 }
-.el-container .el-aside .el-menu .is-active i{
-  color: #2c97fb;
+.el-submenu .el-menu-item{
+  height: 40px;
+  line-height: 40px;
 }
+/*.el-container .el-aside .el-menu .is-active i{*/
+  /*color: #2c97fb;*/
+/*}*/
+/*.el-menu-item.is-active{*/
+  /*color: #2c97fb;*/
+/*}*/
+.el-container .el-aside .el-menu .el-menu-item.is-active {
+  background-color: #060b17 !important;
+}
+/*.el-menu-item{*/
+  /*padding: 0 50px !important;*/
+/*}*/
 /*改变el-input默认样式*/
 .el-input .el-input__inner{
   background-color: #24304A;
@@ -181,12 +188,39 @@ body,html{
 .el-pager li{
   background-color: #24304A;
 }
+
+/*confirm默认样式修改*/
+.el-message-box{
+  background-color: #2b354b;
+  border: 1px solid #323c54;
+}
+.el-message-box__title{
+  color: #fff;
+}
+.el-message-box p{
+  color: #fff;
+}
+/*dialog默认样式修改*/
+/*.el-dialog{*/
+  /*background-color: #182337;*/
+  /*border: 1px solid #323c54;*/
+/*}*/
+.el-dialog__headerbtn .el-dialog__close{
+  color: #fff;
+}
+.el-dialog__headerbtn .el-dialog__close:hover{
+  color: #fff;
+}
+/*修改dialog默认样式*/
 .el-dialog{
   background-color: #35476C;
 }
 .el-dialog__header{
   background: #24304A;
 }
-.el-dialog__title{
+.el-dialog__title {
   color: #eee;
+}
+.el-dialog__footer{
+  text-align: center;
 }
