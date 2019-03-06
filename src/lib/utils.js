@@ -40,3 +40,11 @@ export const restObjectAttribute = obj => {
     })
   }
 };
+
+export const isTypeof =  target => Object.prototype.toString.call(target).slice(8, -1).toLocaleLowerCase();
+
+export const isObject = target => isTypeof(target) === 'object';
+
+export const isArray = target => isTypeof(target) === 'array';
+
+export const isSymbol = target => isTypeof(target) === 'symbol';
