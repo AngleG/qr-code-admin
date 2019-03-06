@@ -56,9 +56,9 @@
                 id: 2,
                 path: "/",
                 subMenuList: [
-                  {description: "创建与修改", iconClass: "", id: 22, path: '/coupon-creation-modification', type: 1},
+                  {description: "创建与修改", iconClass: "", id: 22, path: '/coupon-edit', type: 1},
                   // {description: "礼券分发", iconClass: "", id: 23, path: '/coupon-distribution', type: 1},
-                  {description: "激活与撤销", iconClass: "", id: 24, path: '/coupon-activation-revocation', type: 1},
+                  {description: "激活与撤销", iconClass: "", id: 24, path: '/coupon-operating', type: 1},
                 ],
                 type: 0
               },
@@ -69,7 +69,7 @@
                 path: "/",
                 subMenuList: [
                   {description: "经销商账号", iconClass: "", id: 25, path: '/dealer-account', type: 1},
-                  {description: "支付订单", iconClass: "", id: 26, path: '/payment-order', type: 1},
+                  {description: "支付订单", iconClass: "", id: 26, path: '/dealer-payment-order', type: 1},
                   // {description: "进销存报表", iconClass: "", id: 27, path: '/dealer-payment-order', type: 1},
                 ],
                 type: 0
@@ -80,7 +80,7 @@
                 id: 3,
                 path: "/",
                 subMenuList: [
-                  {description: "兑换订单", iconClass: "", id: 28, path: '/exchange-order', type: 1},
+                  {description: "兑换订单", iconClass: "", id: 28, path: '/consumer-exchange-order', type: 1},
                   // {description: "收货地址列表", iconClass: "", id: 29, path: '/shipping-address', type: 1},
                 ],
                 type: 0

@@ -32,14 +32,14 @@ export default new Router({
       component: Index,
       children: [
         {
-          path: '/coupon-creation-modification',
+          path: '/coupon-edit',
           name: '创建与修改',
-          component: () => import(/*webpackChunkName: 'coupon'*/'../views/pages/coupon/creation-modification/index.vue')
+          component: () => import(/*webpackChunkName: 'coupon-edit'*/'../views/pages/coupon/coupon-edit.vue')
         },
         {
-          path: '/coupon-activation-revocation',
+          path: '/coupon-operating',
           name: '激活与撤销',
-          component: () => import(/*webpackChunkName: 'coupon'*/'../views/pages/coupon/activation-revocation/index.vue')
+          component: () => import(/*webpackChunkName: 'coupon-operating'*/'../views/pages/coupon/coupon-operating.vue')
         }
       ]
     },
@@ -51,12 +51,12 @@ export default new Router({
         {
           path: '/dealer-account',
           name: '经销商账号',
-          component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/account/index.vue')
+          component: () => import(/*webpackChunkName: 'dealer-account'*/'../views/pages/dealer/dealer-account.vue')
         },
         {
-          path: '/payment-order',
+          path: '/dealer-payment-order',
           name: '支付订单',
-          component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/payment-order/index.vue')
+          component: () => import(/*webpackChunkName: 'dealer-payment-order'*/'../views/pages/dealer/dealer-payment-order.vue')
         },
       ]
     },
@@ -68,12 +68,12 @@ export default new Router({
         // {
         //   path: '/dealer-account',
         //   name: '收货地址列表',
-        //   component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/account/index.vue')
+        //   component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/account/coupon-edit.vue')
         // },
         {
-          path: '/exchange-order',
+          path: '/consumer-exchange-order',
           name: '兑换订单',
-          component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/consumer/exchange-order/index.vue')
+          component: () => import(/*webpackChunkName: 'consumer-exchange-order'*/'../views/pages/consumer/consumer-exchange-order.vue')
         },
       ]
     },
@@ -85,7 +85,7 @@ export default new Router({
         {
           path: '/ship',
           name: '',
-          component: () => import(/*webpackChunkName: 'troubleshoot'*/'../views/pages/ship/index.vue')
+          component: () => import(/*webpackChunkName: 'ship'*/'../views/pages/ship/index.vue')
         }
       ]
     },

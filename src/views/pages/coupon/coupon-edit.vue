@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import baseCoupon from "../base/base-coupon"
-  import webApi from '../../../../lib/api'
+  import baseCoupon from "./base/base-coupon"
+  import webApi from '../../../lib/api'
     export default {
       name: "index",
       components: {

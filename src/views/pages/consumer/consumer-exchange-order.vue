@@ -70,8 +70,8 @@
 </template>
 
 <script>
-  import webApi from '../../../../lib/api'
-  import {SOURCE_LIST} from '../../../../conf/config-list'
+  import webApi from '../../../lib/api'
+  import {SOURCE_LIST} from '../../../conf/config-list'
   export default {
     data() {
       return {

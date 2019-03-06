@@ -76,7 +76,7 @@
 </template>
 
 <script>
-  import webApi from '../../../../lib/api'
+  import webApi from '../../../lib/api'
     export default {
       name: "index",
       data(){
