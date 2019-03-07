@@ -182,11 +182,15 @@ body,html{
 .el-pagination .btn-next, .el-pagination .btn-prev{
   background-color: #24304A;
 }
+.el-pagination button i {
+  color: #fff;
+}
 .el-pagination button:disabled{
   background-color: #2F4062;
 }
 .el-pager li{
   background-color: #24304A;
+  color: #fff;
 }
 
 /*confirm默认样式修改*/
