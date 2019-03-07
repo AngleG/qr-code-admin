@@ -28,7 +28,7 @@
       </div>
       <div class="payment-order_content">
         <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-        <customize-pagination ref="customizePaginationPaymentOrder" :total="total" :search-params="searchRequestParams"></customize-pagination>
+        <customize-pagination @getList="getPaymentOrderList" :total="total"></customize-pagination>
       </div>
       <el-dialog
         width="600px"
@@ -155,13 +155,17 @@
          * 获取支付订单列表
          * @returns {Promise<void>}
          */
-        async getPaymentOrderList(){
+        async getPaymentOrderList(currentPage){
           this.tableListLoading = true;
-          let res = await webApi.getPaymentOrderList(this.searchRequestParams);
+          let params = this.$_.cloneDeep(this.requestParams);
+          if (typeof currentPage === 'number') {
+            params.pagenum = currentPage;
+          }
+          let res = await webApi.getPaymentOrderList(params);
           if(res.flags === 'success'){
             if(res.data){
               this.tableData = res.data.pagedorders ? res.data.pagedorders : [];
-              this.total = res.data.totalitems;
+              this.total = this.$config.PAGE_SIZE * res.data.totalpages;
             }
           }else {
             this.tableData = [];

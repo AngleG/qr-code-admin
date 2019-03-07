@@ -28,7 +28,7 @@
     </div>
     <div class="exchange-order_content">
       <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-      <customize-pagination :total="total" :currentPage="totalpages"/>
+      <customize-pagination @getList="getExchangeOrderList" :total="total"/>
     </div>
     <el-dialog
       title="兑换单详情"
@@ -93,7 +93,6 @@
         tableData: [],
         isLoading: false,
         total: 0,
-        totalpages: 0,
         dialogVisible: false,
         exchangeDetail: null
       }
@@ -122,17 +121,19 @@
        * 获取兑换订单分页列表
        * @returns {Promise<void>}
        */
-      async getExchangeOrderList() {
+      async getExchangeOrderList(currentPage) {
         this.isLoading = true;
-        let res = await webApi.getExchangeOrderList(this.searchParams);
+        let params = this.$_.cloneDeep(this.searchParams);
+        if (typeof currentPage === 'number') {
+          params.pagenum = currentPage;
+        }
+        let res = await webApi.getExchangeOrderList(params);
         if (res.flags === 'success') {
           this.tableData = [];
           this.total = 0;
-          this.totalpages = 0;
           if (res.data) {
-            this.total = res.data.totalitems;
+            this.total = this.$config.PAGE_SIZE * res.data.totalpages;
             this.tableData = res.data.pagedorders;
-            this.totalpages = res.data.totalpages;
           }
           this.isLoading = false;
         } else {
