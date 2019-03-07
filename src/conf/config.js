@@ -3,5 +3,7 @@ export default {
   DOWNLOAD_URL: 'http://cdn.jedge.cn/download',
   FREE_LOGIN_KEY_URL: ['/login', '/mccl', '/mcp', '/rqrcbp'],
   FILE_URL: ['/mccl', '/mcp', '/rqrcbp'],
-  DOWNLOAD_FILE_URL: ['/dpo', '/deo']
+  DOWNLOAD_FILE_URL: ['/dpo', '/deo'],
+  //由于接口只返回了总数量和总页数，并不知道一页显示多少
+  PAGE_SIZE: 50
 }
