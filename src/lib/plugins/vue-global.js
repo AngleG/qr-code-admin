@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { Message } from 'element-ui'
+import config from '../../conf/config'
 import {
   downloadFile,
   restObjectAttribute} from "../utils";
@@ -21,3 +22,5 @@ Vue.prototype.$downloadFile = downloadFile;
 Vue.prototype.$restObjectAttribute = restObjectAttribute;
 
 Vue.prototype.$_ = _;
+
+Vue.prototype.$config = config;

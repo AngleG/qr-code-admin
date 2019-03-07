@@ -13,7 +13,19 @@ export const filters = {
     } else {
       return '';
     }
-  }
+  },
+  /**
+   * 根据value返回label
+   * @param value
+   * @param configOptions
+   */
+  formatConfigValueToLabel(value, configOptions) {
+    if (!Array.isArray(configOptions)) {
+      return ''
+    }
+    let result = configOptions.find(item => item.value === value);
+    return result ? result.label : '';
+  },
 };
 // Vue上全局注册filters
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
