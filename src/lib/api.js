@@ -96,9 +96,20 @@ let webApi = {
   downloadExchangeOrder(data) {
     return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
   },
-  //获取经销商激活和撤销列表
+  //获取礼劵激活和撤销列表
   getCouponOperatingList(data) {
     return httpRequest(`/rctm`, data)
+  },
+  //设置礼劵为激活
+  setCouponForActivation(data) {
+    return httpRequest(`/rflc`, Object.assign({}, data, {action: 'a'}))
+  },
+  //设置礼劵为撤销
+  setCouponForCancel(data) {
+    return httpRequest(`/rflc`, Object.assign({}, data, {action: 'c'}))
+  },
+  enterCouponStatus(data) {
+    return httpRequest(`/cctm`, data)
   }
 };
 export default webApi;
