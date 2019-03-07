@@ -95,6 +95,10 @@ let webApi = {
   //下载兑换订单
   downloadExchangeOrder(data) {
     return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
+  },
+  //获取经销商激活和撤销列表
+  getCouponOperatingList(data) {
+    return httpRequest(`/rctm`, data)
   }
 };
 export default webApi;
