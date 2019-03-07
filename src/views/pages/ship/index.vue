@@ -91,7 +91,7 @@
             </span>
         </div>
       </div>
-      <div class="no-data">暂无数据</div>
+      <!--<div class="no-data">暂无数据</div>-->
     </div>
   </div>
 </template>
@@ -100,7 +100,6 @@
   import cityData from '../account/company/data/city'
   import webApi from '../../../lib/api'
     export default {
-      name: "index",
       data(){
         return {
           cityData,
@@ -126,7 +125,6 @@
       },
       created(){
         this.getCouponList();
-        this.getShipList();
       },
       methods: {
         /**
