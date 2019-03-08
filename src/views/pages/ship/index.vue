@@ -91,7 +91,7 @@
             </span>
         </div>
       </div>
-      <!--<div class="no-data">暂无数据</div>-->
+      <div class="no-data" v-if="!shipOrderList.length">暂无数据</div>
     </div>
   </div>
 </template>
@@ -146,6 +146,7 @@
         async getShipList(){
           let res = await webApi.getShipList(this.requestParams);
           if(res.flags === 'success'){
+            this.shipOrderList = [];
             if(res.data && res.data.length){
               this.shipOrderList = res.data;
             }
@@ -158,6 +159,18 @@
          */
         searchHandle(){
           this.getShipList();
+        },
+        /**
+         * 切换省
+         */
+        changeProvinceFn(){
+
+        },
+        /**
+         * 切换市
+         */
+        changeCityFn(){
+
         }
       }
     }
@@ -212,8 +225,11 @@
   }
   .no-data{
     text-align: center;
+    font-size: 14px;
     color: #eee;
-    margin-top: 50px;
+    line-height: 40px;
+    background: #182337;
+    margin-top: 20px;
   }
 }
 </style>

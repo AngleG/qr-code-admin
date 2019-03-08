@@ -78,8 +78,19 @@
         }
       },
       created(){
-        this.requestParams = JSON.parse(JSON.stringify(this.couponDetail));
+        this.requestParams = this.couponDetail;
+        // this.requestParams = JSON.parse(JSON.stringify(this.couponDetail));
         delete this.requestParams.couponid;
+      },
+      watch: {
+        couponDetail: {
+          handler (val){
+            console.log(val, 1233);
+            this.requestParams = val;
+            delete this.requestParams.couponid;
+          },
+          deep: true
+        }
       },
       methods: {
         /**
