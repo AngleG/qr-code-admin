@@ -88,7 +88,7 @@
         if (res.flags === 'success') {
           if (res.data) {
             this.preCompanyInfo = this.$_.cloneDeep(res.data);
-            this.requestParams = res.data;
+            this.requestParams = Object.assign({}, this.requestParams, res.data);
           }
           this.init();
         } else {
