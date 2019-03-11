@@ -25,10 +25,8 @@
           :key="item.value"
           :value="item.value"/>
       </el-select>
-      <base-item inline><template slot="label">激活起始序列号:</template><el-input v-model="requestParams.activation.serialfrom" size="small"/></base-item>
-      <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.activation.num" size="small"/> <el-button @click="setCouponStatus('activation')" size="small" type="primary" round>激活</el-button></base-item>
-      <base-item inline><template slot="label">撤销起始序列号:</template><el-input v-model="requestParams.cancel.serialfrom" size="small"/></base-item>
-      <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.cancel.num" size="small"/><el-button @click="setCouponStatus('cancel')" size="small" type="primary" round>撤销</el-button></base-item>
+      <base-item inline><template slot="label">起始序列号:</template><el-input v-model="requestParams.sharedData.serialfrom" size="small"/></base-item>
+      <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.sharedData.num" size="small"/> <el-button @click="setCouponStatus('activation')" size="small" type="primary" round>激活/分发</el-button><el-button @click="setCouponStatus('cancel')" size="small" type="primary" round>撤销/召回</el-button></base-item>
     </div>
     <div class="coupon-operating_content">
       <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
@@ -54,11 +52,7 @@
         },
         requestParams: {
           agentcompanykey: null,
-          activation: {
-            serialfrom: null,
-            num: null
-          },
-          cancel: {
+          sharedData: {
             serialfrom: null,
             num: null
           }
@@ -135,8 +129,8 @@
           return this.$toast('礼劵状态不能为空')
         }
         let isCancel = status === 'cancel';
-        let statusStr = isCancel ? '撤销' : '激活';
-        let params = this.$_.cloneDeep(this.requestParams[status]);
+        let statusStr = isCancel ? '撤销/召回' : '激活/分发';
+        let params = this.$_.cloneDeep(this.requestParams.sharedData);
         let {serialfrom, num} = params;
 
         let agentcompanykey = this.requestParams.agentcompanykey;
@@ -184,7 +178,7 @@
         let requestParams = Object.assign({}, {couponkey: result.couponkey, action: result.action}, {serialfrom: params.serialfrom, num: params.num, agentcompanykey});
         let res = await webApi.enterCouponStatus(requestParams);
         if (res.flags === 'success') {
-          this.$toast(`${isCancel ? '撤销' : '激活'}成功`, 'success');
+          this.$toast(`${isCancel ? '撤销/召回' : '激活/分发'}成功`, 'success');
           this.getCouponOperatingList(0);
         } else {
           this.$toast(res.message, 'error');
