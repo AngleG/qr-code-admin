@@ -60,7 +60,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background: url("../../../static/assets/login-bg.jpg") center center no-repeat;
+    background: url("../../../static/images/login-bg.jpg") center center no-repeat;
 
     .login-content {
       box-sizing: border-box;
