@@ -1,15 +1,10 @@
 import Vue from 'vue';
+import { PAYMENT_ORDER_STATUS } from '../conf/config-list'
 export const filters = {
   paymentOrderStatusToText(status) {
-    let statusList = [
-      {label: '已支付', value: 'd'},
-      {label: '支付中', value: 'i'},
-      {label: '已取消', value: 'c'},
-      {label: '支付失败', value: 'f'},
-    ];
     if (status) {
-      let statusIndex = statusList.findIndex(item => item.value === status);
-      return statusIndex > -1 ? statusList[statusIndex].label : '';
+      let statusIndex = PAYMENT_ORDER_STATUS.findIndex(item => item.value === status);
+      return statusIndex > -1 ? PAYMENT_ORDER_STATUS[statusIndex].label : '';
     } else {
       return '';
     }

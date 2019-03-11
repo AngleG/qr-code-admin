@@ -11,10 +11,10 @@
         <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
-            <span class="fr">
-              <el-button @click="manualQuestionPayOrder" type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>
-              <el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>
-            </span>
+            <!--<span class="fr">-->
+              <!--<el-button @click="manualQuestionPayOrder" type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>-->
+              <!--<el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>-->
+            <!--</span>-->
           </p>
           <p>
             <span class="label">经销商名称:</span>
@@ -64,16 +64,16 @@
         <div v-if="troubleshootDetail && troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-width">
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> {{ exchange.statusText }}
-            <span class="fr" v-if="exchange.isShowOperate">
-              <el-button @click="deleteQuestionExChangedOrder" type="danger" size="small" round>删除兑换订单</el-button>
-              <el-button @click="saveQuestionExChangedOrder" type="primary" size="small" round>保存修改订单</el-button>
-            </span>
+            <!--<span class="fr" v-if="exchange.isShowOperate">-->
+              <!--<el-button @click="deleteQuestionExChangedOrder" type="danger" size="small" round>删除兑换订单</el-button>-->
+              <!--<el-button @click="saveQuestionExChangedOrder" type="primary" size="small" round>保存修改订单</el-button>-->
+            <!--</span>-->
           </p>
           <p>
             <span class="label">兑换来源:</span>
             <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname }}</span>
-            <span class="label">兑换目标:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}</span>
+            <span class="label" style="width: 85px;">兑换目标(数量):</span>
+            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}&nbsp;({{ troubleshootDetail.exorderinfo.couponum }})</span>
           </p>
           <p>
             <span class="label">配送地址:</span>
@@ -93,43 +93,49 @@
           </p>
           <p class="troubleshoot-content_address">
             <span class="label">发货地址:</span>
-            <el-select @change="changeProvinceFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendprov">
-              <el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>
-            </el-select>
-            <el-select @change="changeCityFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendcity">
-              <el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/>
-            </el-select>
-            <el-select  size="samll" v-model="troubleshootDetail.exorderinfo.sendcounty">
-              <el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/>
-            </el-select>
-            <el-input size="small" style="width: 145px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>
+            {{ troubleshootDetail.exorderinfo.sendprov }}{{ troubleshootDetail.exorderinfo.sendcity }}{{ troubleshootDetail.exorderinfo.sendcounty }}{{ troubleshootDetail.exorderinfo.sendstreet }}
+            <!--<el-select @change="changeProvinceFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendprov">-->
+              <!--<el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>-->
+            <!--</el-select>-->
+            <!--<el-select @change="changeCityFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendcity">-->
+              <!--<el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/>-->
+            <!--</el-select>-->
+            <!--<el-select  size="samll" v-model="troubleshootDetail.exorderinfo.sendcounty">-->
+              <!--<el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/>-->
+            <!--</el-select>-->
+            <!--<el-input size="small" style="width: 145px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>-->
           </p>
           <p>
             <span class="label">发货联系人:</span>
             <span class="text-field">
-              <el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendcontact" maxlength="50" placeholder="请输入联系人姓名"></el-input>
+              {{troubleshootDetail.exorderinfo.sendcontact}}
+              <!--<el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendcontact" maxlength="50" placeholder="请输入联系人姓名"></el-input>-->
             </span>
             <span class="label">发货人电话:</span>
             <span class="text-field">
-              <el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendphone" maxlength="50" placeholder="请输入发货人电话"></el-input>
+              {{ troubleshootDetail.exorderinfo.sendphone }}
+              <!--<el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendphone" maxlength="50" placeholder="请输入发货人电话"></el-input>-->
             </span>
           </p>
           <p class="avatar">
             <span class="label">快递公司:</span>
             <span class="text-field">
-              <el-select size="samll" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delcom">
-                <el-option v-for="item in configObject.expressCompanyList" :label="item.label" :value="item.value" :key="item.value"/>
-              </el-select>
+              {{ troubleshootDetail.exorderinfo.delcom | formatConfigValueToLabel(configObject.expressCompanyList)}}
+              <!--<el-select size="samll" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delcom">-->
+                <!--<el-option v-for="item in configObject.expressCompanyList" :label="item.label" :value="item.value" :key="item.value"/>-->
+              <!--</el-select>-->
             </span>
             <span class="label">快递单号:</span>
             <span class="text-field">
-               <el-input size="small" maxlength="50" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delid" placeholder="请输入快递单号"></el-input>
+              {{ troubleshootDetail.exorderinfo.delid }}
+               <!--<el-input size="small" maxlength="50" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delid" placeholder="请输入快递单号"></el-input>-->
             </span>
           </p>
           <p>
             <span class="label">写给用户:</span>
             <span class="text-field">
-               <el-input size="small" style="width: 260px" v-model="troubleshootDetail.exorderinfo.log" placeholder="写给用户"></el-input>
+              {{ troubleshootDetail.exorderinfo.log }}
+               <!--<el-input size="small" style="width: 260px" v-model="troubleshootDetail.exorderinfo.log" placeholder="写给用户"></el-input>-->
             </span>
           </p>
         </div>

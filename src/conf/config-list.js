@@ -9,3 +9,10 @@ export const COUPON_STATUS = [
   {label: '激活', value: 'a'},
 ];
 
+export const PAYMENT_ORDER_STATUS = [
+  {label: '已支付', value: 'd'},
+  {label: '支付中', value: 'i'},
+  {label: '已取消', value: 'c'},
+  {label: '支付失败', value: 'f'},
+];
+
