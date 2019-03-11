@@ -89,7 +89,7 @@
         if (res.flags === 'success') {
           this.configObject.dealerList = [];
           if (res.data && res.data.length) {
-            this.configObject.dealerList = res.data.map(item => Object.assign(item, {label: item.name, value: item.adminuser}));
+            this.configObject.dealerList = res.data.map(item => Object.assign(item, {label: item.name, value: item.companykey}));
           }
         }else {
           this.$toast(res.message, 'error');
@@ -154,9 +154,8 @@
         if (serialfrom === null || serialfrom === '' || num === null || num === '') {
           return this.$toast('起始序列号和张数不能为空')
         }
-        serialfrom = serialfrom - 0;
-        num = num - 0;
-        console.log(serialfrom, num);
+        params.serialfrom = serialfrom = serialfrom - 0;
+        params.num = num = num - 0;
         if (typeof serialfrom !== 'number' || typeof num !== 'number') {
           return this.$toast('起始序列号和张数必须为数字')
         }
