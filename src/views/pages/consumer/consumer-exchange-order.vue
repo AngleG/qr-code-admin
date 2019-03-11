@@ -41,7 +41,7 @@
           <base-item class="w_50" inline><template slot="label">来源礼券ID:</template>{{ exchangeDetail.fromcouponid }}</base-item>
           <base-item class="w_50" inline><template slot="label">目标礼券ID:</template>{{ exchangeDetail.tocouponid }}</base-item>
           <base-item class="w_50" inline><template slot="label">下单时间:</template>{{ exchangeDetail.createtime }}</base-item>
-          <base-item class="w_50" inline><template slot="label">数量:</template>{{ exchangeDetail.codenum }}</base-item>
+          <base-item class="w_50" inline><template slot="label">数量:</template>{{ exchangeDetail.couponum }}</base-item>
         </div>
         <base-item><template slot="label">收货地址:</template>{{ exchangeDetail.recprov }}{{exchangeDetail.recity}}{{exchangeDetail.recounty}}{{exchangeDetail.recstreet}}</base-item>
         <div class="clearfix">
@@ -56,9 +56,9 @@
           <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ exchangeDetail.sendphone }}</base-item>
           <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from }}</base-item>
           <base-item class="w_50" inline><template slot="label">昵称:</template>{{ exchangeDetail.usernick }}</base-item>
-          <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom }}</template></base-item>
+          <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom | formatConfigValueToLabel(configObject.EXPRESS_COMPANY_LIST)}}</template></base-item>
           <base-item class="w_50" inline><template slot="label">快递单号:</template><template v-if="exchangeDetail.delid">{{ exchangeDetail.delid }}</template></base-item>
-          <base-item class="w_50" inline><template slot="label">性别:</template>{{ exchangeDetail.usergender }}</base-item>
+          <base-item class="w_50" inline><template slot="label">性别:</template>{{ exchangeDetail.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>
           <base-item class="w_50" inline><template slot="label">头像:</template><template v-if="exchangeDetail.userhead"><span class="user-head"><img :src="exchangeDetail.userhead" width="100%" height="100%"></span></template></base-item>
         </div>
       </div>
@@ -71,12 +71,14 @@
 
 <script>
   import webApi from '../../../lib/api'
-  import {SOURCE_LIST} from '../../../conf/config-list'
+  import {SOURCE_LIST, EXPRESS_COMPANY_LIST, SEX_LIST} from '../../../conf/config-list'
   export default {
     data() {
       return {
         configObject: {
           SOURCE_LIST,
+          SEX_LIST,
+          EXPRESS_COMPANY_LIST,
           couponList: []
         },
         searchParams: {

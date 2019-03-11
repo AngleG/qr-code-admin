@@ -147,6 +147,7 @@
   import cityData from '../account/company/data/city'
   import webApi from '../../../lib/api'
   import config from '../../../conf/config'
+  import { EXPRESS_COMPANY_LIST } from '../../../conf/config-list'
     export default {
       name: "index",
       data(){
@@ -165,10 +166,7 @@
           configObject: {
             cityList: [],
             countyList: [],
-            expressCompanyList: [
-              {label: '中通', value: 'zhongtong'},
-              {label: 'EMS', value: 'ems'}
-            ]
+            expressCompanyList: EXPRESS_COMPANY_LIST
           },
           qrCodeFile: null,
           searchType: null,

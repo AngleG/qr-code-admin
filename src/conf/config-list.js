@@ -16,3 +16,13 @@ export const PAYMENT_ORDER_STATUS = [
   {label: '支付失败', value: 'f'},
 ];
 
+export const EXPRESS_COMPANY_LIST = [
+  {label: '中通', value: 'zhongtong'},
+  {label: 'EMS', value: 'ems'}
+];
+
+export const SEX_LIST = [
+  {label: '男', value: 'm'},
+  {label: '女', value: 'f'},
+];
+
