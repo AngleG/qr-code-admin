@@ -27,7 +27,7 @@
                 <el-button type="primary" size="small" @click="saveDealerByCompanyKey(dealer)" round>保存修改</el-button>
               </div>
               <div class="clearfix dealer-user"><span>主账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPasswordConfirm(dealer)" type="primary" size="small" round>重置密码</el-button></div>
-              <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass }}</template>&nbsp;</p>
+              <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass }}</template></p>
             </div>
           </el-col>
         </el-row>
@@ -90,13 +90,13 @@
       async createDealer() {
 	      let params = this.$_.cloneDeep(this.dealerParams);
 	      if (!params.name) {
-	        return this.$toast('经销商名称');
+	        return this.$toast('请输入经销商名称');
         }
         if (!params.cname) {
-          return this.$toast('联系人姓名');
+          return this.$toast('请输入联系人姓名');
         }
         if (!params.cphone) {
-          return this.$toast('联系人电话');
+          return this.$toast('请输入联系人电话');
         }
         let res = await webApi.createDealer(params);
         if (res.flags === 'success') {
@@ -208,7 +208,11 @@
           text-align: center;
           font-size: 12px;
           color: #409EFF;
+          height: 28px;
           line-height: 28px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
       }
     }
