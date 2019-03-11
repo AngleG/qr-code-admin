@@ -98,7 +98,7 @@ let webApi = {
   },
   //获取礼劵激活和撤销列表
   getCouponOperatingList(data) {
-    return httpRequest(`/rctm`, data)
+    return httpRequest(`/rcto`, Object.assign({}, data, {type: 'm'}))
   },
   //设置礼劵为激活
   setCouponForActivation(data) {
