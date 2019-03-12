@@ -2,7 +2,7 @@
   <div class="ship">
     <div class="ship_search">
       <el-select
-        v-model="requestParams.couponkey"
+        v-model="searchRequestParams.couponkey"
         size="small"
         placeholder="请选择">
         <el-option
@@ -13,7 +13,7 @@
         </el-option>
       </el-select>
       <el-select
-        v-model="requestParams.from"
+        v-model="searchRequestParams.from"
         size="small"
         placeholder="请选择">
         <el-option
@@ -34,6 +34,10 @@
           <span class="text-field">{{ item.tocouponname }}</span>
         </div>
         <div>
+          <span class="label">配送物品:</span>
+          <span class="text-field">产品实物<font color="red">3</font>盒</span>
+        </div>
+        <div>
           <span class="label">配送地址:</span>
           <span class="text-field">{{ item.recprov }}{{ item.recity }}{{ item.recounty }}{{ item.recstreet }}</span>
         </div>
@@ -51,7 +55,7 @@
         </div>
         <div class="ship_content_address">
           <span class="label">发货地址:</span>
-          <el-select @change="changeProvinceFn" size="samll" v-model="item.sendprov">
+          <el-select @change="changeProvinceFn()" size="samll" v-model="item.sendprov">
             <el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>
           </el-select>
           <el-select @change="changeCityFn" size="samll" v-model="item.sendcity">
@@ -70,7 +74,7 @@
           <span class="label">发货人电话:</span>
           <span class="text-field">
               <el-input size="small" style="width: 160px" v-model="item.sendphone" maxlength="50" placeholder="请输入发货人电话"></el-input>
-            </span>
+          </span>
         </div>
         <div>
           <span class="label">快递公司:</span>
@@ -87,9 +91,10 @@
         <div>
           <span class="label">写给用户:</span>
           <span class="text-field">
-               <el-input size="small" style="width: 260px" v-model="item.log" placeholder="写给用户"></el-input>
+               <el-input size="small"  v-model="item.log" placeholder="写给用户"></el-input>
             </span>
         </div>
+        <el-button size="small" type="primary" round style="margin-top: 5px;" @click="saveHandle(index)">保存发货信息</el-button>
       </div>
       <div class="no-data" v-if="!shipOrderList.length">暂无数据</div>
     </div>
@@ -103,9 +108,27 @@
       data(){
         return {
           cityData,
-          requestParams: {
+          searchRequestParams: {
             couponkey: null,
             from: 'w'
+          },
+          requestParams: {
+            orderkey: null,
+            recprov: null,
+            recity: null,
+            recounty: null,
+            recstreet: null,
+            recontact: null,
+            recphone: null,
+            delcom: null,
+            delid: null,
+            sendprov: null,
+            sendcity: null,
+            sendcounty: null,
+            sendstreet: null,
+            sendcontact: null,
+            sendphone: null,
+            log: null
           },
           shipOrderList: [],
           configObject: {
@@ -144,11 +167,13 @@
          * 获取发货订单列表
          */
         async getShipList(){
-          let res = await webApi.getShipList(this.requestParams);
+          let res = await webApi.getShipList(this.searchRequestParams);
           if(res.flags === 'success'){
             this.shipOrderList = [];
+            // this.requestParams = [];
             if(res.data && res.data.length){
               this.shipOrderList = res.data;
+              // this.requestParams = res.data;
             }
           }else {
             this.$toast(res.message, 'error');
@@ -161,10 +186,27 @@
           this.getShipList();
         },
         /**
+         * 保存发货信息
+         */
+        async saveHandle(index){
+          Object.keys(this.requestParams).forEach(key => this.requestParams[key] = this.shipOrderList[index][key] ? this.shipOrderList[index][key] : '');
+          this.requestParams['exorderkey'] = this.requestParams.orderkey;
+          delete this.requestParams.orderkey;
+          let res = await webApi.saveShipInformation(this.requestParams);
+          if(res.flags === 'success'){
+            this.$toast('保存成功！', 'success');
+          }else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
          * 切换省
          */
-        changeProvinceFn(){
-
+        changeProvinceFn(province){
+          console.log(province);
+          // if(province){
+          //   this.
+          // }
         },
         /**
          * 切换市
@@ -172,6 +214,7 @@
         changeCityFn(){
 
         }
+
       }
     }
 </script>
@@ -185,7 +228,7 @@
 }
 .ship_content{
   padding: 20px 30px;
-  /*overflow: hidden;*/
+  overflow: hidden;
   .ship_content-item{
     float: left;
     width: 630px;
@@ -216,7 +259,7 @@
       width: 220px;
       line-height: 18px ;
     }
-    &.ship_content_address{
+    .ship_content_address{
       .el-select, .el-input{
         /*margin: 0 5px;*/
         width: 120px;

@@ -88,6 +88,10 @@ let webApi = {
   getShipList(data) {
     return httpRequest(`/reotd`, data)
   },
+  //保存发货信息
+  saveShipInformation(data){
+    return httpRequest(`/deliver`, data)
+  },
   //获取兑换订单分页列表
   getExchangeOrderList(data) {
     return httpRequest(`/reo`, data)
