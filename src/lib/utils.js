@@ -1,3 +1,4 @@
+import router from '../router/index'
 /**
  * 下载文件
  * @param url
@@ -29,7 +30,9 @@ export const downloadFile = (url, outName, type = 'blank', isBold = false) => {
 
 export const loginOut = () => {
   localStorage.removeItem('loginkey');
-  window.location.href = '/';
+  router.push({
+    path: '/login'
+  });
 };
 
 //重置对象属性
