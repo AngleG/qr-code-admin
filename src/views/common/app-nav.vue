@@ -57,7 +57,7 @@
                 path: "/",
                 subMenuList: [
                   {description: "创建与修改", iconClass: "", id: 22, path: '/coupon-edit', type: 1},
-                  // {description: "礼券分发", iconClass: "", id: 23, path: '/coupon-distribution', type: 1},
+                  {description: "礼券分发", iconClass: "", id: 23, path: '/coupon-distribution', type: 1},
                   {description: "激活与撤销", iconClass: "", id: 24, path: '/coupon-operating', type: 1},
                 ],
                 type: 0

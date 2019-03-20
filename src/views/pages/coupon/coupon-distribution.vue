@@ -12,7 +12,7 @@
           :key="item.value"
           :value="item.value"/>
       </el-select>
-      <el-button @click="getCouponOperatingList" size="small" type="primary" round>查询</el-button>
+      <el-button @click="getCouponDistributionList" size="small" type="primary" round>查询</el-button>
       <el-select
         size="small"
         style="margin-left: 20px;"
@@ -26,11 +26,11 @@
           :value="item.value"/>
       </el-select>
       <base-item inline><template slot="label">起始序列号:</template><el-input v-model="requestParams.sharedData.serialfrom" size="small"/></base-item>
-      <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.sharedData.num" size="small"/> <el-button @click="setCouponStatus('activation')" size="small" type="primary" round>激活</el-button><el-button @click="setCouponStatus('cancel')" size="small" type="primary" round>撤销</el-button></base-item>
+      <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.sharedData.num" size="small"/> <el-button @click="setCouponStatus('activation')" size="small" type="primary" round>分发</el-button><el-button @click="setCouponStatus('cancel')" size="small" type="primary" round>召回</el-button></base-item>
     </div>
     <div class="coupon-operating_content">
       <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-      <customize-pagination @getList="getCouponOperatingList" :total="total"/>
+      <customize-pagination @getList="getCouponDistributionList" :total="total"/>
     </div>
   </div>
 </template>
@@ -103,14 +103,14 @@
           this.$toast(res.message, 'error');
         }
       },
-      //获取经销商激活和撤销列表
-      async getCouponOperatingList(currentPage) {
+      //获取经销商激活和召回列表
+      async getCouponDistributionList(currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
         if (typeof currentPage === 'number') {
           params.pagenum = currentPage;
         }
-        let res = await webApi.getCouponOperatingList(params);
+        let res = await webApi.getCouponDistributionList(params);
         if (res.flags === 'success') {
           this.tableData = [];
           this.total = 0;
@@ -129,7 +129,7 @@
           return this.$toast('礼劵状态不能为空')
         }
         let isCancel = status === 'cancel';
-        let statusStr = isCancel ? '撤销' : '激活';
+        let statusStr = isCancel ? '召回' : '分发';
         let params = this.$_.cloneDeep(this.requestParams.sharedData);
         let {serialfrom, num} = params;
 
@@ -167,19 +167,19 @@
         }
       },
       /**
-       * 确定激活api
+       * 确定分发api
        * @param result
        * @param params
        * @param isCancel
        * @returns {Promise<void>}
        */
-      async enterCouponStatus(result, params, isCancel) {
+      async enterCouponDistribution(result, params, isCancel) {
         let agentcompanykey = this.requestParams.agentcompanykey;
         let requestParams = Object.assign({}, {couponkey: result.couponkey, action: result.action}, {serialfrom: params.serialfrom, num: params.num, agentcompanykey});
-        let res = await webApi.enterCouponStatus(requestParams);
+        let res = await webApi.enterCouponDistribution(requestParams);
         if (res.flags === 'success') {
-          this.$toast(`${isCancel ? '撤销' : '激活'}成功`, 'success');
-          this.getCouponOperatingList(0);
+          this.$toast(`${isCancel ? '召回' : '分发'}成功`, 'success');
+          this.getCouponDistributionList(0);
         } else {
           this.$toast(res.message, 'error');
         }
@@ -191,12 +191,12 @@
        * @param isCancel
        */
       setCouponStatusConfirm(result, params, isCancel) {
-        this.$confirm(`请确认${result.serialfrom}到${result.serialto}范围内第一张支付码${result.codestart}的序列号为${result.serialfrom}，最后一张支付码${result.codelast}的序列号为${result.serialto}，是否确认${isCancel ? '撤销' : '激活'}?`, '提示', {
+        this.$confirm(`请确认${result.serialfrom}到${result.serialto}范围内第一张支付码${result.codestart}的序列号为${result.serialfrom}，最后一张支付码${result.codelast}的序列号为${result.serialto}，是否确认${isCancel ? '召回' : '分发'}?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           roundButton: true,
           type: 'warning'
-        }).then(() => this.enterCouponStatus(result, params, isCancel)).catch(() => {
+        }).then(() => this.enterCouponDistribution(result, params, isCancel)).catch(() => {
         });
       }
     }
