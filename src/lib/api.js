@@ -122,8 +122,14 @@ let webApi = {
   enterCouponDistribution(data) {
     return httpRequest(`/ccta`, data)
   },
+  //获取用户列表
   getUserList(data) {
     return httpRequest(`/ru`, data)
+  },
+  //获取进销存列表
+  getInvoicingReportList(data) {
+    return httpRequest(`/repac`, data)
   }
+
 };
 export default webApi;

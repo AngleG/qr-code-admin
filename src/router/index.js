@@ -59,10 +59,15 @@ export default new Router({
           component: () => import(/*webpackChunkName: 'dealer-account'*/'../views/pages/dealer/dealer-account.vue')
         },
         {
-          path: '/dealer-payment-order',
+          path: '/payment-order',
           name: '支付订单',
-          component: () => import(/*webpackChunkName: 'dealer-payment-order'*/'../views/pages/dealer/dealer-payment-order.vue')
+          component: () => import(/*webpackChunkName: 'payment-order'*/'../views/pages/dealer/dealer-payment-order.vue')
         },
+        {
+          path: '/invoicing-report',
+          name: '进销存报表',
+          component: () => import(/*webpackChunkName: 'invoicing-report'*/'../views/pages/dealer/dealer-invoicing-report.vue')
+        }
       ]
     },
     {
