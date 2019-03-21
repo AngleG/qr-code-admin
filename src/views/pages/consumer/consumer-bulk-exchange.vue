@@ -1,7 +1,7 @@
 <template>
     <div class="bulk-exchange-content">
       <div class="clearfix">
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">礼券:</template>
           <el-select
             size="small"
@@ -15,15 +15,15 @@
               :value="item.value"/>
           </el-select>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">礼券起始编号:</template>
           <el-input size="small" placeholder="请输入礼券起始编号" v-model="requestParams.serialfrom"></el-input>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">兑换张数:</template>
           <el-input size="small" placeholder="请输入兑换张数" v-model="requestParams.num"></el-input>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">礼券:</template>
           <el-select
             size="small"
@@ -37,45 +37,39 @@
               :value="item.value"/>
           </el-select>
         </base-item>
-      </div>
-      <div class="clearfix">
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货省:</template>
           <el-select placeholder="请选择收货省" @change="changeProvinceFn" size="samll" v-model="requestParams.recprov" :value="requestParams.recprov"><el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/></el-select>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货市:</template>
           <el-select placeholder="请选择收货市" @change="changeCityFn" size="samll" v-model="requestParams.recity" :value="requestParams.recity"><el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/></el-select>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货区县:</template>
           <el-select placeholder="请选择收货区县" size="samll" v-model="requestParams.recounty" :value="requestParams.recounty"><el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/></el-select>
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货街道详细地址 :</template>
           <el-input size="small" v-model="requestParams.recstreet"  placeholder="请输入收货详细街道地址" maxlength="100" />
         </base-item>
-      </div>
-      <div class="clearfix">
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货人姓名:</template>
           <el-input size="small" v-model="requestParams.recontact"  placeholder="请输入收货人姓名" maxlength="50" />
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">收货人手机:</template>
           <el-input size="small" v-model="requestParams.recphone"  placeholder="请输入收货人手机" maxlength="11" />
         </base-item>
-      </div>
-      <div class="clearfix">
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">兑换人姓名:</template>
           <el-input size="small" v-model="requestParams.helloer" placeholder="请输入兑换人姓名" maxlength="11" />
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">兑换人手机:</template>
           <el-input size="small" v-model="requestParams.usermobile" placeholder="请输入兑换人手机" maxlength="11" />
         </base-item>
-        <base-item class="w_25">
+        <base-item class="w_310">
           <template slot="label">祝福语:</template>
           <el-input size="small" v-model="requestParams.hello"  placeholder="请输入祝福语" maxlength="50" />
         </base-item>
@@ -185,9 +179,9 @@
 
 <style lang="scss" scoped>
   .bulk-exchange-content{
-    min-width: 1400px;
+    max-width: 1400px;
     .el-input, .el-select{
-      width: 215px;
+      width: 170px;
     }
     /deep/ {
       @include customFormItem(135px, 40px, #afafaf, #fff, false);
@@ -195,8 +189,8 @@
         width: 50%;
         float: left;
       }
-      .w_25{
-        width: 25%;
+      .w_310{
+        width: 310px;
         float: left;
       }
     }
