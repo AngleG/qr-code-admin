@@ -78,7 +78,7 @@ export default new Router({
         {
           path: '/user-list',
           name: '用户列表',
-          component: () => import(/*webpackChunkName: 'user-list'*/'../views/pages/consumer/user-list.vue')
+          component: () => import(/*webpackChunkName: 'user-list'*/'../views/pages/consumer/consumer-user-list.vue')
         },
         // {
         //   path: '/dealer-account',
@@ -86,9 +86,14 @@ export default new Router({
         //   component: () => import(/*webpackChunkName: 'dealer'*/'../views/pages/dealer/account/coupon-edit.vue')
         // },
         {
-          path: '/consumer-exchange-order',
+          path: '/exchange-order',
           name: '兑换订单',
-          component: () => import(/*webpackChunkName: 'consumer-exchange-order'*/'../views/pages/consumer/consumer-exchange-order.vue')
+          component: () => import(/*webpackChunkName: 'exchange-order'*/'../views/pages/consumer/consumer-exchange-order.vue')
+        },
+        {
+          path: '/bulk-exchange',
+          name: '批量兑换',
+          component: () => import(/*webpackChunkName: 'bulk-exchange'*/'../views/pages/consumer/consumer-bulk-exchange.vue')
         },
       ]
     },

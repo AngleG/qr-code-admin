@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import cityData from './data/city'
+  import cityData from '../../../../conf/city'
   import config from '../../../../conf/config'
   import webApi from '../../../../lib/api'
 	export default {

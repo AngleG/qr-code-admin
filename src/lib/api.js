@@ -129,7 +129,10 @@ let webApi = {
   //获取进销存列表
   getInvoicingReportList(data) {
     return httpRequest(`/repac`, data)
+  },
+  //保存批量兑换
+  saveBulkExchange(data) {
+    return httpRequest(`/exs`, data)
   }
-
 };
 export default webApi;
