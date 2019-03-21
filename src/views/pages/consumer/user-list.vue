@@ -27,19 +27,19 @@
         },
         tableColumns: [
           {title: '昵称', align: 'center', key: 'usernick'},
-          {title: '性别', align: 'center', key: 'usergender', formatter: (row) => this.$options.filters.formatConfigValueToLabel(row.usergender, this.configObject.SEX_LIST, false)},
-          {title: '头像', align: 'center', key: 'userhead', render: (h, params) => {
+          {title: '性别', width: 50, align: 'center', key: 'usergender', formatter: (row) => this.$options.filters.formatConfigValueToLabel(row.usergender, this.configObject.SEX_LIST, false)},
+          {title: '头像', width: 70, align: 'center', key: 'userhead', render: (h, params) => {
             return <img width="100%" style="border-radius: 50%" src={params.row.userhead}/>
             }},
-          {title: '来源', align: 'center', key: 'from', formatter: (row) => this.$options.filters.formatConfigValueToLabel(row.from, this.configObject.SOURCE_LIST, false)},
+          {title: '来源', width: 80, align: 'center', key: 'from', formatter: (row) => this.$options.filters.formatConfigValueToLabel(row.from, this.configObject.SOURCE_LIST, false)},
           {title: 'ID', align: 'center', key: 'userid'},
-          {title: '兑换人手机号', align: 'center', key: 'usermobile' },
-          {title: '省', align: 'center', key: 'recprov' },
-          {title: '市', align: 'center', key: 'recity' },
-          {title: '区', align: 'center', key: 'recounty' },
+          {title: '兑换人手机号', width: 120, align: 'center', key: 'usermobile' },
+          {title: '省', width: 80, align: 'center', key: 'recprov' },
+          {title: '市', width: 80, align: 'center', key: 'recity' },
+          {title: '区', width: 80, align: 'center', key: 'recounty' },
           {title: '街道', align: 'center', key: 'recstreet' },
           {title: '收货人姓名', align: 'center', key: 'recontact' },
-          {title: '收货人手机号', align: 'center', key: 'recphone' },
+          {title: '收货人手机号', width: 120, align: 'center', key: 'recphone' },
         ],
         tableData: [],
         isLoading: false,
