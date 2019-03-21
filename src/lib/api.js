@@ -121,6 +121,9 @@ let webApi = {
   },
   enterCouponDistribution(data) {
     return httpRequest(`/ccta`, data)
+  },
+  getUserList(data) {
+    return httpRequest(`/ru`, data)
   }
 };
 export default webApi;

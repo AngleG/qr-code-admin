@@ -2,6 +2,7 @@ export const SOURCE_LIST = [
   {label: '全部', value: 'All'},
   {label: '微信', value: 'w'},
   {label: '支付宝', value: 'z'},
+  {label: '批量', value: 'm'}
 ];
 
 export const COUPON_STATUS = [
@@ -24,5 +25,6 @@ export const EXPRESS_COMPANY_LIST = [
 export const SEX_LIST = [
   {label: '男', value: 'm'},
   {label: '女', value: 'f'},
+  {label: '未知', value: 'o'}
 ];
 

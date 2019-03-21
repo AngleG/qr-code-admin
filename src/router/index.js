@@ -70,6 +70,11 @@ export default new Router({
       name: '消费者管理',
       component: Index,
       children: [
+        {
+          path: '/user-list',
+          name: '用户列表',
+          component: () => import(/*webpackChunkName: 'user-list'*/'../views/pages/consumer/user-list.vue')
+        },
         // {
         //   path: '/dealer-account',
         //   name: '收货地址列表',

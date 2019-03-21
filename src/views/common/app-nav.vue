@@ -80,6 +80,7 @@
                 id: 3,
                 path: "/",
                 subMenuList: [
+                  {description: "用户列表", iconClass: "", id: 28, path: '/user-list', type: 1},
                   {description: "兑换订单", iconClass: "", id: 28, path: '/consumer-exchange-order', type: 1},
                   // {description: "收货地址列表", iconClass: "", id: 29, path: '/shipping-address', type: 1},
                 ],
