@@ -137,10 +137,10 @@
             this.total = this.$config.PAGE_SIZE * res.data.totalpages;
             this.tableData = res.data.pagedorders;
           }
-          this.isLoading = false;
         } else {
           this.$toast(res.message, 'error');
         }
+        this.isLoading = false;
       },
       /**
        * 下载全部
