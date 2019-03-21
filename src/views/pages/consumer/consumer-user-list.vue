@@ -6,7 +6,7 @@
     </div>
     <div class="exchange-order_content">
       <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-      <customize-pagination @getList="getUserList" :total="total"/>
+      <customize-pagination @getList="getUserList" :page-count="totalPages"/>
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@
         ],
         tableData: [],
         isLoading: false,
-        total: 0
+        totalPages: 0
       }
     },
     created() {
@@ -57,15 +57,13 @@
       async getUserList(currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
-        if (typeof currentPage === 'number') {
-          params.pagenum = currentPage;
-        }
+        params.pagenum = currentPage ? currentPage : 0;
         let res = await webApi.getUserList(params);
         if (res.flags === 'success') {
           this.tableData = [];
-          this.total = 0;
+          this.totalPages = 0;
           if (res.data) {
-            this.total = this.$config.PAGE_SIZE * res.data.totalpages;
+            this.totalPages = res.data.totalpages;
             this.tableData = res.data.pagedlist;
           }
         } else {

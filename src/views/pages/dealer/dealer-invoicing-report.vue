@@ -8,7 +8,6 @@
     </div>
     <div class="exchange-order_content">
       <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-      <customize-pagination @getList="getInvoicingReportList" :total="total"/>
     </div>
   </div>
 </template>
@@ -37,8 +36,7 @@
           {title: '未兑换张数', align: 'center', key: 'unexnum'},
         ],
         tableData: [],
-        isLoading: false,
-        total: 0
+        isLoading: false
       }
     },
     created() {
@@ -67,15 +65,10 @@
       async getInvoicingReportList(currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
-        if (typeof currentPage === 'number') {
-          params.pagenum = currentPage;
-        }
         let res = await webApi.getInvoicingReportList(params);
         if (res.flags === 'success') {
           this.tableData = [];
-          this.total = 0;
           if (res.data) {
-            this.total = res.data.length;
             this.tableData = res.data;
           }
         } else {

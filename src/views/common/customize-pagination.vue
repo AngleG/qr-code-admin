@@ -3,27 +3,24 @@
       v-bind="$attrs"
       v-on="$listeners"
       layout="prev, pager, next"
-      :total="total"
-      :page-size="pageSize"
+      :page-count="pageCount"
       :current-page.sync="currentPage"
       @current-change="currentPageChange"
       @size-change="pageSizeChange"></el-pagination>
 </template>
 
 <script>
-    import config from '../../conf/config'
     export default {
       name: "customize-pagination",
       props: {
-        total: {
+        pageCount: {
           type: Number,
           required: true,
-          default: 0
+          default: 1
         }
       },
       data(){
         return{
-          pageSize: config.PAGE_SIZE,
           currentPage: 1
         }
       },
