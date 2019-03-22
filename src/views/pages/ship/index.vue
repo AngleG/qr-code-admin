@@ -103,7 +103,7 @@
 </template>
 
 <script>
-  import cityData from '../account/company/data/city'
+  import cityData from '../../../conf/city'
   import webApi from '../../../lib/api'
     export default {
       data(){

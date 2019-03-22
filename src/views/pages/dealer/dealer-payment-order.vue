@@ -28,7 +28,7 @@
       </div>
       <div class="payment-order_content">
         <element-table v-loading="tableListLoading" :table-columns="tableColumn" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
-        <customize-pagination @getList="getPaymentOrderList" :total="total"></customize-pagination>
+        <customize-pagination @getList="getPaymentOrderList" :page-count="totalPages"></customize-pagination>
       </div>
       <el-dialog
         width="600px"
@@ -88,7 +88,7 @@
             from: 'ALL'
           },
           searchRequestParams: null,
-          total: 0,
+          totalPages: 0,
           options: {
             userSourceList: [
               {label: '全部', value: 'ALL'},
@@ -158,18 +158,16 @@
         async getPaymentOrderList(currentPage){
           this.tableListLoading = true;
           let params = this.$_.cloneDeep(this.requestParams);
-          if (typeof currentPage === 'number') {
-            params.pagenum = currentPage;
-          }
+          params.pagenum = currentPage ? currentPage : 0;
           let res = await webApi.getPaymentOrderList(params);
           if(res.flags === 'success'){
             if(res.data){
               this.tableData = res.data.pagedorders ? res.data.pagedorders : [];
-              this.total = this.$config.PAGE_SIZE * res.data.totalpages;
+              this.totalPages = res.data.totalpages;
             }
           }else {
             this.tableData = [];
-            this.total = 0;
+            this.totalPages = 0;
             this.$toast(res.message, 'error');
           }
           this.tableListLoading = false;

@@ -100,6 +100,10 @@ let webApi = {
   downloadExchangeOrder(data) {
     return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
   },
+  //获取礼劵分发和召回列表
+  getCouponDistributionList(data) {
+    return httpRequest(`/rcto`, Object.assign({}, data, {type: 'a'}))
+  },
   //获取礼劵激活和撤销列表
   getCouponOperatingList(data) {
     return httpRequest(`/rcto`, Object.assign({}, data, {type: 'm'}))
@@ -114,6 +118,21 @@ let webApi = {
   },
   enterCouponStatus(data) {
     return httpRequest(`/cctm`, data)
+  },
+  enterCouponDistribution(data) {
+    return httpRequest(`/ccta`, data)
+  },
+  //获取用户列表
+  getUserList(data) {
+    return httpRequest(`/ru`, data)
+  },
+  //获取进销存列表
+  getInvoicingReportList(data) {
+    return httpRequest(`/repac`, data)
+  },
+  //保存批量兑换
+  saveBulkExchange(data) {
+    return httpRequest(`/exs`, data)
   }
 };
 export default webApi;

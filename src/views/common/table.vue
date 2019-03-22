@@ -5,6 +5,7 @@
       header-row-class-name="customize-header-row"
       row-class-name="customize-row"
       :border="border"
+      :max-height="600"
       fit
       :style="{'width': width}"
       v-bind="$attrs"

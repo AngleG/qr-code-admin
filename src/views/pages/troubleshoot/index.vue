@@ -144,7 +144,7 @@
 </template>
 
 <script>
-  import cityData from '../account/company/data/city'
+  import cityData from '../../../conf/city'
   import webApi from '../../../lib/api'
   import config from '../../../conf/config'
   import { EXPRESS_COMPANY_LIST } from '../../../conf/config-list'
