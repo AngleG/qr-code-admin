@@ -35,7 +35,8 @@
         </div>
         <div>
           <span class="label">配送物品:</span>
-          <span class="text-field">产品实物<font color="red">3</font>盒</span>
+          <span class="text-field" v-if="item.fromcouponid && item.tocouponid && item.fromcouponid === item.tocouponid">产品实物<font color="red">{{item.couponum}}</font>盒</span>
+          <span class="text-field" v-if="item.fromcouponid && item.tocouponid && item.fromcouponid !== item.tocouponid">产品礼券<font color="red">{{item.couponum}}</font>张</span>
         </div>
         <div>
           <span class="label">配送地址:</span>
@@ -55,10 +56,10 @@
         </div>
         <div class="ship_content_address">
           <span class="label">发货地址:</span>
-          <el-select @change="changeProvinceFn()" size="samll" v-model="item.sendprov">
+          <el-select @change="changeProvinceFn(index)" size="samll" v-model="item.sendprov">
             <el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>
           </el-select>
-          <el-select @change="changeCityFn" size="samll" v-model="item.sendcity">
+          <el-select @change="changeCityFn(index)" size="samll" v-model="item.sendcity">
             <el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/>
           </el-select>
           <el-select  size="samll" v-model="item.sendcounty">
@@ -173,7 +174,25 @@
             // this.requestParams = [];
             if(res.data && res.data.length){
               this.shipOrderList = res.data;
-              // this.requestParams = res.data;
+              console.log('原数组--', this.shipOrderList);
+              this.shipOrderList.forEach( (item, index, arr) => {
+                if(!item.sendprov){
+                  arr[index].sendcity = null;
+                  arr[index].sendcounty = null;
+                  this.configObject.cityList = [];
+                  this.configObject.countyList = [];
+                }else {
+                  this.configObject.cityList = this.cityData.find(prov => item.sendprov === prov.name).children;
+                }
+                if(!item.sendcity){
+                  arr[index].sendcounty = null;
+                  this.configObject.countyList = [];
+                }else {
+                  let cityList = this.configObject.cityList;
+                  this.configObject.countyList = !cityList.length ? [] : cityList.find(city => item.sendcity === city.name).children;
+                }
+              });
+              console.log('处理后的数组--', this.shipOrderList);
             }
           }else {
             this.$toast(res.message, 'error');
@@ -189,10 +208,11 @@
          * 保存发货信息
          */
         async saveHandle(index){
-          Object.keys(this.requestParams).forEach(key => this.requestParams[key] = this.shipOrderList[index][key] ? this.shipOrderList[index][key] : '');
-          this.requestParams['exorderkey'] = this.requestParams.orderkey;
-          delete this.requestParams.orderkey;
-          let res = await webApi.saveShipInformation(this.requestParams);
+          let params = JSON.parse(JSON.stringify(this.requestParams));
+          Object.keys(params).forEach(key => params[key] = this.shipOrderList[index][key] ? this.shipOrderList[index][key] : null);
+          params['exorderkey'] = params.orderkey;
+          delete params.orderkey;
+          let res = await webApi.saveShipInformation(params);
           if(res.flags === 'success'){
             this.$toast('保存成功！', 'success');
           }else {
@@ -202,17 +222,26 @@
         /**
          * 切换省
          */
-        changeProvinceFn(province){
-          console.log(province);
-          // if(province){
-          //   this.
-          // }
+        changeProvinceFn(index){
+            let sendprov  = this.shipOrderList[index].sendprov;
+            if(sendprov){
+              this.shipOrderList[index].sendcity = null;
+              this.shipOrderList[index].sendcounty = null;
+            }
+            console.log(index, sendprov, '-选中省');
+            this.configObject.cityList = !sendprov ? [] : this.cityData.find(item => sendprov === item.name).children;
         },
         /**
          * 切换市
          */
-        changeCityFn(){
-
+        changeCityFn(index){
+          let sendcity = this.shipOrderList[index].sendcity;
+          if(sendcity){
+            this.shipOrderList[index].sendcounty = null;
+          }
+          let cityList = this.configObject.cityList;
+          this.configObject.countyList = !sendcity || !cityList.length ? [] : cityList.find(item => sendcity === item.name).children;
+          console.log(index, sendcity, '-选中市');
         }
 
       }
