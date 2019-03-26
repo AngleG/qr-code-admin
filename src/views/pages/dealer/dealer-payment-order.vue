@@ -158,7 +158,7 @@
         async getPaymentOrderList(currentPage){
           this.tableListLoading = true;
           let params = this.$_.cloneDeep(this.requestParams);
-          params.pagenum = currentPage ? currentPage : 0;
+          params.pagenum = typeof currentPage === 'number' ? currentPage : 0;
           let res = await webApi.getPaymentOrderList(params);
           if(res.flags === 'success'){
             if(res.data){

@@ -54,10 +54,10 @@
        * 获取用户分页列表
        * @returns {Promise<void>}
        */
-      async getUserList(e, currentPage) {
+      async getUserList(currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
-        params.pagenum = currentPage ? currentPage : 0;
+        params.pagenum = typeof currentPage === 'number' ? currentPage : 0;
         let res = await webApi.getUserList(params);
         if (res.flags === 'success') {
           this.tableData = [];

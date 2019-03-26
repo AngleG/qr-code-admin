@@ -107,7 +107,7 @@
       async getCouponOperatingList(currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
-        params.pagenum = currentPage ? currentPage : 0;
+        params.pagenum = typeof currentPage === 'number' ? currentPage : 0;
         let res = await webApi.getCouponOperatingList(params);
         if (res.flags === 'success') {
           this.tableData = [];
