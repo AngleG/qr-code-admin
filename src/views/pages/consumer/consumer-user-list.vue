@@ -1,7 +1,7 @@
 <template>
   <div class="exchange-order">
     <div class="exchange-order_search">
-      <el-input style="width: 215px;" v-model="searchParams.mobile" size="small" />
+      <el-input style="width: 215px;" v-model="searchParams.mobile" size="small" placeholder="请输入手机号" maxlength="11" clearable/>
       <el-button @click="getUserList" size="small" type="primary" round>查询</el-button>
     </div>
     <div class="exchange-order_content">
@@ -54,7 +54,7 @@
        * 获取用户分页列表
        * @returns {Promise<void>}
        */
-      async getUserList(currentPage) {
+      async getUserList(e, currentPage) {
         this.isLoading = true;
         let params = this.$_.cloneDeep(this.searchParams);
         params.pagenum = currentPage ? currentPage : 0;
