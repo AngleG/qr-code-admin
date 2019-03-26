@@ -10,6 +10,7 @@ export const downloadFile = (url, outName, type = 'blank', isBold = false) => {
   if (!url) {
     return
   }
+  let fileExtension = url.type.split('/')[1];
   if(type === 'blank') {
     window.open(url);
   } else {
@@ -21,7 +22,7 @@ export const downloadFile = (url, outName, type = 'blank', isBold = false) => {
     link.href = url;
     document.body.appendChild(link);
     if (outName) {
-      link.setAttribute('download', outName);
+      link.setAttribute('download', `${outName}.${fileExtension}`);
     }
     link.click();
     link.remove();

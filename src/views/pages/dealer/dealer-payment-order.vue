@@ -185,7 +185,7 @@
         async downloadPaymentOrder(){
           let res = await webApi.downloadPaymentOrder();
           if(res.flags === 'success'){
-            this.$downloadFile(res.data,`支付订单.xlsx`, false, true)
+            this.$downloadFile(res.data,`支付订单`, false, true)
           }else {
             this.$toast(res.message, 'error');
           }
