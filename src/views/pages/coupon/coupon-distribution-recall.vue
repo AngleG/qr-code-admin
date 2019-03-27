@@ -37,12 +37,12 @@
 
 <script>
   import webApi from '../../../lib/api'
-  import {COUPON_STATUS} from '../../../conf/config-list'
+  import {COUPON_RECALL_STATUS} from '../../../conf/config-list'
   export default {
     data() {
       return {
         configObject: {
-          COUPON_STATUS,
+          COUPON_RECALL_STATUS,
           couponList: [],
           dealerList: []
         },
@@ -61,7 +61,8 @@
           {title: '时间', width: 160, align: 'center', key: 'time' },
           {title: '起始编号', align: 'center', key: 'sfrom' },
           {title: '终止编号', align: 'center', key: 'sto' },
-          {title: '事件', align: 'center', key: 'action', render: (h, params) => <span>{ this.$options.filters.formatConfigValueToLabel(params.row.action, this.configObject.COUPON_STATUS) }</span>},
+          {title: '经销商', align: 'center', key: 'agentcompanyname' },
+          {title: '事件', align: 'center', key: 'action', render: (h, params) => <span>{ this.$options.filters.formatConfigValueToLabel(params.row.action, this.configObject.COUPON_RECALL_STATUS) }</span>},
           {title: '成功张数', align: 'center', key: 'successnum' },
           {title: '失败张数', align: 'center', key: 'failnum' }
         ],

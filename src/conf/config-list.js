@@ -5,8 +5,13 @@ export const SOURCE_LIST = [
   {label: '批量', value: 'm'}
 ];
 
+export const COUPON_RECALL_STATUS = [
+  {label: '召回', value: 'c'},
+  {label: '分发', value: 'a'},
+];
+
 export const COUPON_STATUS = [
-  {label: '已撤销', value: 'c'},
+  {label: '撤销', value: 'c'},
   {label: '激活', value: 'a'},
 ];
 

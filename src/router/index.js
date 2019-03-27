@@ -37,9 +37,9 @@ export default new Router({
           component: () => import(/*webpackChunkName: 'coupon-edit'*/'../views/pages/coupon/coupon-edit.vue')
         },
         {
-          path: '/coupon-distribution',
-          name: '礼券分发',
-          component: () => import(/*webpackChunkName: 'coupon-distribution'*/'../views/pages/coupon/coupon-distribution.vue')
+          path: '/coupon-distribution-recall',
+          name: '分发与召回',
+          component: () => import(/*webpackChunkName: 'coupon-distribution-recall'*/'../views/pages/coupon/coupon-distribution-recall.vue')
         },
         {
           path: '/coupon-operating',
