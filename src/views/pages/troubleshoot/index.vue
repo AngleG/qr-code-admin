@@ -4,10 +4,28 @@
         <span class="file-name" v-if="qrCodeFile">{{ qrCodeFile.name }}</span>
         <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_troubleshoot" style="visibility: hidden;width: 0;height: 0;">
         <label for="file_troubleshoot"><span class="el-button el-button--primary el-button--small is-round" style="margin-right: 20px;">上传二维码查询</span></label>
-        <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="code" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
+        <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="searchParams.code" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
         <el-button size="small" type="primary" @click="getTroubleshootDetail" round>查询</el-button>
+        <el-select
+          clearable
+          v-model="searchParams.couponkey"
+          size="small"
+          placeholder="请选择">
+          <el-option
+            v-for="item in configObject.couponList"
+            :label="item.label"
+            :key="item.value"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="searchParams.serialNumber" placeholder="请输入序列号" style="width: 200px; margin-right: 5px;"></el-input>
+        <el-button size="small" type="primary" @click="getTroubleshoot" round>查询</el-button>
       </div>
       <div class="troubleshoot-content">
+        <p class="distribute-desc">
+          <span v-if="troubleshootDetail.codeinfo.agentcompany">已分发给经销商<font>{{troubleshootDetail.codeinfo.agentcompany}}</font></span>
+          <span v-else>未分发</span>
+        </p>
         <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
@@ -73,7 +91,7 @@
             <span class="label">兑换来源:</span>
             <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname }}</span>
             <span class="label" style="width: 85px;">兑换目标(数量):</span>
-            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}&nbsp;({{ troubleshootDetail.exorderinfo.couponum }})</span>
+            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}&nbsp; <font color="orange"> ({{ troubleshootDetail.exorderinfo.couponum }})</font></span>
           </p>
           <p>
             <span class="label">配送地址:</span>
@@ -154,6 +172,11 @@
         return {
           config,
           cityData,
+          searchParams: {
+            serialNumber: null,
+            code: '0211fbfe40',
+            couponkey: null
+          },
           requestParams: {
             Sendprov: null,
             sendcity: null,
@@ -164,13 +187,13 @@
           },
           troubleshootDetail: null,
           configObject: {
+            couponList: [],
             cityList: [],
             countyList: [],
             expressCompanyList: EXPRESS_COMPANY_LIST
           },
           qrCodeFile: null,
           searchType: null,
-          code: '0211fbfe40'
         }
       },
       computed: {
@@ -205,7 +228,23 @@
           return exchangeStatus;
         }
       },
+      created(){
+        this.getCouponList();
+      },
       methods: {
+        /**
+         * 获取礼券列表
+         */
+        async getCouponList(){
+          let res = await webApi.getCouponList();
+          if(res.flags === 'success'){
+            if(res.data && res.data.length){
+              res.data.map(item => this.configObject.couponList.push({label: item.name, value: item.couponkey}));
+            }
+          }else {
+            this.$toast(res.message, 'error');
+          }
+        },
         /**
          * 公司页面初始化函数
          */
@@ -247,10 +286,30 @@
          * 根据二维码查询详情
          */
         async getTroubleshootDetail() {
-          if (!this.code) {
+          if (!this.searchParams.code) {
             return this.$toast('请输入二维码号码')
           }
-          let res = await webApi.getTroubleshootDetail({code: this.code});
+          let res = await webApi.getTroubleshootDetail({code: this.searchParams.code});
+          if (res.flags === 'success') {
+            if (res.data) {
+              this.troubleshootDetail = res.data;
+            }
+            this.searchType = 'code';
+            if (this.troubleshootDetail && this.troubleshootDetail.exorderinfo) {
+              this.init();
+            }
+          } else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 根据序列号查询详情
+         */
+        async getTroubleshoot() {
+          if (!this.searchParams.serialNumber) {
+            return this.$toast('请输入序列号')
+          }
+          let res = await webApi.getTroubleshootDetail({code: this.searchParams.serialNumber, couponkey: this.searchParams.couponkey});
           if (res.flags === 'success') {
             if (res.data) {
               this.troubleshootDetail = res.data;
@@ -466,6 +525,15 @@
           /*margin: 0 5px;*/
           width: 120px;
         }
+      }
+      .distribute-desc{
+        width: 630px;
+        line-height: 34px;
+        background-color: #182337;
+        color: #fff;
+        text-align: left;
+        padding-left: 15px;
+        margin-bottom: 10px;
       }
     }
 </style>
