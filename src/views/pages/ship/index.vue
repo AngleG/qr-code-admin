@@ -25,7 +25,7 @@
       </el-select>
       <el-button size="small" type="primary" round @click="getShipList">刷新发货列表</el-button>
     </div>
-    <div class="ship_content">
+    <div class="ship_content" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.5)">
       <div class="ship_content-item" v-if="shipOrderList.length" v-for="(item, index) in shipOrderList" :key="index">
         <div>
           <span class="label">兑换来源:</span>
@@ -97,6 +97,7 @@
         </div>
         <el-button size="small" type="primary" round style="margin-top: 5px;" @click="saveHandle(index)">保存发货信息</el-button>
       </div>
+      <div class="no-data" v-if="!shipOrderList.length">暂无数据</div>
     </div>
   </div>
 </template>
@@ -110,6 +111,7 @@
       data(){
         return {
           cityData,
+          isLoading: false,
           searchRequestParams: {
             couponkey: null,
             from: 'w'
@@ -150,6 +152,7 @@
          * 获取发货订单列表
          */
         async getShipList(){
+          this.isLoading = true;
           let res = await webApi.getShipList(this.searchRequestParams);
           if(res.flags === 'success'){
             this.shipOrderList = [];
@@ -161,6 +164,7 @@
           }else {
             this.$toast(res.message, 'error');
           }
+          this.isLoading = false;
         },
         /**
          * 保存发货信息
@@ -196,6 +200,7 @@
 .ship_content{
   padding: 20px 30px;
   overflow: hidden;
+  background-color: #060b17;
   .ship_content-item{
     float: left;
     width: 630px;
