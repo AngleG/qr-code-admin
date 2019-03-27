@@ -3,13 +3,13 @@
       <div class="dealer-header">
         <div class="dealer-create">
           <el-input size="small" v-model="dealerParams.name" style="margin-left: 0" placeholder="经销商名称" maxlength="20"></el-input>
-          <el-input size="small" v-model="dealerParams.cname" placeholder="联系人姓名" maxlength="20"></el-input>
-          <el-input size="small" v-model="dealerParams.cphone" placeholder="联系人电话" maxlength="20"></el-input>
+          <el-input size="small" v-model="dealerParams.cname" placeholder="经销商联系人" maxlength="20"></el-input>
+          <el-input size="small" v-model="dealerParams.cphone" placeholder="经销商联系电话" maxlength="20"></el-input>
           <el-button style="margin-left: 5px;" type="primary" size="small" @click="createDealer" round>创建经销商</el-button>
         </div>
         <div class="dealer-search">
-          <el-input size="small" v-model="name" style="margin-left: 0" placeholder="查经销商名称" maxlength="20"></el-input>
-          <el-input size="small" v-model="adminuser" placeholder="查主账号" maxlength="20"></el-input>
+          <el-input size="small" v-model="name" style="margin-left: 0" placeholder="经销商名称" maxlength="20"></el-input>
+          <el-input size="small" v-model="adminuser" placeholder="经销商主账号" maxlength="20"></el-input>
           <el-button style="margin-left: 5px;" type="primary" size="small" @click="setSearchParams" round>查询</el-button>
         </div>
       </div>
@@ -18,15 +18,15 @@
           <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4" v-for="dealer in currentDealerList" :key="dealer.companykey">
             <div class="dealer-list">
               <el-input size="small" v-model="dealer.name" prefix-icon="iconfont icon-A-jingxiaoshang" placeholder="经销商名称"/>
-              <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-jingxiaoshang" placeholder="联系人姓名"/>
-              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-shouji" placeholder="联系人电话"/>
+              <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-jingxiaoshang" placeholder="经销商联系人"/>
+              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-shouji" placeholder="经销商联系电话"/>
               <div class="clearfix" style="text-align: right;">
                 <el-select size="small" style="width: 80px;float: left;" v-model="dealer.status">
                   <el-option v-for="option in options" :label="option.label" :value="option.value" :key="option.value" />
                 </el-select>
                 <el-button type="primary" size="small" @click="saveDealerByCompanyKey(dealer)" round>保存修改</el-button>
               </div>
-              <div class="clearfix dealer-user"><span>主账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPasswordConfirm(dealer)" type="primary" size="small" round>重置密码</el-button></div>
+              <div class="clearfix dealer-user"><span>管理员账号:{{ dealer.adminuser }}</span><el-button @click="resetDealerPasswordConfirm(dealer)" type="primary" size="small" round>重置密码</el-button></div>
               <p class="dealer-pass"><template v-if="dealer.pass">长按复制主账号新密码: {{ dealer.pass }}</template></p>
             </div>
           </el-col>
@@ -197,9 +197,9 @@
               display: inline-block;
               border: 1px solid #323c54;
               border-radius: 15px;
-              padding: 0 12px;
+              padding: 0 10px;
               color: #c0c4cc;
-              font-size: 13px;
+              font-size: 12px;
               line-height: 24px;
             }
           }
