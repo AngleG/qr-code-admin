@@ -21,12 +21,12 @@
         <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="searchParams.serialNumber" placeholder="请输入序列号" style="width: 200px; margin-right: 5px;"></el-input>
         <el-button size="small" type="primary" @click="getTroubleshoot" round>查询</el-button>
       </div>
-      <div class="troubleshoot-content">
+      <div class="troubleshoot-content" v-if="troubleshootDetail">
         <p class="distribute-desc">
-          <span v-if="troubleshootDetail.codeinfo.agentcompany">已分发给经销商<font>{{troubleshootDetail.codeinfo.agentcompany}}</font></span>
-          <span v-else>未分发</span>
+          <span v-if="troubleshootDetail.codeinfo && troubleshootDetail.codeinfo.agentcompany">已分发给经销商<font color="orange">{{troubleshootDetail.codeinfo.agentcompany}}</font></span>
+          <span v-if="troubleshootDetail.codeinfo && !troubleshootDetail.codeinfo.agentcompany">未分发</span>
         </p>
-        <div v-if="troubleshootDetail && troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
+        <div v-if="troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
             <!--<span class="fr">-->
@@ -79,7 +79,7 @@
             </span>
           </p>
         </div>
-        <div v-if="troubleshootDetail && troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-width">
+        <div v-if="troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-width">
           <p class="status clearfix" style="line-height: 34px">
             <span style="color: #909090">状态:</span> {{ exchange.statusText }}
             <!--<span class="fr" v-if="exchange.isShowOperate">-->
@@ -91,7 +91,7 @@
             <span class="label">兑换来源:</span>
             <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname }}</span>
             <span class="label" style="width: 85px;">兑换目标(数量):</span>
-            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}&nbsp; <font color="orange"> ({{ troubleshootDetail.exorderinfo.couponum }})</font></span>
+            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}（{{ troubleshootDetail.exorderinfo.couponum }}）</span>
           </p>
           <p>
             <span class="label">配送地址:</span>
