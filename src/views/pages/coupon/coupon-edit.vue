@@ -23,9 +23,7 @@
       data () {
         return {
           requestParams: {
-            name: null,
-            loginkey: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).loginkey : '',
-            eid: localStorage.getItem('loginkey') ? JSON.parse(localStorage.getItem('loginkey')).eid : ''
+            name: null
           },
           couponList: []
         }
@@ -58,7 +56,7 @@
           let res = await webApi.getCouponList(params);
           if(res.flags === 'success'){
             if(res.data && res.data.length){
-              this.couponList = res.data.reverse();
+              this.couponList = res.data;
             }
           }else {
             this.$toast(res.message, 'error');

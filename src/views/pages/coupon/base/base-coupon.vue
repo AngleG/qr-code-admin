@@ -7,11 +7,14 @@
         <el-button class="upload-btn" type="primary" size="small" round @click="upload">上传产品图</el-button>
       </div>
       <div class="base-coupon_form">
-        <p><el-input size="small" style="width: 50%;" v-model="requestParams.name" maxlength="50"></el-input></p>
-        <p>当前折扣:
-          <el-input size="small" style="width: 50px;" v-model="requestParams.discount"></el-input> 折(0折表示原价)
+        <p>礼券名称：
+          <el-input size="small" style="width: 50%; margin-right: 5px;" v-model="requestParams.name" maxlength="20"></el-input>
+          <span> 礼券ID:</span> {{requestParams.couponid}}
         </p>
-        <p>
+        <p>当前折扣：
+          <el-input size="small" style="width: 50px;" v-model="requestParams.discount" maxlength="2"></el-input>
+        </p>
+        <p>下一折扣日期：
           <el-date-picker
             size="small"
             v-model="requestParams.nextdiscountdate"
@@ -20,13 +23,14 @@
             value-format="yyyy/MM/dd"
             placeholder="选择日期">
           </el-date-picker>
-          后(含当天)折扣为
-          <el-input size="small" style="width: 50px;" v-model="requestParams.nextdiscount"></el-input> 折
         </p>
-        <p>原价:
+        <p>下一折扣：
+          <el-input size="small" style="width: 50px;" v-model="requestParams.nextdiscount" maxlength="2"></el-input>
+        </p>
+        <p>原价：
           <el-input size="small" style="width: 105px;" v-model="requestParams.value"></el-input> 元
         </p>
-        <p>
+        <p>上架时间：
           <el-date-picker
             size="small"
             v-model="requestParams.timeon"
@@ -35,9 +39,8 @@
             value-format="yyyy/MM/dd"
             placeholder="选择日期">
           </el-date-picker>
-          上架(含当天)
         </p>
-        <p>
+        <p>下架时间：
           <el-date-picker
             size="small"
             v-model="requestParams.timeoff"
@@ -46,7 +49,6 @@
             value-format="yyyy/MM/dd"
             placeholder="选择日期">
           </el-date-picker>
-          下架(含当天)
         </p>
         <el-button class="confirm" type="primary" size="small" round @click="saveHandle">保存修改</el-button>
       </div>
@@ -79,15 +81,12 @@
       },
       created(){
         this.requestParams = this.couponDetail;
-        // this.requestParams = JSON.parse(JSON.stringify(this.couponDetail));
-        delete this.requestParams.couponid;
       },
       watch: {
         couponDetail: {
           handler (val){
             console.log(val, 1233);
             this.requestParams = val;
-            delete this.requestParams.couponid;
           },
           deep: true
         }
@@ -110,6 +109,7 @@
          * @param event
          */
         getCacheFile(event){
+          console.log(event.target, '获取上传文件信息');
           let file = event.target.files[0];
           this.couponCacheUrl = this.getObjectURL(file);
           this.couponFile = file;
