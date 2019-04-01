@@ -120,7 +120,11 @@
           shipOrderList: [],
           configObject: {
             couponList: [],
-            SOURCE_LIST,
+            SOURCE_LIST: [
+              {label: '微信', value: 'w'},
+              {label: '支付宝', value: 'z'},
+              {label: '批量兑换', value: 'm'}
+            ],
             EXPRESS_COMPANY_LIST
           }
         }
@@ -141,8 +145,10 @@
         async getCouponList(){
           let res = await webApi.getCouponList();
           if(res.flags === 'success'){
+            this.configObject.couponList = [];
             if(res.data && res.data.length){
-              res.data.map(item => this.configObject.couponList.push({label: item.name, value: item.couponkey}));
+              this.configObject.couponList = res.data.map(item => Object.assign({}, item, {label: item.name, value: item.couponkey}));
+              this.searchRequestParams.couponkey = this.configObject.couponList[0].value;
             }
           }else {
             this.$toast(res.message, 'error');
