@@ -113,6 +113,9 @@
           let file = event.target.files[0];
           this.couponCacheUrl = this.getObjectURL(file);
           this.couponFile = file;
+          if(this.couponFile){
+            this.$toast('请点击“上传产品图”按钮以完成上传');
+          }
         },
         /**
          * 兼容性获取图片本地缓存地址

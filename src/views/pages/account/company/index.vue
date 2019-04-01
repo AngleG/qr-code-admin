@@ -7,6 +7,7 @@
           <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_company" style="visibility: hidden;width: 0;height: 0;"/>
           <label for="file_company"><span style="font-size: 14px;color: #409EFF;cursor: pointer;">浏览..</span></label>
           <el-button @click="upload" class="upload-btn" type="primary" size="small" round>上传企业logo</el-button>
+          <!--<p v-if="logoFile" style="font-size: 12px; color: orange;">请点击“上传企业logo”按钮以完成上传</p>-->
         </div>
         <div class="company-form">
           <el-input v-model="requestParams.ename" size="small" maxlength="50" prefix-icon="iconfont icon-qiye1" placeholder="企业名称"/>
@@ -190,7 +191,10 @@
       getCacheFile(event) {
         let files = event.target.files[0];
         this.logoCacheUrl = this.getObjectURL(files);
-        this.logoFile = files
+        this.logoFile = files;
+        if(this.logoFile){
+          this.$toast('请点击“上传企业logo”按钮以完成上传');
+        }
       }
     }
 	}
