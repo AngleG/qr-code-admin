@@ -1,5 +1,5 @@
 export const SOURCE_LIST = [
-  {label: '全部', value: 'All'},
+  {label: '全部', value: 'ALL'},
   {label: '微信', value: 'w'},
   {label: '支付宝', value: 'z'},
   {label: '批量', value: 'm'}
