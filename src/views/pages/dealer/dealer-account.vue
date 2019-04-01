@@ -81,7 +81,7 @@
 	      let res = await webApi.getDealerList();
         if (res.flags === 'success') {
           if (res.data) {
-            this.dealerList = res.data.reverse();
+            this.dealerList = res.data;
           }
         } else {
           this.$toast(res.message, 'error');
