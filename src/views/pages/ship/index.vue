@@ -130,7 +130,7 @@
         }
       },
       created(){
-        this.getCouponList();
+        this.getCouponList().then(this.getShipList);
       },
       methods: {
         getCurrentCityList(cityData, province) {
