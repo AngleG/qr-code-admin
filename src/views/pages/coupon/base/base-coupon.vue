@@ -114,7 +114,7 @@
           this.couponCacheUrl = this.getObjectURL(file);
           this.couponFile = file;
           if(this.couponFile){
-            this.$toast('请点击“上传产品图”按钮以完成上传');
+            this.$toast('请点击“上传产品图”按钮以完成上传', 'info');
           }
         },
         /**

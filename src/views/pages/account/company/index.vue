@@ -126,6 +126,7 @@
         let res = this.isEdit ? await webApi.saveCompanyInfo(params) : await webApi.createCompanyInfo(params);
         if (res.flags === 'success') {
           this.$toast(!this.isEdit ? '创建成功' : '保存成功', 'success');
+          this.getCompanyInfo();
         } else {
           this.$toast(res.message, 'error');
         }
@@ -193,7 +194,7 @@
         this.logoCacheUrl = this.getObjectURL(files);
         this.logoFile = files;
         if(this.logoFile){
-          this.$toast('请点击“上传企业logo”按钮以完成上传');
+          this.$toast('请点击“上传企业logo”按钮以完成上传', 'info');
         }
       }
     }
