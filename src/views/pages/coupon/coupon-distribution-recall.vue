@@ -5,14 +5,15 @@
         size="small"
         v-model="searchParams.couponkey"
         :value="searchParams.couponkey"
-        placeholder="请选择礼劵">
+        placeholder="请选择礼劵"
+      @change="getCouponDistributionList">
         <el-option
           v-for="item in configObject.couponList"
           :label="item.label"
           :key="item.value"
           :value="item.value"/>
       </el-select>
-      <el-button @click="getCouponDistributionList" size="small" type="primary" round>查询</el-button>
+      <!--<el-button @click="getCouponDistributionList" size="small" type="primary" round>查询</el-button>-->
       <el-select
         size="small"
         style="margin-left: 20px;"
@@ -72,8 +73,9 @@
       }
     },
     created() {
-      this.getDealerList();
-      this.getCouponList();
+      Promise.all([this.getDealerList(), this.getCouponList()]).then( () => {
+        this.getCouponDistributionList();
+      }).catch( err => console.log(err));
     },
     methods: {
       /**
@@ -85,6 +87,7 @@
           this.configObject.dealerList = [];
           if (res.data && res.data.length) {
             this.configObject.dealerList = res.data.map(item => Object.assign(item, {label: item.name, value: item.companykey}));
+            this.requestParams.agentcompanykey = this.configObject.dealerList[0].value || null;
           }
         }else {
           this.$toast(res.message, 'error');
@@ -99,6 +102,7 @@
           this.configObject.couponList = [];
           if(res.data && res.data.length){
             this.configObject.couponList = res.data.reverse().map(item => ({label: item.name, value: item.couponkey}));
+            this.searchParams.couponkey = this.configObject.couponList[0].value || null;
           }
         }else {
           this.$toast(res.message, 'error');
