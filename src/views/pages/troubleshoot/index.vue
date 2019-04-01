@@ -5,7 +5,7 @@
         <input @change="getCacheFile" type="file" accept="image/png,image/jpeg,image/gif" name="file" id="file_troubleshoot" style="visibility: hidden;width: 0;height: 0;">
         <label for="file_troubleshoot"><span class="el-button el-button--primary el-button--small is-round" style="margin-right: 20px;">上传二维码查询</span></label>
         <el-input size="small" @keyup.enter.native="getTroubleshootDetail" maxLength="20" v-model="searchParams.code" placeholder="请输入二维码" style="width: 200px; margin-right: 5px;"></el-input>
-        <el-button size="small" type="primary" @click="getTroubleshootDetail" round>查询</el-button>
+        <el-button size="small" type="primary" @click="getTroubleshootDetail" round>查询</el-button><br>
         <el-select
           clearable
           v-model="searchParams.couponkey"
@@ -174,7 +174,7 @@
           cityData,
           searchParams: {
             serialNumber: null,
-            code: '0211fbfe40',
+            code: null, // '0211fbfe40'
             couponkey: null
           },
           requestParams: {
@@ -238,8 +238,10 @@
         async getCouponList(){
           let res = await webApi.getCouponList();
           if(res.flags === 'success'){
+            this.configObject.couponList = [];
             if(res.data && res.data.length){
-              res.data.map(item => this.configObject.couponList.push({label: item.name, value: item.couponkey}));
+              this.configObject.couponList = res.data.map(item => Object.assign({}, item, {label: item.name, value: item.couponkey}));
+              this.searchParams.couponkey = this.configObject.couponList[0].value;
             }
           }else {
             this.$toast(res.message, 'error');
