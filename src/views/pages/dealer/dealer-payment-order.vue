@@ -77,6 +77,7 @@
 
 <script>
   import webApi from '../../../lib/api'
+
     export default {
       name: "index",
       data(){
@@ -93,7 +94,8 @@
             userSourceList: [
               {label: '全部', value: 'ALL'},
               {label: '微信', value: 'w'},
-              {label: '支付宝', value: 'z'}
+              {label: '支付宝', value: 'z'},
+              {label: '手工激活', value: 'm'}
             ],
             dealerList: [],
             sexList: [
@@ -144,7 +146,7 @@
           let res = await webApi.getDealerList();
           if(res.flags === 'success'){
             if (res.data && res.data.length) {
-              res.data.map( item => this.options.dealerList.push({label: item.name, value: item.adminuser}))
+              res.data.map( item => this.options.dealerList.push({label: item.name, value: item.adminuser}));
               this.options.dealerList.unshift({label: '全部经销商', value: 'ALL'})
             }
           }else {
@@ -185,7 +187,7 @@
         async downloadPaymentOrder(){
           let res = await webApi.downloadPaymentOrder();
           if(res.flags === 'success'){
-            this.$downloadFile(res.data,`支付订单`, false, true)
+            window.open(res.url)
           }else {
             this.$toast(res.message, 'error');
           }

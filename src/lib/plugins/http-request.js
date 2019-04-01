@@ -24,7 +24,8 @@ const getResult = res => {
     return {
       flags: 'success',
       data: result,
-      message: '成功'
+      message: '成功',
+      url: `${res.config.url}?${res.config.data}`
     };
   }
   if (result.state === 'success') {

@@ -146,7 +146,7 @@
       async downloadExchangeOrder(){
         let res = await webApi.downloadExchangeOrder();
         if(res.flags === 'success'){
-          this.$downloadFile(res.data,`兑换订单`, false, true)
+          window.open(res.url)
         }else {
           this.$toast(res.message, 'error');
         }
