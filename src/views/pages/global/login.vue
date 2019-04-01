@@ -18,8 +18,8 @@
   export default {
     data() {
       return {
-        username: 'testadmin',
-        password: 1
+        username: null, //'testadmin'
+        password: null //1
       }
     },
     methods: {
