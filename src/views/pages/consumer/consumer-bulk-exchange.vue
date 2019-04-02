@@ -2,12 +2,13 @@
     <div class="bulk-exchange-content">
       <div class="clearfix">
         <base-item class="w_310">
-          <template slot="label">礼券:</template>
+          <template slot="label">礼券来源:</template>
           <el-select
             size="small"
             v-model="requestParams.couponkeyfrom"
             :value="requestParams.couponkeyfrom"
-            placeholder="请选择礼劵">
+            placeholder="请选择礼劵"
+          @change="couponkeyfromChange">
             <el-option
               v-for="item in configObject.couponList"
               :label="item.label"
@@ -24,7 +25,7 @@
           <el-input size="small" placeholder="请输入兑换张数" v-model="requestParams.num"></el-input>
         </base-item>
         <base-item class="w_310">
-          <template slot="label">礼券:</template>
+          <template slot="label">兑换目标礼券:</template>
           <el-select
             size="small"
             v-model="requestParams.couponkeyto"
@@ -75,6 +76,57 @@
         </base-item>
       </div>
       <p style="margin-top: 30px;"><el-button @click="saveBulkExchange" class="confirm" type="primary" size="small" round>生成兑换订单</el-button></p>
+      <el-dialog
+        width="600px"
+        :visible.sync="dialogOption.visible"
+        title="信息确认">
+        <div class="dialog-content">
+          <div>
+            <span class="label">礼券来源:</span>
+            <span class="text-field" v-if="configObject.couponList.length">{{configObject.couponList.find(item => item.value === requestParams.couponkeyfrom).label}}</span>
+            <span class="label">礼券起始编号:</span>
+            <span class="text-field">{{requestParams.serialfrom}}</span>
+          </div>
+          <div>
+            <span class="label">兑换张数:</span>
+            <span class="text-field">{{requestParams.num}}</span>
+            <span class="label">兑换目标礼券:</span>
+            <span class="text-field" v-if="configObject.couponList.length">{{configObject.couponList.find(item => item.value === requestParams.couponkeyto).label}}</span>
+          </div>
+          <div>
+            <span class="label">收货省:</span>
+            <span class="text-field">{{requestParams.recprov}}</span>
+            <span class="label">收货市:</span>
+            <span class="text-field">{{requestParams.recity}}</span>
+          </div>
+          <div>
+            <span class="label">收货区县:</span>
+            <span class="text-field">{{requestParams.recounty}}</span>
+            <span class="label">收货街道详细地址:</span>
+            <span class="text-field">{{requestParams.recstreet}}</span>
+          </div>
+          <div>
+            <span class="label">收货人姓名:</span>
+            <span class="text-field">{{requestParams.recontact}}</span>
+            <span class="label">收货人手机:</span>
+            <span class="text-field">{{requestParams.recphone}}</span>
+          </div>
+          <div>
+            <span class="label">兑换人姓名:</span>
+            <span class="text-field">{{requestParams.helloer}}</span>
+            <span class="label">兑换人手机:</span>
+            <span class="text-field">{{requestParams.usermobile}}</span>
+          </div>
+          <div>
+            <span class="label">祝福语:</span>
+            <span class="text-field">{{requestParams.hello}}</span>
+          </div>
+        </div>
+        <div slot="footer">
+          <el-button round @click="dialogOption.visible = false">取消</el-button>
+          <el-button round type="primary" @click="confirmEntureHandle">确定生成兑换订单</el-button>
+        </div>
+      </el-dialog>
     </div>
 </template>
 
@@ -104,7 +156,11 @@
           usermobile: null,
           helloer: null,
           hello: null
-        }
+        },
+        dialogOption: {
+          visible: false
+        },
+        paramsConfirm: null
       }
     },
     created() {
@@ -120,6 +176,7 @@
           this.configObject.couponList = [];
           if(res.data && res.data.length){
             this.configObject.couponList = res.data.reverse().map(item => ({label: item.name, value: item.couponkey}));
+            this.requestParams.couponkeyto = this.requestParams.couponkeyfrom = this.configObject.couponList[0].value || null;
           }
         }else {
           this.$toast(res.message, 'error');
@@ -166,7 +223,21 @@
         if (num < 0 || num > 1000) {
           return this.$toast(`兑换张数必须大于0且小于或等于1000`)
         }
-        let res = await webApi.saveBulkExchange(params);
+        this.paramsConfirm = params;
+        this.dialogOption.visible = true;
+
+      },
+      /**
+       * 选择礼券来源事件
+       */
+      couponkeyfromChange(val){
+        this.requestParams.couponkeyto = this.requestParams.couponkeyfrom;
+      },
+      /**
+       * 确定confirm事件
+       */
+      async confirmEntureHandle(){
+        let res = await webApi.saveBulkExchange(this.paramsConfirm);
         if(res.flags === 'success'){
           this.$toast('批量兑换成功', 'success')
         }else {
@@ -193,6 +264,43 @@
         width: 310px;
         float: left;
       }
+    }
+  }
+  .el-dialog{
+    .dialog-content div{
+      padding-bottom: 5px;
+      /*border-bottom: 1px solid #737373;*/
+      margin-bottom: 10px;
+      text-align: left;
+      &.avatar{
+        i{
+          display: inline-block;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          overflow: hidden;
+          img{
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+    .label,.text-field{
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 18px;
+    }
+    .label{
+      width: 118px;
+      color: #AFAFAF;
+      text-align: right;
+    }
+    .text-field{
+      text-align: left;
+      width: 150px;
+      color: #eee;
     }
   }
 </style>
