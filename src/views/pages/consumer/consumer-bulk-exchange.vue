@@ -132,7 +132,8 @@
 
 <script>
   import webApi from '../../../lib/api'
-  import cityData from '../../../conf/city'
+  import cityAllData from '../../../conf/city'
+  const cityData = cityAllData.filter(item => !['西藏自治区', '新疆维吾尔自治区', '香港特别行政区', '澳门特别行政区', '台湾省'].includes(item.name));
 	export default {
     data() {
       return {
