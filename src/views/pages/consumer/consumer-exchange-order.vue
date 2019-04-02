@@ -54,7 +54,7 @@
           <base-item class="w_50" inline><template slot="label">祝福语:</template>{{ exchangeDetail.hello }}</base-item>
           <base-item class="w_50" inline><template slot="label">发货人名称:</template>{{ exchangeDetail.sendcontact }}</base-item>
           <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ exchangeDetail.sendphone }}</base-item>
-          <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from }}</base-item>
+          <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</base-item>
           <base-item class="w_50" inline><template slot="label">昵称:</template>{{ exchangeDetail.usernick }}</base-item>
           <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom | formatConfigValueToLabel(configObject.EXPRESS_COMPANY_LIST)}}</template></base-item>
           <base-item class="w_50" inline><template slot="label">快递单号:</template><template v-if="exchangeDetail.delid">{{ exchangeDetail.delid }}</template></base-item>

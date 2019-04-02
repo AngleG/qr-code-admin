@@ -35,37 +35,17 @@
       :visible.sync="dialogOption.isVisible"
       :title="dialogOption.title">
         <div class="dialog-content">
-          <div>
-            <span class="label">支付账号:</span>
-            <span class="text-field">{{detail.accountuser}}</span>
-            <span class="label">礼券名称/礼券id:</span>
-            <span class="text-field">{{`${detail.couponname}/${detail.couponid}`}}</span>
-          </div>
-          <div>
-            <span class="label">下单时间:</span>
-            <span class="text-field">{{detail.createtime}}</span>
-            <span class="label">折扣:</span>
-            <span class="text-field">{{detail.discount}}</span>
-          </div>
-          <div>
-            <span class="label">张数:</span>
-            <span class="text-field">{{detail.couponum}}</span>
-            <span class="label">原单价:</span>
-            <span class="text-field">{{detail.nodisvalue}}</span>
-          </div>
-          <div>
-            <span class="label">来源:</span>
-            <span class="text-field">{{detail.from}}</span>
-            <span class="label">昵称:</span>
-            <span class="text-field">{{detail.usernick}}</span>
-          </div>
-          <div class="avatar">
-            <span class="label">性别:</span>
-            <span class="text-field">{{detail.usergender && options.sexList.find(item => item.value === detail.usergender).label}}</span>
-            <span class="label">头像:</span>
-            <span class="text-field" v-if="detail.userhead">
-              <i><img :src="detail.userhead" width="100%" height="100%"></i>
-            </span>
+          <div class="clearfix">
+            <base-item class="w_50" inline><template slot="label">支付账号:</template>{{detail.accountuser}}</base-item>
+            <base-item class="w_50" inline><template slot="label">礼券名称/礼券id:</template>{{`${detail.couponname}`}}&nbsp;<template v-if="detail.couponid">/</template>&nbsp;{{detail.couponid}}</base-item>
+            <base-item class="w_50" inline><template slot="label">下单时间:</template>{{detail.createtime}}</base-item>
+            <base-item class="w_50" inline><template slot="label">折扣:</template>{{detail.discount}}</base-item>
+            <base-item class="w_50" inline><template slot="label">张数:</template>{{detail.couponum}}</base-item>
+            <base-item class="w_50" inline><template slot="label">原单价:</template>{{detail.nodisvalue}}</base-item>
+            <base-item class="w_50" inline><template slot="label">来源:</template>{{detail.from | formatConfigValueToLabel(options.userSourceList)}}</base-item>
+            <base-item class="w_50" inline><template slot="label">昵称:</template>{{detail.usernick}}</base-item>
+            <base-item class="w_50" inline><template slot="label">性别:</template>{{detail.usergender | formatConfigValueToLabel(options.sexList)}}</base-item>
+            <base-item class="w_50" inline><template slot="label">头像:</template><img v-if="detail.userhead" class="user-head" :src="detail.userhead" width="100%" height="100%"></base-item>
           </div>
         </div>
         <div slot="footer">
@@ -225,7 +205,8 @@
     overflow-y: auto;
   }
   .el-dialog{
-    .dialog-content div{
+    .dialog-content > div{
+      display: table;
       padding-bottom: 5px;
       /*border-bottom: 1px solid #737373;*/
       margin-bottom: 10px;
@@ -246,18 +227,39 @@
       }
     }
     .label,.text-field{
-      display: inline-block;
+      display: table-cell;
+      table-layout: fixed;
+      /*display: inline-block;*/
       vertical-align: middle;
       line-height: 18px;
     }
     .label{
-      width: 65px;
+      width: 80px;
       color: #AFAFAF;
-      text-align: left;
+      text-align: right;
+      padding-right: 5px;
     }
     .text-field{
-      width: 200px;
+      width: 180px;
       color: #eee;
+      word-wrap:break-word;
+    }
+  }
+}
+.dialog-content{
+  text-align: left;
+  /deep/ {
+    @include customFormItem(125px, 40px, #afafaf, #fff, false);
+    .w_50{
+      width: 50%;
+      float: left;
+    }
+    .user-head{
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
     }
   }
 }

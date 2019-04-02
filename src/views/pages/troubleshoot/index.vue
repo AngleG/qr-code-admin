@@ -89,7 +89,7 @@
           </p>
           <p>
             <span class="label">兑换来源:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname }}</span>
+            <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</span>
             <span class="label" style="width: 85px;">兑换目标(数量):</span>
             <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}（{{ troubleshootDetail.exorderinfo.couponum }}）</span>
           </p>
@@ -165,7 +165,7 @@
   import cityData from '../../../conf/city'
   import webApi from '../../../lib/api'
   import config from '../../../conf/config'
-  import { EXPRESS_COMPANY_LIST } from '../../../conf/config-list'
+  import { EXPRESS_COMPANY_LIST, SOURCE_LIST } from '../../../conf/config-list'
     export default {
       name: "index",
       data(){
@@ -190,7 +190,8 @@
             couponList: [],
             cityList: [],
             countyList: [],
-            expressCompanyList: EXPRESS_COMPANY_LIST
+            expressCompanyList: EXPRESS_COMPANY_LIST,
+            SOURCE_LIST
           },
           qrCodeFile: null,
           searchType: null,

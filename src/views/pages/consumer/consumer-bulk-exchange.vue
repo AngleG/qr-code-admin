@@ -83,7 +83,7 @@
         <div class="dialog-content">
           <div>
             <span class="label">礼券来源:</span>
-            <span class="text-field" v-if="configObject.couponList.length">{{configObject.couponList.find(item => item.value === requestParams.couponkeyfrom).label}}</span>
+            <span class="text-field" v-if="configObject.couponList.length">{{requestParams.couponkeyfrom ? configObject.couponList.find(item => item.value === requestParams.couponkeyfrom).label : ''}}</span>
             <span class="label">礼券起始编号:</span>
             <span class="text-field">{{requestParams.serialfrom}}</span>
           </div>
@@ -91,7 +91,7 @@
             <span class="label">兑换张数:</span>
             <span class="text-field">{{requestParams.num}}</span>
             <span class="label">兑换目标礼券:</span>
-            <span class="text-field" v-if="configObject.couponList.length">{{configObject.couponList.find(item => item.value === requestParams.couponkeyto).label}}</span>
+            <span class="text-field" v-if="configObject.couponList.length">{{requestParams.couponkeyto ? configObject.couponList.find(item => item.value === requestParams.couponkeyto).label : ''}}</span>
           </div>
           <div>
             <span class="label">收货省:</span>
