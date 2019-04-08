@@ -1,7 +1,7 @@
 <template>
     <div class="coupon">
       <div class="coupon_header">
-        <el-input size="small" placeholder="礼券名称" v-model="requestParams.name"></el-input>
+        <el-input size="small" placeholder="礼券名称" v-model="requestParams.name" maxlength="30"></el-input>
         <el-button type="primary" size="small" round @click="createCouponHandle">创建礼券</el-button>
       </div>
       <div class="coupon_content">

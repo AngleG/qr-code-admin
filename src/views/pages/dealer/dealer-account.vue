@@ -4,7 +4,7 @@
         <div class="dealer-create">
           <el-input size="small" v-model="dealerParams.name" style="margin-left: 0" placeholder="经销商名称" maxlength="20"></el-input>
           <el-input size="small" v-model="dealerParams.cname" placeholder="经销商联系人" maxlength="20"></el-input>
-          <el-input size="small" v-model="dealerParams.cphone" placeholder="经销商联系电话" maxlength="20"></el-input>
+          <el-input size="small" v-model="dealerParams.cphone" placeholder="经销商联系电话" maxlength="12" minlength="10" @change="lengthCheckedHandle"></el-input>
           <el-button style="margin-left: 5px;" type="primary" size="small" @click="createDealer" round>创建经销商</el-button>
         </div>
         <div class="dealer-search">
@@ -19,7 +19,7 @@
             <div class="dealer-list">
               <el-input size="small" v-model="dealer.name" prefix-icon="iconfont icon-A-jingxiaoshang" placeholder="经销商名称"/>
               <el-input size="small" v-model="dealer.cname" prefix-icon="iconfont icon-jingxiaoshang" placeholder="经销商联系人"/>
-              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-shouji" placeholder="经销商联系电话"/>
+              <el-input size="small" v-model="dealer.cphone" prefix-icon="iconfont icon-shouji" placeholder="经销商联系电话" maxlength="12" minlength="10" @change="lengthCheckedHandle"/>
               <div class="clearfix" style="text-align: right;">
                 <el-select size="small" style="width: 80px;float: left;" v-model="dealer.status">
                   <el-option v-for="option in options" :label="option.label" :value="option.value" :key="option.value" />
@@ -140,6 +140,12 @@
           }
         } else {
           this.$toast(res.message, 'error');
+        }
+      },
+      lengthCheckedHandle(val){
+        // let num = dealerParams.cphone;
+        if(val.length > 12 || val.length < 10){
+          return this.$toast('号码长度必须为10~12位！');
         }
       }
     }

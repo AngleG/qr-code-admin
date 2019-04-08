@@ -8,7 +8,7 @@
       </div>
       <div class="base-coupon_form">
         <p>礼券名称：
-          <el-input size="small" style="width: 50%; margin-right: 5px;" v-model="requestParams.name" maxlength="20"></el-input>
+          <el-input size="small" style="width: 50%; margin-right: 5px;" v-model="requestParams.name" maxlength="30"></el-input>
           <span> 礼券ID:</span> {{requestParams.couponid}}
         </p>
         <p>当前折扣：
