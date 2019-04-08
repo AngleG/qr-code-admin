@@ -72,7 +72,9 @@
         </base-item>
         <base-item class="w_310">
           <template slot="label">祝福语:</template>
-          <el-input size="small" v-model="requestParams.hello"  placeholder="请输入祝福语" maxlength="50" />
+          <el-select placeholder="请选择祝福语" v-model="requestParams.hello" size="samll">
+            <el-option v-for="item in configObject.wishList" :label="item.label" :value="item.value" :key="item.name" :disabled="item.isDisabled"></el-option>
+          </el-select>
         </base-item>
       </div>
       <p style="margin-top: 30px;"><el-button @click="saveBulkExchange" class="confirm" type="primary" size="small" round>生成兑换订单</el-button></p>
@@ -141,7 +143,8 @@
         configObject: {
           couponList: [],
           cityList: [],
-          countyList: []
+          countyList: [],
+          wishList: []
         },
         requestParams: {
           couponkeyfrom: null,
@@ -166,6 +169,7 @@
     },
     created() {
       this.getCouponList();
+      this.getWishList();
     },
     methods: {
       /**
@@ -178,6 +182,20 @@
           if(res.data && res.data.length){
             this.configObject.couponList = res.data.reverse().map(item => ({label: item.name, value: item.couponkey}));
             this.requestParams.couponkeyto = this.requestParams.couponkeyfrom = this.configObject.couponList[0].value || null;
+          }
+        }else {
+          this.$toast(res.message, 'error');
+        }
+      },
+      /**
+       * 获取祝福语列表
+       */
+      async getWishList(){
+        let res = await webApi.getWishList({});
+        if(res.flags === 'success'){
+          this.configObject.wishList = [];
+          if(res.data && res.data.length){
+            this.configObject.wishList = res.data.reverse().map(item => ({label: item.value === '' ? `--------${item.name}--------` : item.name, value: item.value, isDisabled: item.value === '' ? true : false}));
           }
         }else {
           this.$toast(res.message, 'error');
@@ -290,7 +308,7 @@
     }
     .label,.text-field{
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: top;
       line-height: 18px;
     }
     .label{

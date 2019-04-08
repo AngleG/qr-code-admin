@@ -29,7 +29,7 @@ let webApi = {
   getCouponList(data){
     return httpRequest(`/rc`, data)
   },
-  //获取礼券列表
+  //编辑礼券
   modifyCoupon(data){
     return httpRequest(`/mc`, data)
   },
@@ -133,6 +133,10 @@ let webApi = {
   //保存批量兑换
   saveBulkExchange(data) {
     return httpRequest(`/exs`, data)
+  },
+  //获取祝福语列表
+  getWishList(data) {
+    return httpRequest(`/wish`, data)
   }
 };
 export default webApi;
