@@ -7,7 +7,7 @@
       <el-button @click="getInvoicingReportList" size="small" type="primary" round>查看</el-button>
     </div>
     <div class="exchange-order_content">
-      <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
     </div>
   </div>
 </template>

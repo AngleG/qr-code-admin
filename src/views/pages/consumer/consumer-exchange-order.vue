@@ -27,7 +27,7 @@
       <el-button @click="downloadExchangeOrder" size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
     </div>
     <div class="exchange-order_content">
-      <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
       <customize-pagination @getList="getExchangeOrderList" :page-count="totalPages"/>
     </div>
     <el-dialog

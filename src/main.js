@@ -13,10 +13,22 @@ import './lib/plugins/vue-components'
 import './lib/filters'
 Vue.config.productionTip = false;
 
+//引入vuex
+import store from './store/index'
+
+//引入全局vue-progressBar
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '2px'
+});
+
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 });

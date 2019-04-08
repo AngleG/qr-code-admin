@@ -1,8 +1,32 @@
 import axios from 'axios';
+import store from '../../store/index'
+import app from '../../main'
 import config from '../../conf/config'
 import qs from 'qs';
 import {loginOut} from "../utils";
 
+const globalStart = () => {
+  app.$Progress.start();
+  store.commit('changeGlobalLoading', true)
+};
+
+const globalFinish = () => {
+  app.$Progress.finish();
+  store.commit('changeGlobalLoading', false)
+};
+
+const globalFail = () => {
+  app.$Progress.fail();
+  store.commit('changeGlobalLoading', false)
+};
+
+
+axios.interceptors.request.use(config => {
+  globalStart();
+  return config;
+}, error => {
+  globalFail();
+});
 
 axios.interceptors.response.use(data => {
   if (data.data.code === 900) {
@@ -21,6 +45,7 @@ const getResult = res => {
     message: result.error
   };
   if (Object.prototype.toString.call(result).indexOf('Blob') > -1) {
+    globalFinish();
     return {
       flags: 'success',
       data: result,
@@ -29,14 +54,17 @@ const getResult = res => {
     };
   }
   if (result.state === 'success') {
+    globalFinish();
     return {
       flags: 'success',
       data: result.data,
       message: '成功'
     }
   } else if(result.state === 'error') {
+    globalFail();
     return failResult
   } else if (result.state === 'fail'){
+    globalFail();
     let logoutErrorList = ['已过期', '已退出', '账号未授权登录本控制台', '输入登录名和密码'];
     if (logoutErrorList.includes(result.error)|| result.error.indexOf("禁用") !== -1) {
       let timer = setTimeout(() => {
@@ -77,6 +105,7 @@ export const httpRequest = (url, data = {}, options = { method : 'post' }, param
     }, options))
     .then(getResult)
     .catch(err => {
+      globalFail();
       if (!err.response || ![401, 422].includes(err.response.status)) {
         return {
           flags: 'fail',

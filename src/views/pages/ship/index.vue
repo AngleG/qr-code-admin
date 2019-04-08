@@ -25,7 +25,7 @@
       </el-select>
       <el-button size="small" type="primary" round @click="getShipList">刷新发货列表</el-button>
     </div>
-    <div class="ship_content" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.5)">
+    <div class="ship_content" element-loading-background="rgba(0, 0, 0, 0.5)">
       <div class="ship_content-item" v-if="shipOrderList.length" v-for="(item, index) in shipOrderList" :key="index">
         <div>
           <span class="label">兑换来源:</span>

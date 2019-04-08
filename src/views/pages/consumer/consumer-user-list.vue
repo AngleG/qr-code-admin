@@ -5,7 +5,7 @@
       <el-button @click="getUserList" size="small" type="primary" round>查询</el-button>
     </div>
     <div class="exchange-order_content">
-      <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
       <customize-pagination @getList="getUserList" :page-count="totalPages"/>
     </div>
   </div>

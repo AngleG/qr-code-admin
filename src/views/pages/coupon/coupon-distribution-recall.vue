@@ -30,7 +30,7 @@
       <base-item label-width="45px" inline><template slot="label">张数:</template><el-input v-model="requestParams.sharedData.num" size="small"/> <el-button @click="setCouponStatus('activation')" size="small" type="primary" round>分发</el-button><el-button @click="setCouponStatus('cancel')" size="small" type="primary" round>召回</el-button></base-item>
     </div>
     <div class="coupon-operating_content">
-      <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
       <customize-pagination @getList="getCouponDistributionList" :page-count="totalPages"/>
     </div>
   </div>
