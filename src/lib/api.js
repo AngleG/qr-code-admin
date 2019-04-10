@@ -29,6 +29,10 @@ let webApi = {
   getCouponList(data){
     return httpRequest(`/rc`, data)
   },
+  //获取快递公司列表
+  getExpressCompanyList(data){
+    return httpRequest(`/delcom`, data)
+  },
   //编辑礼券
   modifyCoupon(data){
     return httpRequest(`/mc`, data)

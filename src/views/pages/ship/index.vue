@@ -81,7 +81,7 @@
           <span class="label">快递公司:</span>
           <span class="text-field">
               <el-select size="samll" style="width: 160px" v-model="item.delcom">
-                <el-option v-for="item in configObject.EXPRESS_COMPANY_LIST" :label="item.label" :value="item.value" :key="item.value"/>
+                <el-option v-for="item in configObject.expressCompanyList" :label="item.label" :value="item.value" :key="item.value"/>
               </el-select>
             </span>
           <span class="label">快递单号:</span>
@@ -105,7 +105,7 @@
 <script>
   import cityData from '../../../conf/city'
   import webApi from '../../../lib/api'
-  import {SOURCE_LIST, EXPRESS_COMPANY_LIST} from "../../../conf/config-list";
+  import {SOURCE_LIST} from "../../../conf/config-list";
 
   export default {
       data(){
@@ -125,11 +125,12 @@
               {label: '支付宝', value: 'z'},
               {label: '批量兑换', value: 'm'}
             ],
-            EXPRESS_COMPANY_LIST
+            expressCompanyList: []
           }
         }
       },
       created(){
+        this.getExpressCompanyList();
         this.getCouponList().then(this.getShipList);
       },
       methods: {
@@ -149,6 +150,20 @@
             if(res.data && res.data.length){
               this.configObject.couponList = res.data.map(item => Object.assign({}, item, {label: item.name, value: item.couponkey}));
               this.searchRequestParams.couponkey = this.configObject.couponList[0].value;
+            }
+          }else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 获取快递公司列表
+         */
+        async getExpressCompanyList(){
+          let res = await webApi.getExpressCompanyList();
+          if(res.flags === 'success'){
+            this.configObject.expressCompanyList = [];
+            if(res.data && res.data.length){
+              this.configObject.expressCompanyList = res.data.map(item => Object.assign({}, {label: item.name, value: item.value}));
             }
           }else {
             this.$toast(res.message, 'error');
