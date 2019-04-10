@@ -442,17 +442,6 @@
       line-height: 36px;
       padding: 7px 30px;
       text-align: left;
-      .file-button{
-        display: inline-block;
-        width: 92px;
-        height: 24px;
-        border-radius: 20px;
-        background: #eee;
-        text-align: center;
-        color: #606266;
-        font-size: 12px;
-        line-height: 24px
-      }
       .file-name{
         font-size: 12px;
         color: #fff;
@@ -465,7 +454,7 @@
           float: left;
           width: 630px;
           /*height: 450px;*/
-          height: 618px;
+          height: 500px;
           background-color: #182337;
           border-radius: 5px;
           border: 1px solid #1a273a;
@@ -474,7 +463,7 @@
           font-size: 12px;
           margin: 0 10px 20px 0;
           p{
-            padding: 10px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #2f3743;
             text-align: left;
           }
@@ -482,11 +471,11 @@
             line-height: 34px;
           }
         }
-      .custom-height{
-        height: 618px;
-      }
+      /*.custom-height{*/
+        /*height: 618px;*/
+      /*}*/
       /deep/ {
-        @include customFormItem(110px, 24px, #909090, #fff, false);
+        @include customFormItem(110px, 22px, #909090, #fff, false);
         .w_50{
           width: 50%;
           float: left;
@@ -500,10 +489,8 @@
         }
       }
       .distribute-desc{
-        width: 630px;
-        line-height: 34px;
-        background-color: #182337;
         color: #fff;
+        font-size: 14px;
         text-align: left;
         padding-left: 15px;
         margin-bottom: 10px;
