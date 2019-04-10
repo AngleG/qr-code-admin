@@ -23,95 +23,76 @@
       </div>
       <div class="troubleshoot-content" v-if="troubleshootDetail">
         <p class="distribute-desc">
-          <span v-if="troubleshootDetail.codeinfo && troubleshootDetail.codeinfo.agentcompany">已分发给经销商<font color="orange">{{troubleshootDetail.codeinfo.agentcompany}}</font></span>
+          <span v-if="troubleshootDetail.codeinfo && troubleshootDetail.codeinfo.agentcompany">已分发给经销商 <font color="orange">{{troubleshootDetail.codeinfo.agentcompany}}</font></span>
           <span v-if="troubleshootDetail.codeinfo && !troubleshootDetail.codeinfo.agentcompany">未分发</span>
         </p>
         <div v-if="troubleshootDetail.payorderinfo" class="troubleshoot-content-item">
           <p class="status clearfix" style="line-height: 34px">
-            <span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>
+            <base-item class="w_50"><template slot="label">状态:</template>{{ payBtnStatus.statusText | paymentOrderStatusToText }}</base-item>
+            <!--<span style="color: #909090">状态:</span> <template>{{ payBtnStatus.statusText  | paymentOrderStatusToText}}</template>-->
             <!--<span class="fr">-->
               <!--<el-button @click="manualQuestionPayOrder" type="success" size="small" v-if="payBtnStatus.isManual" round>手工激活</el-button>-->
               <!--<el-button @click="deleteQuestionPayOrder" type="danger" size="small" v-if="payBtnStatus.isDelete" round>删除支付订单</el-button>-->
             <!--</span>-->
           </p>
-          <p>
-            <span class="label">经销商名称:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.agentcompany }}</span>
-            <span class="label">支付账号:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.accountuser }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">经销商名称:</template>{{ troubleshootDetail.payorderinfo.agentcompany }}</base-item>
+            <base-item class="w_50" inline><template slot="label">支付账号:</template>{{ troubleshootDetail.payorderinfo.accountuser }}</base-item>
           </p>
-          <p>
-            <span class="label">折扣:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.discount }}<template v-if="troubleshootDetail.payorderinfo.discount">折</template></span>
-            <span class="label">支付金额:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.distotal }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">支付金额:</template>{{ troubleshootDetail.payorderinfo.distotal }}</base-item>
+            <base-item class="w_50" inline><template slot="label">折扣:</template>{{ troubleshootDetail.payorderinfo.discount }}<template v-if="troubleshootDetail.payorderinfo.discount">折</template></base-item>
           </p>
-          <p>
-            <span class="label">礼券id:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponid }}</span>
-            <span class="label">礼券名称:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponname }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">礼券名称:</template>{{ troubleshootDetail.payorderinfo.couponname }}</base-item>
+            <base-item class="w_50" inline><template slot="label">礼券id:</template>{{ troubleshootDetail.payorderinfo.couponid }}</base-item>
           </p>
-          <p>
-            <span class="label">下单时间:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.createtime }}</span>
-            <span class="label">支付时间:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.lastupdatime }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">下单时间:</template>{{ troubleshootDetail.payorderinfo.createtime }}</base-item>
+            <base-item class="w_50" inline><template slot="label">支付时间:</template>{{ troubleshootDetail.payorderinfo.lastupdatime }}</base-item>
           </p>
-          <p>
-            <span class="label">张数:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.couponum }}</span>
-            <span class="label">原单价:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.nodisvalue }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">原单价:</template>{{ troubleshootDetail.payorderinfo.nodisvalue }}</base-item>
+            <base-item class="w_50" inline><template slot="label">张数:</template>{{ troubleshootDetail.payorderinfo.couponum }}</base-item>
           </p>
-          <p>
-            <span class="label">来源:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.from }}</span>
-            <span class="label">昵称:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.usernick }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">来源:</template>{{ troubleshootDetail.payorderinfo.from | formatConfigValueToLabel(configObject.fromList)}}</base-item>
+            <base-item class="w_50" inline><template slot="label">昵称:</template>{{ troubleshootDetail.payorderinfo.usernick }}</base-item>
           </p>
-          <p class="avatar">
-            <span class="label">性 别:</span>
-            <span class="text-field">{{ troubleshootDetail.payorderinfo.usergender }}</span>
-            <span class="label">头 像:</span>
-            <span class="text-field" v-if="troubleshootDetail.payorderinfo.userhead">
-              <i><img :src=" troubleshootDetail.payorderinfo.userhead"></i>
-            </span>
+          <p class="avatar clearfix">
+            <base-item class="w_50" inline><template slot="label">性 别:</template>{{ troubleshootDetail.payorderinfo.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>
+            <base-item class="w_50" inline v-if="troubleshootDetail.payorderinfo.userhead"><template slot="label">头 像:</template>
+              <template v-if="troubleshootDetail.payorderinfo.userhead">
+                <span class="user-head"><img :src="troubleshootDetail.payorderinfo.userhead" width="100%" height="100%"></span>
+              </template>
+            </base-item>
           </p>
         </div>
-        <div v-if="troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-width">
+        <div v-if="troubleshootDetail.exorderinfo" class="troubleshoot-content-item custom-height">
           <p class="status clearfix" style="line-height: 34px">
-            <span style="color: #909090">状态:</span> {{ exchange.statusText }}
+            <base-item class="w_50"><template slot="label">状态:</template>{{ exchange.statusText }}</base-item>
             <!--<span class="fr" v-if="exchange.isShowOperate">-->
               <!--<el-button @click="deleteQuestionExChangedOrder" type="danger" size="small" round>删除兑换订单</el-button>-->
               <!--<el-button @click="saveQuestionExChangedOrder" type="primary" size="small" round>保存修改订单</el-button>-->
             <!--</span>-->
           </p>
-          <p>
-            <span class="label">兑换来源:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.fromcouponname | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</span>
-            <span class="label" style="width: 85px;">兑换目标(数量):</span>
-            <span style="width: 205px;" class="text-field">{{ troubleshootDetail.exorderinfo.tocouponname }}（{{ troubleshootDetail.exorderinfo.couponum }}）</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">兑换来源:</template>{{ troubleshootDetail.exorderinfo.fromcouponname }}</base-item>
+            <base-item class="w_50" inline><template slot="label">兑换目标<font color="orange">(数量)</font>:</template>{{ troubleshootDetail.exorderinfo.tocouponname }}<font color="orange">（{{ troubleshootDetail.exorderinfo.couponum }}）</font></base-item>
           </p>
-          <p>
-            <span class="label">配送地址:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.recprov }}{{ troubleshootDetail.exorderinfo.recity }}{{ troubleshootDetail.exorderinfo.recounty }}{{ troubleshootDetail.exorderinfo.recstreet }}</span>
+          <p class="clearfix">
+            <base-item><template slot="label">配送地址:</template>{{ troubleshootDetail.exorderinfo.recprov }}{{ troubleshootDetail.exorderinfo.recity }}{{ troubleshootDetail.exorderinfo.recounty }}{{ troubleshootDetail.exorderinfo.recstreet }}</base-item>
           </p>
-          <p>
-            <span class="label">收货联系人:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.recontact }}</span>
-            <span class="label">收货人电话:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.recphone }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">收货联系人:</template>{{ troubleshootDetail.exorderinfo.recontact }}</base-item>
+            <base-item class="w_50" inline><template slot="label">收货人电话:</template>{{ troubleshootDetail.exorderinfo.recphone }}</base-item>
           </p>
-          <p>
-            <span class="label">兑换人手机:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.usermobile }}</span>
-            <span class="label">祝福语:</span>
-            <span class="text-field">{{ troubleshootDetail.exorderinfo.hello }}</span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">兑换人手机:</template>{{ troubleshootDetail.exorderinfo.usermobile }}</base-item>
+            <base-item class="w_50" inline><template slot="label">祝福语:</template>{{ troubleshootDetail.exorderinfo.hello }}</base-item>
           </p>
-          <p class="troubleshoot-content_address">
-            <span class="label">发货地址:</span>
-            {{ troubleshootDetail.exorderinfo.sendprov }}{{ troubleshootDetail.exorderinfo.sendcity }}{{ troubleshootDetail.exorderinfo.sendcounty }}{{ troubleshootDetail.exorderinfo.sendstreet }}
+          <p class="troubleshoot-content_address clearfix">
+            <base-item><template slot="label">发货地址:</template>{{ troubleshootDetail.exorderinfo.sendprov }}{{ troubleshootDetail.exorderinfo.sendcity }}{{ troubleshootDetail.exorderinfo.sendcounty }}{{ troubleshootDetail.exorderinfo.sendstreet }}</base-item>
             <!--<el-select @change="changeProvinceFn" size="samll" v-model="troubleshootDetail.exorderinfo.sendprov">-->
               <!--<el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/>-->
             <!--</el-select>-->
@@ -123,38 +104,28 @@
             <!--</el-select>-->
             <!--<el-input size="small" style="width: 145px" maxlength="100" v-model="troubleshootDetail.exorderinfo.sendstreet" placeholder="请输入街道地址"></el-input>-->
           </p>
-          <p>
-            <span class="label">发货联系人:</span>
-            <span class="text-field">
-              {{troubleshootDetail.exorderinfo.sendcontact}}
-              <!--<el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendcontact" maxlength="50" placeholder="请输入联系人姓名"></el-input>-->
-            </span>
-            <span class="label">发货人电话:</span>
-            <span class="text-field">
-              {{ troubleshootDetail.exorderinfo.sendphone }}
-              <!--<el-input size="small" style="width: 160px" v-model="troubleshootDetail.exorderinfo.sendphone" maxlength="50" placeholder="请输入发货人电话"></el-input>-->
-            </span>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">发货联系人:</template>{{ troubleshootDetail.exorderinfo.sendcontact }}</base-item>
+            <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ troubleshootDetail.exorderinfo.sendphone }}</base-item>
           </p>
-          <p class="avatar">
-            <span class="label">快递公司:</span>
-            <span class="text-field">
-              {{ troubleshootDetail.exorderinfo.delcom | formatConfigValueToLabel(configObject.expressCompanyList)}}
-              <!--<el-select size="samll" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delcom">-->
-                <!--<el-option v-for="item in configObject.expressCompanyList" :label="item.label" :value="item.value" :key="item.value"/>-->
-              <!--</el-select>-->
-            </span>
-            <span class="label">快递单号:</span>
-            <span class="text-field">
-              {{ troubleshootDetail.exorderinfo.delid }}
-               <!--<el-input size="small" maxlength="50" style="width: 160px" v-model="troubleshootDetail.exorderinfo.delid" placeholder="请输入快递单号"></el-input>-->
-            </span>
+          <p class="avatar clearfix">
+            <base-item class="w_50" inline><template slot="label">快递公司:</template>{{ troubleshootDetail.exorderinfo.delcomname | formatConfigValueToLabel(configObject.expressCompanyList) }}</base-item>
+            <base-item class="w_50" inline><template slot="label">快递单号:</template>{{ troubleshootDetail.exorderinfo.delid }}</base-item>
           </p>
           <p>
-            <span class="label">写给用户:</span>
-            <span class="text-field">
-              {{ troubleshootDetail.exorderinfo.log }}
-               <!--<el-input size="small" style="width: 260px" v-model="troubleshootDetail.exorderinfo.log" placeholder="写给用户"></el-input>-->
-            </span>
+            <base-item><template slot="label">写给用户:</template>{{ troubleshootDetail.exorderinfo.log }}</base-item>
+          </p>
+          <p class="clearfix">
+            <base-item class="w_50" inline><template slot="label">来源:</template>{{ troubleshootDetail.exorderinfo.from | formatConfigValueToLabel(configObject.fromList)}}</base-item>
+            <base-item class="w_50" inline><template slot="label">昵称:</template>{{ troubleshootDetail.exorderinfo.usernick }}</base-item>
+          </p>
+          <p class="avatar clearfix">
+            <base-item class="w_50" inline><template slot="label">性 别:</template>{{ troubleshootDetail.exorderinfo.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>
+            <base-item class="w_50" inline v-if="troubleshootDetail.exorderinfo.userhead"><template slot="label">头 像:</template>
+              <template v-if="troubleshootDetail.exorderinfo.userhead">
+                <span class="user-head"><img :src="troubleshootDetail.exorderinfo.userhead" width="100%" height="100%"></span>
+              </template>
+            </base-item>
           </p>
         </div>
       </div>
@@ -165,7 +136,7 @@
   import cityData from '../../../conf/city'
   import webApi from '../../../lib/api'
   import config from '../../../conf/config'
-  import { EXPRESS_COMPANY_LIST, SOURCE_LIST } from '../../../conf/config-list'
+  import {SEX_LIST} from '../../../conf/config-list'
     export default {
       name: "index",
       data(){
@@ -190,8 +161,14 @@
             couponList: [],
             cityList: [],
             countyList: [],
-            expressCompanyList: EXPRESS_COMPANY_LIST,
-            SOURCE_LIST
+            expressCompanyList: [],
+            fromList: [
+              {label: '全部', value: 'ALL'},
+              {label: '微信', value: 'w'},
+              {label: '支付宝', value: 'z'},
+              {label: '批量激活', value: 'm'}
+            ],
+            SEX_LIST
           },
           qrCodeFile: null,
           searchType: null,
@@ -231,6 +208,7 @@
       },
       created(){
         this.getCouponList();
+        this.getExpressCompanyList();
       },
       methods: {
         /**
@@ -243,6 +221,20 @@
             if(res.data && res.data.length){
               this.configObject.couponList = res.data.map(item => Object.assign({}, item, {label: item.name, value: item.couponkey}));
               this.searchParams.couponkey = this.configObject.couponList[0].value;
+            }
+          }else {
+            this.$toast(res.message, 'error');
+          }
+        },
+        /**
+         * 获取快递公司列表
+         */
+        async getExpressCompanyList(){
+          let res = await webApi.getExpressCompanyList();
+          if(res.flags === 'success'){
+            this.configObject.expressCompanyList = [];
+            if(res.data && res.data.length){
+              this.configObject.expressCompanyList = res.data;
             }
           }else {
             this.$toast(res.message, 'error');
@@ -472,7 +464,8 @@
         .troubleshoot-content-item{
           float: left;
           width: 630px;
-          height: 400px;
+          /*height: 450px;*/
+          height: 618px;
           background-color: #182337;
           border-radius: 5px;
           border: 1px solid #1a273a;
@@ -480,53 +473,30 @@
           color: #FEFEFE;
           font-size: 12px;
           margin: 0 10px 20px 0;
-          /*&.custom-width{*/
-            /*width: 680px;*/
-            /*.text-field {*/
-              /*width: 200px;*/
-            /*}*/
-          /*}*/
           p{
-            padding-bottom: 5px;
+            padding: 10px 0;
             border-bottom: 1px solid #2f3743;
-            margin-bottom: 10px;
             text-align: left;
-            &.avatar{
-              i{
-                display: inline-block;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                overflow: hidden;
-                img{
-                  width: 100%;
-                  height: 100%;
-                  vertical-align: middle;
-                }
-              }
-            }
-          }
-          .label,.text-field{
-            display: inline-block;
-            vertical-align: middle;
-          }
-          .label{
-            width: 65px;
-            color: #909090;
-            text-align: left;
-          }
-          .text-field{
-            width: 220px;
-            line-height: 18px ;
           }
           .status{
             line-height: 34px;
           }
         }
-      .troubleshoot-content_address{
-        .el-select, .el-input{
-          /*margin: 0 5px;*/
-          width: 120px;
+      .custom-height{
+        height: 618px;
+      }
+      /deep/ {
+        @include customFormItem(110px, 24px, #909090, #fff, false);
+        .w_50{
+          width: 50%;
+          float: left;
+        }
+        .user-head{
+          display: inline-block;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          overflow: hidden;
         }
       }
       .distribute-desc{

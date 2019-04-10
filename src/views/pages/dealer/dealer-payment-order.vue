@@ -75,7 +75,7 @@
               {label: '全部', value: 'ALL'},
               {label: '微信', value: 'w'},
               {label: '支付宝', value: 'z'},
-              {label: '手工激活', value: 'm'}
+              {label: '批量激活', value: 'm'}
             ],
             dealerList: [],
             sexList: [
