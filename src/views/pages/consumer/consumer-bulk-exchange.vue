@@ -77,7 +77,19 @@
           </el-select>
         </base-item>
       </div>
-      <p style="margin-top: 30px;"><el-button @click="saveBulkExchange" class="confirm" type="primary" size="small" round>生成兑换订单</el-button></p>
+      <p style="margin-top: 30px; line-height: 30px;">
+        <el-button @click="downloadBulkExchangeTemplate" class="confirm" type="primary" size="small" round>下载批量兑换订单模版</el-button>
+        <el-button @click="saveBulkExchange" class="confirm" type="primary" size="small" round>生成兑换订单</el-button>
+        <input @change="getCacheFile" type="file" accept="/*" name="exorder" id="upload_bulk_exchange" style="visibility: hidden;width: 0;height: 0;">
+        <label for="upload_bulk_exchange"><span class="el-button el-button--primary el-button--small is-round" style="margin-right: 20px;">上传批量兑换订单</span></label>
+      </p>
+      <div style="padding: 20px" >
+        <p style="text-align: left">
+          <base-item inline><template slot="label">上传总兑换订单数:</template>{{ bulkExchangeTotals }}</base-item>
+          <base-item inline><template slot="label">成功兑换订单数:</template>{{ bulkExchangeSuccessCounts }}</base-item>
+        </p>
+        <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      </div>
       <el-dialog
         width="600px"
         :visible.sync="dialogOption.visible"
@@ -140,6 +152,12 @@
     data() {
       return {
         cityData,
+        tableColumns: [
+          {title: '失败表单名称', align: 'center', key: 'sheetname'},
+          {title: '失败表单行号', align: 'center', key: 'row'},
+          {title: '失败原因', align: 'center', key: 'reason'}
+        ],
+        tableData: [],
         configObject: {
           couponList: [],
           cityList: [],
@@ -164,7 +182,10 @@
         dialogOption: {
           visible: false
         },
-        paramsConfirm: null
+        paramsConfirm: null,
+        bulkExchangeFile: null,
+        bulkExchangeTotals: 0,
+        bulkExchangeSuccessCounts: 0
       }
     },
     created() {
@@ -172,6 +193,41 @@
       this.getWishList();
     },
     methods: {
+      //下载批量兑换模板
+      downloadBulkExchangeTemplate() {
+        window.open(`http://cdn.jedge.cn/批量兑换订单模版.xlsx`);
+      },
+      /**
+       * 获取上传文件信息
+       * @param event
+       */
+      getCacheFile(event) {
+        this.bulkExchangeFile = event.target.files[0];
+        if (this.bulkExchangeFile) {
+          this.uploadBulkExchange();
+        }
+      },
+      /**
+       * 上传文件
+       * @returns {Promise<void>}
+       */
+      async uploadBulkExchange() {
+        let res = await webApi.uploadBulkExchange(this.bulkExchangeFile);
+        if (res.flags === 'success') {
+          this.tableData = [];
+          this.bulkExchangeTotals = 0;
+          this.bulkExchangeSuccessCounts = 0;
+          const result = res.data;
+          if (result && result.fails) {
+            this.tableData = result.fails;
+            this.bulkExchangeTotals = result.total;
+            this.bulkExchangeSuccessCounts = result.success;
+          }
+        } else {
+          this.$toast(res.message, 'error');
+        }
+        this.bulkExchangeFile = null;
+      },
       /**
        * 获取礼券列表
        */
@@ -195,7 +251,7 @@
         if(res.flags === 'success'){
           this.configObject.wishList = [];
           if(res.data && res.data.length){
-            this.configObject.wishList = res.data.reverse().map(item => ({label: item.value === '' ? `--------${item.name}--------` : item.name, value: item.value, isDisabled: item.value === '' ? true : false}));
+            this.configObject.wishList = res.data.reverse().map(item => ({label: item.value === '' ? `--------${item.name}--------` : item.name, value: item.value, isDisabled: item.value === ''}));
           }
         }else {
           this.$toast(res.message, 'error');
@@ -270,6 +326,7 @@
 <style lang="scss" scoped>
   .bulk-exchange-content{
     max-width: 1400px;
+    margin: 0 auto;
     .el-input, .el-select{
       width: 170px;
     }

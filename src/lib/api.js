@@ -141,6 +141,12 @@ let webApi = {
   //获取祝福语列表
   getWishList(data) {
     return httpRequest(`/wish`, data)
-  }
+  },
+  //上传文件
+  uploadBulkExchange(file) {
+    let data = new FormData();
+    data.append('file', file);
+    return httpRequest('/upexs', data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}})
+  },
 };
 export default webApi;
