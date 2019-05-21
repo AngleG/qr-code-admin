@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import {routes} from "../../router";
   import subMenus from '../base/base-menu'
   const { body } = document;
   const WIDTH = 1024;
@@ -39,77 +40,15 @@
   export default {
         data() {
           return {
-            menus: [
-              {
-                description: "账号管理",
-                iconClass: "iconfont icon-qiye1",
-                id: 1,
-                path: "/",
-                subMenuList: [
-                  {description: "企业信息", iconClass: "", id: 21, path: '/company-info', type: 1},
-                ],
-                type: 0
-              },
-              {
-                description: "礼劵管理",
-                iconClass: "iconfont icon-youhuiquan",
-                id: 2,
-                path: "/",
-                subMenuList: [
-                  {description: "创建与修改", iconClass: "", id: 22, path: '/coupon-edit', type: 1},
-                  {description: "分发与召回", iconClass: "", id: 23, path: '/coupon-distribution-recall', type: 1},
-                  {description: "激活与撤销", iconClass: "", id: 24, path: '/coupon-operating', type: 1},
-                ],
-                type: 0
-              },
-              {
-                description: "经销商管理",
-                iconClass: "iconfont icon-jingxiaoshang",
-                id: 3,
-                path: "/",
-                subMenuList: [
-                  {description: "经销商账号", iconClass: "", id: 25, path: '/dealer-account', type: 1},
-                  {description: "支付订单", iconClass: "", id: 26, path: '/payment-order', type: 1},
-                  {description: "进销存报表", iconClass: "", id: 27, path: '/invoicing-report', type: 1},
-                ],
-                type: 0
-              },
-              {
-                description: "消费者管理",
-                iconClass: "iconfont icon-xiaofeizhe1",
-                id: 3,
-                path: "/",
-                subMenuList: [
-                  {description: "用户列表", iconClass: "", id: 28, path: '/user-list', type: 1},
-                  {description: "兑换订单", iconClass: "", id: 28, path: '/exchange-order', type: 1},
-                  {description: "批量兑换", iconClass: "", id: 28, path: '/bulk-exchange', type: 1},
-                  // {description: "收货地址列表", iconClass: "", id: 29, path: '/shipping-address', type: 1},
-                ],
-                type: 0
-              },
-              {
-                description: "发货",
-                iconClass: "iconfont icon-fahuo",
-                id: 4,
-                path: "/ship",
-                subMenuList: [],
-                type: 1
-              },
-              {
-                description: "问题排查",
-                iconClass: "iconfont icon-paicha",
-                id: 4,
-                path: "/troubleshoot",
-                subMenuList: [],
-                type: 1
-              }
-            ],
+            menuIndex: 0,
+            menus: [],
             defaultIndex: this.$route.fullPath,
             defaultOpens: [],
             isCollapse: false
           }
         },
         created() {
+          this.getMenus();
             let menuOptions = this.getMenuOptions();
             if (menuOptions) {
               Object.keys(menuOptions).forEach(key => {
@@ -122,19 +61,51 @@
             return process.env.NODE_ENV;
           },
         },
-        mounted() {
-            // this.$nextTick(() => {
-            //   window.addEventListener('resize', this.resizeHandler, false)
-            // })
-        },
         methods: {
+          getMenus() {
+            const currentMenus = routes.filter(route => route.children);
+            const menus = currentMenus.map(item => {
+              this.menuIndex++;
+              if (item.name) {
+                return {
+                  description: item.name,
+                  iconClass: item.iconClass,
+                  id: this.menuIndex,
+                  path: item.path,
+                  subMenuList: this.getSubMenuList(item.children),
+                  type: 0
+                }
+              } else {
+                const currentItem = item.children[0];
+                return currentItem ? {
+                  description: currentItem.name,
+                  iconClass: item.iconClass,
+                  id: this.menuIndex,
+                  path: currentItem.path,
+                  type: 1
+                } : null
+              }
+            });
+            this.menus = menus.filter(item => item);
+          },
+          getSubMenuList(childrens) {
+            if (!childrens || childrens.length === 0) {
+              return [];
+            }
+            return childrens.map(child => {
+              this.menuIndex++;
+              return {
+                description: child.name,
+                type: 1,
+                iconClass: '',
+                path: child.path,
+                id: this.menuIndex,
+                subMenuList: this.getSubMenuList(child.children)
+              }
+            })
+          },
           resizeHandler() {
             return null;
-            (this.$_.throttle(() => {
-              if (!document.hidden) {
-                this.isCollapse = this.isMobile();
-              }
-            }, 200))()
           },
           isMobile() {
             const rect = body.getBoundingClientRect();
