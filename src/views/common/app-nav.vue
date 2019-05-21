@@ -76,7 +76,7 @@
                   type: 0
                 }
               } else {
-                const currentItem = item.children[0];
+                const currentItem = item.children && item.children[0];
                 return currentItem ? {
                   description: currentItem.name,
                   iconClass: item.iconClass,
