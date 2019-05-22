@@ -228,3 +228,7 @@ body,html{
 .el-loading-mask{
   background-color: rgba(0, 0, 0, .3);
 }
+
+.el-checkbox__input.is-disabled .el-checkbox__inner{
+  background-color: #909399;
+}
