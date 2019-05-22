@@ -148,5 +148,21 @@ let webApi = {
     data.append('file', file);
     return httpRequest('/upexs', data, {method: 'post',  headers: {'Content-Type': 'multipart/form-data;boundary = ' + new Date().getTime()}})
   },
+  //获取自动发货年份列表
+  getAutomaticDeliveryYears() {
+    return httpRequest(`/adry`)
+  },
+  getAutomaticDeliveryMonths(data) {
+    return httpRequest(`/adroy`, data)
+  },
+  getAutomaticDeliveryOrderList(data) {
+    return httpRequest(`/adrod`, data)
+  },
+  setAutomaticDeliveryBulkShipment(data) {
+    return httpRequest(`/adb`, data)
+  },
+  setAutomaticDeliveryCombined(data) {
+    return httpRequest(`/adc`, data)
+  }
 };
 export default webApi;
