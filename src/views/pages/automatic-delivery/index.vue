@@ -48,11 +48,48 @@
       <el-button size="small" type="primary" @click="setAutomaticDeliveryCombined" round>合并发货</el-button>
       <el-button size="small" type="primary" @click="setAutomaticDeliveryBulkShipment" round>批量发货</el-button>
     </base-item>
+    <el-dialog
+      title="兑换单详情"
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      @close="closeDialog"
+      width="600px">
+      <div class="exchange-dialog-content" v-if="exchangeDetail">
+        <div class="clearfix">
+          <base-item class="w_50" inline><template slot="label">来源礼券ID:</template>{{ exchangeDetail.fromcouponid }}</base-item>
+          <base-item class="w_50" inline><template slot="label">目标礼券ID:</template>{{ exchangeDetail.tocouponid }}</base-item>
+          <base-item class="w_50" inline><template slot="label">下单时间:</template>{{ exchangeDetail.createtime }}</base-item>
+          <base-item class="w_50" inline><template slot="label">数量:</template>{{ exchangeDetail.couponum }}</base-item>
+        </div>
+        <base-item><template slot="label">收货地址:</template>{{ exchangeDetail.recprov }}{{exchangeDetail.recity}}{{exchangeDetail.recounty}}{{exchangeDetail.recstreet}}</base-item>
+        <div class="clearfix">
+          <base-item class="w_50" inline><template slot="label">收货人名称:</template>{{ exchangeDetail.recontact }}</base-item>
+          <base-item class="w_50" inline><template slot="label">收货人电话:</template>{{ exchangeDetail.recphone }}</base-item>
+        </div>
+        <base-item><template slot="label">发货地址:</template>{{ exchangeDetail.sendprov }}{{exchangeDetail.sendcity}}{{exchangeDetail.sendcounty}}{{exchangeDetail.sendstreet}}</base-item>
+        <div class="clearfix">
+          <base-item class="w_50" inline><template slot="label">兑换人手机:</template>{{ exchangeDetail.usermobile }}</base-item>
+          <base-item class="w_50" inline><template slot="label">祝福语:</template>{{ exchangeDetail.hello }}</base-item>
+          <base-item class="w_50" inline><template slot="label">发货人名称:</template>{{ exchangeDetail.sendcontact }}</base-item>
+          <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ exchangeDetail.sendphone }}</base-item>
+          <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</base-item>
+          <!--<base-item class="w_50" inline><template slot="label">昵称:</template>{{ exchangeDetail.usernick }}</base-item>-->
+          <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom | formatConfigValueToLabel(configObject.expressCompanyList)}}</template></base-item>
+          <base-item class="w_50" inline><template slot="label">快递单号:</template><template v-if="exchangeDetail.delid">{{ exchangeDetail.delid }}</template></base-item>
+          <!--<base-item class="w_50" inline><template slot="label">性别:</template>{{ exchangeDetail.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>-->
+          <!--<base-item class="w_50" inline><template slot="label">头像:</template><template v-if="exchangeDetail.userhead"><span class="user-head"><img :src="exchangeDetail.userhead" width="100%" height="100%"></span></template></base-item>-->
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="closeDialog" round>关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import webApi from '../../../lib/api'
+  import {SOURCE_LIST, SEX_LIST} from '../../../conf/config-list'
 	export default {
     data(){
       return {
@@ -78,7 +115,9 @@
           days: [],
           expressCompanyList: [],
           couponList: [],
-          shipSituation: ['全部', '合并发货']
+          shipSituation: ['全部', '合并发货'],
+          SOURCE_LIST,
+          SEX_LIST
         },
         totalpages: 0,
         currentIndex: 1,
@@ -92,12 +131,14 @@
           {title: '兑换人', key: 'helloer' },
           {title: '兑换人手机号', key: 'usermobile' },
           {title: '祝福语', key: 'hello' },
-          {title: '快递公司', key: 'delcom' },
+          {title: '快递公司', key: 'delcomname' },
           {title: '快递单号', key: 'delid' },
-          {title: '操作', render: (h, params) => <el-button size="medium" type="text">查看详情</el-button>}
+          {title: '操作', render: (h, params) => <el-button size="medium" type="text" onClick={this.getExchangeDetail.bind(this, params.row)}>查看详情</el-button>}
         ],
         tableData: [],
-        selectedRows: []
+        selectedRows: [],
+        dialogVisible: false,
+        exchangeDetail: {}
       }
     },
     created() {
@@ -301,6 +342,18 @@
         this.summary.currentDate = this.currentDate;
         this.summary.totalex = daysResult.totalex;
         this.summary.totaltodel = daysResult.totaltodel;
+      },
+      openDialog(){
+        this.dialogVisible = true;
+      },
+      closeDialog(){
+        this.dialogVisible = false;
+      },
+      getExchangeDetail(row){
+        if (row) {
+          this.exchangeDetail = this.$_.cloneDeep(row);
+          this.openDialog();
+        }
       }
     }
 	}
@@ -327,5 +380,21 @@
       }
     }
   }
-
+  .exchange-dialog-content{
+    text-align: left;
+    /deep/ {
+      @include customFormItem(85px, 34px, #afafaf, #fff, false);
+      .w_50{
+        width: 50%;
+        float: left;
+      }
+      .user-head{
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+    }
+  }
 </style>
