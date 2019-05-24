@@ -93,6 +93,7 @@
       init() {
         this.getExpressCompanyList();
         this.getAutomaticDeliveryYears();
+        this.getAutomaticDeliveryOrderList();
       },
       handleSelectionChange(items) {
         this.selectedRows = items;
@@ -146,31 +147,39 @@
         }
       },
       //获取兑换订单列表
-      async getAutomaticDeliveryOrderList(pagenum = 0) {
+      async getAutomaticDeliveryOrderList() {
         const date = this.currentDate;
         if (!date) {
           return
         }
-        // const params = {date: '2019-05-21', pagenum};
-        const params = {date, pagenum};
+        // const params = {date: '2019-05-23', pagenum: 0};
+        const params = {date, pagenum: 0};
         let res = await webApi.getAutomaticDeliveryOrderList(params);
         if (res.flags === 'success') {
-          if (pagenum === 0) {
-            this.tableData = [];
-          }
+          this.tableData = [];
           const result = res.data;
           if (result) {
             this.totalpages = result.totalpages;
             this.tableData = [...this.tableData, ...result.orders];
-            if (result.totalpages > 1) {
-              while (this.currentIndex < result.totalpages) {
-                this.getAutomaticDeliveryOrderList(this.currentIndex);
+            const promiseList = [];
+            if (this.totalpages > 1) {
+              while (this.currentIndex < this.totalpages) {
+                promiseList.push(webApi.getAutomaticDeliveryOrderList({date: '2019-05-23', pagenum: this.currentIndex}));
                 this.currentIndex++;
               }
             }
-            if (this.currentIndex === result.totalpages) {
-              this.currentIndex = 1;
-            }
+            Promise.all(promiseList).then(promiseResult => {
+              promiseResult.forEach(item => {
+                if (item.flags === 'success') {
+                  const promiseResultData = item.data;
+                  if (promiseResultData) {
+                    this.tableData = [...this.tableData, ...promiseResultData.orders];
+                  }
+                } else {
+                  this.$toast(promiseResult.message, 'error');
+                }
+              })
+            })
           }
         } else {
           this.$toast(res.message, 'error');
