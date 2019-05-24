@@ -25,11 +25,18 @@
     </div>
     <base-item>
       <template slot="label">过滤:</template>
-      <el-select placeholder="选择来源礼券" v-model="year" :value="year" size="small" clearable></el-select>
-      <el-select placeholder="选择目标礼券" v-model="year" :value="year" size="small" clearable></el-select>
-      <el-select size="small" v-model="year" :value="year" clearable></el-select>
+      <el-select placeholder="选择来源礼券" v-model="filterOption.fromcouponname" size="small" clearable>
+        <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
+      </el-select>
+      <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponname" size="small" clearable>
+        <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
+      </el-select>
+      <el-select placeholder="请选择" size="small" v-model="filterOption.shipSituation" clearable>
+        <el-option v-for="(item, index) in configObject.shipSituation" :key="index" :value="item" :label="item"/>
+      </el-select>
     </base-item>
     <div class="automatic-delivery-content__list">
+      <div class="summary"><span>订单列表：{{summary.currentDate}}</span><span>总兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
       <element-table ref="multipleTable" @selection-change="handleSelectionChange" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
     </div>
     <base-item label-width="110px">
@@ -37,7 +44,7 @@
       <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" :value="delcom" clearable>
         <el-option v-for="item in configObject.expressCompanyList" :key="item.value" :label="item.label" :value="item.value"/>
       </el-select>
-      <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small"/>
+      <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
       <el-button size="small" type="primary" @click="setAutomaticDeliveryCombined" round>合并发货</el-button>
       <el-button size="small" type="primary" @click="setAutomaticDeliveryBulkShipment" round>批量发货</el-button>
     </base-item>
@@ -54,12 +61,24 @@
         day: null,
         delcom: null,
         delid: null,
+        filterOption: {
+          fromcouponname: null,
+          tocouponname: null,
+          shipSituation: null
+        },
+        summary: {
+          currentDate: null,
+          totalex: null,
+          totaltodel: null
+        },
         exorderkeys: [],
         configObject:{
           years: [],
           months: [],
           days: [],
-          expressCompanyList: []
+          expressCompanyList: [],
+          couponList: [],
+          shipSituation: ['全部', '合并发货']
         },
         totalpages: 0,
         currentIndex: 1,
@@ -70,7 +89,7 @@
           {title: '数量', key: 'couponum' },
           {title: '收货地址', formatter: row => `${row.recprov}${row.recity}${row.recounty}${row.recstreet}`},
           {title: '收货人', key: 'recontact' },
-          {title: '兑换人', key: 'username' },
+          {title: '兑换人', key: 'helloer' },
           {title: '兑换人手机号', key: 'usermobile' },
           {title: '祝福语', key: 'hello' },
           {title: '快递公司', key: 'delcom' },
@@ -91,6 +110,7 @@
     },
     methods: {
       init() {
+        this.getCouponList();
         this.getExpressCompanyList();
         this.getAutomaticDeliveryYears();
       },
@@ -107,8 +127,9 @@
           this.getAutomaticDeliveryMonths();
         } else if (type === 'month'){
           this.day = '';
-          configObject.days = configObject.months[this.month].days;
+          configObject.days = this.month ? configObject.months[this.month].days : [];
         } else if (type === 'day'){
+          this.getSummaryData();
           this.getAutomaticDeliveryOrderList();
         }
       },
@@ -164,7 +185,7 @@
             this.tableData = [...this.tableData, ...result.orders];
             if (result.totalpages > 1) {
               while (this.currentIndex < result.totalpages) {
-                this.getAutomaticDeliveryOrderList(this.currentIndex);
+                await this.getAutomaticDeliveryOrderList(this.currentIndex);
                 this.currentIndex++;
               }
             }
@@ -173,6 +194,21 @@
             }
           }
         } else {
+          this.$toast(res.message, 'error');
+        }
+      },
+      /**
+       * 获取礼券列表
+       */
+      async getCouponList(){
+        let res = await webApi.getCouponList({});
+        if(res.flags === 'success'){
+          this.configObject.couponList = [];
+          if(res.data && res.data.length){
+            this.configObject.couponList = res.data.map(item => ({label: item.name, value: item.couponkey}));
+            this.filterOption.tocouponname = this.filterOption.fromcouponname = this.configObject.couponList[0].value || null;
+          }
+        }else {
           this.$toast(res.message, 'error');
         }
       },
@@ -208,7 +244,7 @@
       async setAutomaticDeliveryCombined() {
         const {exorderkeys, delcom, delid} = this.$data;
         if (exorderkeys.length === 0) {
-          return this.$toast('请勾选订单后批量发货')
+          return this.$toast('请勾选订单后合并发货')
         }
         let res = await webApi.setAutomaticDeliveryCombined({exorderkeys, delcom, delid});
         if(res.flags === 'success'){
@@ -232,6 +268,30 @@
           }
         }
         this.$refs.multipleTable.$refs['customize-table'].clearSelection();
+      },
+      /**
+       * 获取summary数据
+       */
+      getSummaryData(){
+        let monthList = this.configObject.months;
+        let daysResult = {};
+        if(!this.day || !this.month || !this.year){
+          return
+        }
+        if(monthList && monthList.length){
+          monthList.forEach( (month,monthIndex) => {
+            if(this.month === monthIndex+1){
+              month.days.forEach( (day,index) => {
+                if(this.day === index){
+                  daysResult = {totalex: day.totalex, totaltodel: day.totaltodel};
+                }
+              })
+            }
+          })
+        }
+        this.summary.currentDate = this.currentDate;
+        this.summary.totalex = daysResult.totalex;
+        this.summary.totaltodel = daysResult.totaltodel;
       }
     }
 	}
@@ -247,6 +307,15 @@
     .automatic-delivery-content__list{
       margin-top: 20px;
       padding: 0 40px;
+    }
+    .summary{
+      line-height: 30px;
+      text-align: left;
+      font-size: 14px;
+      color: #fff;
+      span{
+        margin-right: 20px;
+      }
     }
   }
 
