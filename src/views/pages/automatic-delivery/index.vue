@@ -25,19 +25,19 @@
     </div>
     <base-item>
       <template slot="label">过滤:</template>
-      <el-select placeholder="选择来源礼券" v-model="filterOption.fromcouponname" size="small" clearable>
+      <el-select placeholder="选择来源礼券" v-model="filterOption.fromcouponid" size="small" clearable @change="filterTableData">
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponname" size="small" clearable>
+      <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponid" size="small" clearable @change="filterTableData">
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="请选择" size="small" v-model="filterOption.shipSituation" clearable>
+      <el-select placeholder="请选择" size="small" v-model="filterOption.shipSituation" clearable @change="filterTableData">
         <el-option v-for="(item, index) in configObject.shipSituation" :key="index" :value="item" :label="item"/>
       </el-select>
     </base-item>
     <div class="automatic-delivery-content__list">
       <div class="summary"><span>订单列表：{{summary.currentDate}}</span><span>总兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
-      <element-table ref="multipleTable" @selection-change="handleSelectionChange" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table ref="multipleTable" @selection-change="handleSelectionChange" :table-columns="tableColumns" :table-data="currentTableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
     </div>
     <base-item label-width="110px">
       <template slot="label">发货操作:</template>
@@ -99,8 +99,8 @@
         delcom: null,
         delid: null,
         filterOption: {
-          fromcouponname: null,
-          tocouponname: null,
+          fromcouponid: null,
+          tocouponid: null,
           shipSituation: null
         },
         summary: {
@@ -136,6 +136,7 @@
           {title: '操作', render: (h, params) => <el-button size="medium" type="text" onClick={this.getExchangeDetail.bind(this, params.row)}>查看详情</el-button>}
         ],
         tableData: [],
+        currentTableData: [],
         selectedRows: [],
         dialogVisible: false,
         exchangeDetail: {}
@@ -222,7 +223,7 @@
           const result = res.data;
           if (result) {
             this.totalpages = result.totalpages;
-            this.tableData = [...this.tableData, ...result.orders];
+            this.currentTableData = this.tableData = [...this.tableData, ...result.orders];
             const promiseList = [];
             if (this.totalpages > 1) {
               while (this.currentIndex < this.totalpages) {
@@ -235,7 +236,7 @@
                 if (item.flags === 'success') {
                   const promiseResultData = item.data;
                   if (promiseResultData) {
-                    this.tableData = [...this.tableData, ...promiseResultData.orders];
+                    this.currentTableData = this.tableData = [...this.tableData, ...promiseResultData.orders];
                   }
                 } else {
                   this.$toast(promiseResult.message, 'error');
@@ -255,8 +256,7 @@
         if(res.flags === 'success'){
           this.configObject.couponList = [];
           if(res.data && res.data.length){
-            this.configObject.couponList = res.data.map(item => ({label: item.name, value: item.couponkey}));
-            this.filterOption.tocouponname = this.filterOption.fromcouponname = this.configObject.couponList[0].value || null;
+            this.configObject.couponList = res.data.map(item => ({label: item.name, value: item.couponid}));
           }
         }else {
           this.$toast(res.message, 'error');
@@ -332,7 +332,7 @@
           monthList.forEach( (month,monthIndex) => {
             if(this.month === monthIndex+1){
               month.days.forEach( (day,index) => {
-                if(this.day === index){
+                if(this.day === index+1){
                   daysResult = {totalex: day.totalex, totaltodel: day.totaltodel};
                 }
               })
@@ -349,11 +349,22 @@
       closeDialog(){
         this.dialogVisible = false;
       },
+      /**
+       * 打开详情弹窗
+       * @param row
+       */
       getExchangeDetail(row){
         if (row) {
           this.exchangeDetail = this.$_.cloneDeep(row);
           this.openDialog();
         }
+      },
+      /**
+       * 前端过滤table数据
+       */
+      filterTableData(){
+        const {fromcouponid, tocouponid} = this.filterOption;
+        this.currentTableData = this.tableData.filter( item => (!fromcouponid || item.fromcouponid === fromcouponid) && (!tocouponid || item.tocouponid === tocouponid));
       }
     }
 	}
