@@ -31,7 +31,7 @@
       <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponid" size="small" clearable @change="filterTableData">
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="请选择" size="small" v-model="filterOption.shipSituation" clearable @change="filterTableData">
+      <el-select placeholder="请选择发货情况" size="small" v-model="filterOption.shipSituation" clearable @change="filterTableData">
         <el-option v-for="(item, index) in configObject.shipSituation" :key="index" :value="item" :label="item"/>
       </el-select>
     </base-item>
@@ -115,7 +115,7 @@
           days: [],
           expressCompanyList: [],
           couponList: [],
-          shipSituation: ['全部', '合并发货'],
+          shipSituation: ['全部', '合并发货', '未发货'],
           SOURCE_LIST,
           SEX_LIST
         },
