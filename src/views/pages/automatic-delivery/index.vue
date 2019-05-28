@@ -25,19 +25,59 @@
     </div>
     <base-item>
       <template slot="label">过滤:</template>
-      <el-select placeholder="选择来源礼券" v-model="filterOption.fromcouponid" size="small" clearable @change="filterTableData">
+      <el-select placeholder="选择来源礼券" v-model="filterOption.fromcouponid" :value="filterOption.fromcouponid" size="small" clearable>
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponid" size="small" clearable @change="filterTableData">
+      <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponid" :value="filterOption.tocouponid" size="small" clearable>
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="请选择发货情况" size="small" v-model="filterOption.shipSituation" clearable @change="filterTableData">
-        <el-option v-for="(item, index) in configObject.shipSituation" :key="index" :value="item" :label="item"/>
+      <el-select placeholder="请选择发货情况" size="small" v-model="filterOption.shipSituation" :value="filterOption.shipSituation">
+        <el-option v-for="item in configObject.shipSituation" :key="item.value" :value="item.value" :label="item.label"/>
       </el-select>
     </base-item>
     <div class="automatic-delivery-content__list">
       <div class="summary"><span>订单列表：{{summary.currentDate}}</span><span>总兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
-      <element-table ref="multipleTable" @selection-change="handleSelectionChange" :table-columns="tableColumns" :table-data="currentTableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <div class="order-table-content">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th class="order-table-column" v-for="column in tableColumns">
+                <span v-if="column.type === 'selection'"  style="padding-left: 10px;"><el-checkbox :disabled="!tableData.length" v-model="isSelectedAll" @change="selectedAllRows"/></span>
+                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;">操作</span>
+                <template v-else>{{ column.title }}</template>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="order-table--empty" v-if="tableData.length === 0">暂无数据</div>
+      <div class="order-table-content order-table-content__scroll">
+        <table class="order-table">
+          <template v-for="(combinedOrder, index) in combinedOrderList">
+            <tbody class="order-table-body">
+            <tr v-for="item in filterOrder(combinedOrder, filterOption.fromcouponid, filterOption.tocouponid)">
+              <td v-for="column in tableColumns" class="order-table-td">
+                <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
+                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="small" type="primary" round @click="getExchangeDetail(item)">查看详情</el-button></span>
+                <template v-else>{{ item[column.key] }}</template>
+              </td>
+            </tr>
+            </tbody>
+            <tbody v-if="index !== combinedOrderList.length - 1">
+              <tr><td style="height: 20px;"></td></tr>
+            </tbody>
+          </template>
+          <tbody v-if="filterOption.shipSituation === 10">
+            <tr v-for="item in filterOrder(singleOrderList, filterOption.fromcouponid, filterOption.tocouponid)">
+              <td v-for="column in tableColumns" class="order-table-td">
+                <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
+                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="small" type="primary" round @click="getExchangeDetail(item)">查看详情</el-button></span>
+                <template v-else>{{ item[column.key] }}</template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <base-item label-width="110px">
       <template slot="label">发货操作:</template>
@@ -90,6 +130,7 @@
 <script>
   import webApi from '../../../lib/api'
   import {SOURCE_LIST, SEX_LIST} from '../../../conf/config-list'
+  import {mapMutations} from 'vuex'
 	export default {
     data(){
       return {
@@ -101,7 +142,7 @@
         filterOption: {
           fromcouponid: null,
           tocouponid: null,
-          shipSituation: null
+          shipSituation: 20
         },
         summary: {
           currentDate: null,
@@ -115,7 +156,10 @@
           days: [],
           expressCompanyList: [],
           couponList: [],
-          shipSituation: ['全部', '合并发货', '未发货'],
+          shipSituation: [
+            {label: '全部', value: 10},
+            {label: '合并发货', value: 20},
+          ],
           SOURCE_LIST,
           SEX_LIST
         },
@@ -136,8 +180,10 @@
           {title: '操作', render: (h, params) => <el-button size="medium" type="text" onClick={this.getExchangeDetail.bind(this, params.row)}>查看详情</el-button>}
         ],
         tableData: [],
-        currentTableData: [],
+        combinedOrderList: [],
+        singleOrderList: [],
         selectedRows: [],
+        isSelectedAll: false,
         dialogVisible: false,
         exchangeDetail: {}
       }
@@ -151,15 +197,32 @@
       }
     },
     methods: {
+      ...mapMutations([
+          'changeGlobalLoading'
+        ]),
       init() {
         this.getCouponList();
         this.getExpressCompanyList();
         this.getAutomaticDeliveryYears();
         this.getAutomaticDeliveryOrderList();
       },
-      handleSelectionChange(items) {
-        this.selectedRows = items;
-        this.exorderkeys = items.map(item => item.orderkey);
+      selectedAllRows(value) {
+        if (value) {
+          this.selectedRows = this.tableData.filter(item => !(item.delcom || item.delid)).map(item => item.orderkey);
+          this.isSelectedAll = true;
+        } else {
+          this.selectedRows = [];
+          this.isSelectedAll = false;
+        }
+      },
+      changeSelectRow(value, orderkey) {
+        let index = this.selectedRows.indexOf(orderkey);
+        if (index > -1) {
+          this.selectedRows.splice(index, 1);
+        } else {
+          this.selectedRows.push(orderkey)
+        }
+        this.isSelectedAll = this.selectedRows.length && this.selectedRows.length === this.tableData.filter(item => !(item.delcom || item.delid)).length;
       },
       //日期条件改变出发方法
       changeTimeType(type) {
@@ -182,6 +245,8 @@
         this.month = null;
         this.day = null;
         this.getAutomaticDeliveryYears();
+        this.tableData = [];
+        this.getCombinedAndSingleOrderList()
       },
       //获取年份列表
       async getAutomaticDeliveryYears() {
@@ -220,14 +285,15 @@
         let res = await webApi.getAutomaticDeliveryOrderList(params);
         if (res.flags === 'success') {
           this.tableData = [];
+          this.currentIndex = 1;
           const result = res.data;
           if (result) {
             this.totalpages = result.totalpages;
-            this.currentTableData = this.tableData = [...this.tableData, ...result.orders];
+            this.tableData = [...this.tableData, ...result.orders];
             const promiseList = [];
             if (this.totalpages > 1) {
               while (this.currentIndex < this.totalpages) {
-                promiseList.push(webApi.getAutomaticDeliveryOrderList({date: '2019-05-23', pagenum: this.currentIndex}));
+                promiseList.push(webApi.getAutomaticDeliveryOrderList({date: params.date, pagenum: this.currentIndex}));
                 this.currentIndex++;
               }
             }
@@ -236,17 +302,48 @@
                 if (item.flags === 'success') {
                   const promiseResultData = item.data;
                   if (promiseResultData) {
-                    this.currentTableData = this.tableData = [...this.tableData, ...promiseResultData.orders];
+                    this.tableData = [...this.tableData, ...promiseResultData.orders];
                   }
                 } else {
                   this.$toast(promiseResult.message, 'error');
                 }
-              })
+              });
+              this.getCombinedAndSingleOrderList();
             })
           }
         } else {
           this.$toast(res.message, 'error');
         }
+      },
+      getCombinedAndSingleOrderList() {
+        this.$Progress.start();
+        this.changeGlobalLoading(true);
+        let combinedValueKeyList = [];
+        let combinedValueList = [];
+        this.tableData.forEach(item => {
+          const {recprov, recity, recounty, recstreet, recontact, recphone, helloer, usermobile} = item;
+          const combinedValueKey = `${recprov}${recity}${recounty}${recstreet}${recontact}${recphone}${helloer}${usermobile}`;
+          let combinedValueKeyIndex = combinedValueKeyList.findIndex(key => key === combinedValueKey);
+          if (combinedValueKeyIndex === -1) {
+            combinedValueKeyList.push(combinedValueKey);
+            combinedValueList.push([item]);
+          } else {
+            combinedValueList[combinedValueKeyIndex].push(item);
+          }
+        });
+        const combinedOrderList = [];
+        let singleOrderList = [];
+        combinedValueList.forEach(combinedValue => {
+          if (combinedValue.length === 1) {
+            singleOrderList = singleOrderList.concat(combinedValue)
+          } else {
+            combinedOrderList.push(combinedValue)
+          }
+        });
+        this.combinedOrderList = combinedOrderList;
+        this.singleOrderList = singleOrderList;
+        this.$Progress.finish();
+        this.changeGlobalLoading(false);
       },
       /**
        * 获取礼券列表
@@ -278,11 +375,11 @@
       },
       //批量发货
       async setAutomaticDeliveryBulkShipment() {
-        const {exorderkeys, delcom, delid} = this.$data;
-        if (exorderkeys.length === 0) {
+        const {selectedRows, delcom, delid} = this.$data;
+        if (selectedRows.length === 0) {
           return this.$toast('请勾选订单后批量发货')
         }
-        let res = await webApi.setAutomaticDeliveryBulkShipment({exorderkeys, delcom, delid});
+        let res = await webApi.setAutomaticDeliveryBulkShipment({exorderkeys: selectedRows, delcom, delid});
         if(res.flags === 'success'){
           const result = res.data;
           this.combinedDeliveryAndBulkShipmentCallback(result);
@@ -292,11 +389,11 @@
       },
       //合并发货
       async setAutomaticDeliveryCombined() {
-        const {exorderkeys, delcom, delid} = this.$data;
-        if (exorderkeys.length === 0) {
+        const {selectedRows, delcom, delid} = this.$data;
+        if (selectedRows.length === 0) {
           return this.$toast('请勾选订单后合并发货')
         }
-        let res = await webApi.setAutomaticDeliveryCombined({exorderkeys, delcom, delid});
+        let res = await webApi.setAutomaticDeliveryCombined({exorderkeys: selectedRows, delcom, delid});
         if(res.flags === 'success'){
           const result = res.data;
           this.combinedDeliveryAndBulkShipmentCallback(result);
@@ -308,16 +405,19 @@
       combinedDeliveryAndBulkShipmentCallback(result) {
         if (result) {
           if (result.delresult && result.delresult.length) {
-            this.selectedRows.forEach((item, index) => {
+            result.delresult.forEach((item, index) => {
               const {delcom, delid} = result.delresult[index];
-              item = Object.assign(item, {delcom, delid});
-            })
+              const currentOrder = this.tableData.find(order => order.orderkey === item.exorderkey);
+              currentOrder.delcom = delcom;
+              currentOrder.delid = delid;
+            });
+            this.selectedRows = [];
+            this.getCombinedAndSingleOrderList();
           }
           if (result.delmessage) {
             this.$toast(result.delmessage, 'success');
           }
         }
-        this.$refs.multipleTable.$refs['customize-table'].clearSelection();
       },
       /**
        * 获取summary数据
@@ -359,12 +459,11 @@
           this.openDialog();
         }
       },
-      /**
-       * 前端过滤table数据
-       */
-      filterTableData(){
-        const {fromcouponid, tocouponid} = this.filterOption;
-        this.currentTableData = this.tableData.filter( item => (!fromcouponid || item.fromcouponid === fromcouponid) && (!tocouponid || item.tocouponid === tocouponid));
+      filterOrder(orderList, fromcouponid, tocouponid) {
+        if (!orderList.length) {
+          return orderList;
+        }
+        return orderList.filter( item => (!fromcouponid || item.fromcouponid === fromcouponid) && (!tocouponid || item.tocouponid === tocouponid));
       }
     }
 	}
@@ -372,8 +471,51 @@
 
 <style lang="scss" scoped>
   .automatic-delivery-content{
-    max-width: 1400px;
-    margin: 0 auto;
+    min-width: 1400px;
+    .order-table-content{
+      padding-right: 5px;
+      &.order-table-content__scroll{
+        max-height: 650px;
+        overflow: hidden;
+        overflow-y: auto;
+        margin-bottom: 10px;
+      }
+    }
+    .order-table--empty{
+      text-align: center;
+      color: #fff;
+      padding: 12px 0;
+    }
+    .order-table{
+      table-layout: fixed;
+      width: 100%;
+      color: #fff;
+      .order-table-thead__hidden{
+        visibility: hidden;
+        .order-table-column{
+          padding: 0;
+        }
+      }
+      .order-table-body{
+        border: 1px solid #323c54;
+      }
+      .order-table-column, .order-table-td{
+        padding: 12px 0;
+        min-width: 0;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+        position: relative;
+        text-align: center;
+        &:first-child{
+          width: 30px;
+        }
+        &:last-child{
+          width: 90px;
+        }
+      }
+    }
     .automatic-delivery-content__date{
       text-align: left;
     }
