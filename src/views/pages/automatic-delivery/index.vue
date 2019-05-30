@@ -58,8 +58,9 @@
             <tr v-for="item in filterOrder(combinedOrder, filterOption.fromcouponid, filterOption.tocouponid)">
               <td v-for="column in tableColumns" class="order-table-td">
                 <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
-                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="small" type="primary" round @click="getExchangeDetail(item)">查看详情</el-button></span>
-                <template v-else>{{ item[column.key] }}</template>
+                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="medium" type="text" @click="getExchangeDetail(item)">查看</el-button></span>
+                <span v-else><span :title="item[column.key]">{{ item[column.key] }}</span></span>
+                <!--<span v-if="column.title=== '收货地址'">{{item[column[formatter]]}}</span>-->
               </td>
             </tr>
             </tbody>
@@ -71,8 +72,8 @@
             <tr v-for="item in filterOrder(singleOrderList, filterOption.fromcouponid, filterOption.tocouponid)">
               <td v-for="column in tableColumns" class="order-table-td">
                 <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
-                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="small" type="primary" round @click="getExchangeDetail(item)">查看详情</el-button></span>
-                <template v-else>{{ item[column.key] }}</template>
+                <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="medium" type="text" @click="getExchangeDetail(item)">查看</el-button></span>
+                <span v-else :title="item[column.key]">{{ item[column.key] }}</span>
               </td>
             </tr>
           </tbody>
@@ -81,7 +82,7 @@
     </div>
     <base-item label-width="110px">
       <template slot="label">发货操作:</template>
-      <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" :value="delcom" clearable>
+      <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" clearable>
         <el-option v-for="item in configObject.expressCompanyList" :key="item.value" :label="item.label" :value="item.value"/>
       </el-select>
       <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
@@ -142,7 +143,7 @@
         filterOption: {
           fromcouponid: null,
           tocouponid: null,
-          shipSituation: 20
+          shipSituation: 10
         },
         summary: {
           currentDate: null,
@@ -159,6 +160,7 @@
           shipSituation: [
             {label: '全部', value: 10},
             {label: '合并发货', value: 20},
+            // {label: '未发货', value: 30}
           ],
           SOURCE_LIST,
           SEX_LIST
@@ -170,7 +172,7 @@
           {title: '来源礼券', key: 'fromcouponname' },
           {title: '目标礼券', key: 'tocouponname' },
           {title: '数量', key: 'couponum' },
-          {title: '收货地址', formatter: row => `${row.recprov}${row.recity}${row.recounty}${row.recstreet}`},
+          {title: '收货地址',key:'', formatter: row => `${row.recprov}${row.recity}${row.recounty}${row.recstreet}`},
           {title: '收货人', key: 'recontact' },
           {title: '兑换人', key: 'helloer' },
           {title: '兑换人手机号', key: 'usermobile' },
@@ -473,7 +475,6 @@
   .automatic-delivery-content{
     min-width: 1400px;
     .order-table-content{
-      padding-right: 5px;
       &.order-table-content__scroll{
         max-height: 650px;
         overflow: hidden;
@@ -485,11 +486,15 @@
       text-align: center;
       color: #fff;
       padding: 12px 0;
+      background-color: #24304A;
+      font-size: 14px;
     }
     .order-table{
       table-layout: fixed;
       width: 100%;
       color: #fff;
+      background-color: #182337;
+      font-size: 14px;
       .order-table-thead__hidden{
         visibility: hidden;
         .order-table-column{
@@ -505,15 +510,22 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         vertical-align: middle;
         position: relative;
         text-align: center;
+        line-height: 16px;
         &:first-child{
           width: 30px;
         }
         &:last-child{
           width: 90px;
         }
+      }
+      .order-table-td{
+        padding: 12px 4px;
+        color: #828282;
       }
     }
     .automatic-delivery-content__date{
