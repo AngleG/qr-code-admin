@@ -31,7 +31,7 @@
       <el-select placeholder="选择目标礼券" v-model="filterOption.tocouponid" :value="filterOption.tocouponid" size="small" clearable>
         <el-option v-for="(item, index) in configObject.couponList" :key="index" :value="item.value" :label="item.label"/>
       </el-select>
-      <el-select placeholder="请选择发货情况" size="small" v-model="filterOption.shipSituation" :value="filterOption.shipSituation">
+      <el-select placeholder="请选择发货情况" size="small" v-model="filterOption.shipSituation" :value="filterOption.shipSituation" @change="changeShipSituation">
         <el-option v-for="item in configObject.shipSituation" :key="item.value" :value="item.value" :label="item.label"/>
       </el-select>
     </base-item>
@@ -59,21 +59,24 @@
               <td v-for="column in tableColumns" class="order-table-td">
                 <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
                 <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="medium" type="text" @click="getExchangeDetail(item)">查看</el-button></span>
-                <span v-else><span :title="item[column.key]">{{ item[column.key] }}</span></span>
-                <!--<span v-if="column.title=== '收货地址'">{{item[column[formatter]]}}</span>-->
+                <span v-else><span :title="column.title === '收货地址' ? `${item.recprov}${item.recity}${item.recounty}${item.recstreet}` : item[column.key]">{{
+                  column.title === '收货地址' ? `${item.recprov}${item.recity}${item.recounty}${item.recstreet}` : item[column.key]
+                  }}</span></span>
               </td>
             </tr>
             </tbody>
-            <tbody v-if="index !== combinedOrderList.length - 1">
+            <tbody v-if="index !== combinedOrderList.length - 1 && filterOrder(combinedOrder, filterOption.fromcouponid, filterOption.tocouponid).length">
               <tr><td style="height: 20px;"></td></tr>
             </tbody>
           </template>
-          <tbody v-if="filterOption.shipSituation === 10">
+          <tbody v-if="[10 ,30].includes(filterOption.shipSituation)">
             <tr v-for="item in filterOrder(singleOrderList, filterOption.fromcouponid, filterOption.tocouponid)">
               <td v-for="column in tableColumns" class="order-table-td">
                 <span v-if="column.type === 'selection'" style="padding-left: 10px;"><el-checkbox :disabled="!!(item.delcom || item.delid)" :label="item.orderkey" :value="selectedRows.includes(item.orderkey)" @change="value => changeSelectRow(value, item.orderkey)">{{ '' }}</el-checkbox></span>
                 <span v-else-if="column.title === '操作'"  style="padding-right: 10px;"><el-button size="medium" type="text" @click="getExchangeDetail(item)">查看</el-button></span>
-                <span v-else :title="item[column.key]">{{ item[column.key] }}</span>
+                <span v-else><span :title="column.title === '收货地址' ? `${item.recprov}${item.recity}${item.recounty}${item.recstreet}` : item[column.key]">{{
+                  column.title === '收货地址' ? `${item.recprov}${item.recity}${item.recounty}${item.recstreet}` : item[column.key]
+                  }}</span></span>
               </td>
             </tr>
           </tbody>
@@ -160,7 +163,7 @@
           shipSituation: [
             {label: '全部', value: 10},
             {label: '合并发货', value: 20},
-            // {label: '未发货', value: 30}
+            {label: '未发货', value: 30}
           ],
           SOURCE_LIST,
           SEX_LIST
@@ -172,7 +175,7 @@
           {title: '来源礼券', key: 'fromcouponname' },
           {title: '目标礼券', key: 'tocouponname' },
           {title: '数量', key: 'couponum' },
-          {title: '收货地址',key:'', formatter: row => `${row.recprov}${row.recity}${row.recounty}${row.recstreet}`},
+          {title: '收货地址',key:'recprov', formatter: row => `${row.recprov}${row.recity}${row.recounty}${row.recstreet}`},
           {title: '收货人', key: 'recontact' },
           {title: '兑换人', key: 'helloer' },
           {title: '兑换人手机号', key: 'usermobile' },
@@ -207,6 +210,13 @@
         this.getExpressCompanyList();
         this.getAutomaticDeliveryYears();
         this.getAutomaticDeliveryOrderList();
+      },
+      changeShipSituation(value){
+        if (value === 30) {
+          this.getCombinedAndSingleOrderList(true)
+        } else if (10) {
+          this.getCombinedAndSingleOrderList()
+        }
       },
       selectedAllRows(value) {
         if (value) {
@@ -317,12 +327,16 @@
           this.$toast(res.message, 'error');
         }
       },
-      getCombinedAndSingleOrderList() {
+      getCombinedAndSingleOrderList(isUnShipped = false) {
+        let tableData = this.$_.cloneDeep(this.tableData);
+        if (isUnShipped) {
+          tableData = tableData.filter(item => !(item.delcom || item.delid));
+        }
         this.$Progress.start();
         this.changeGlobalLoading(true);
         let combinedValueKeyList = [];
         let combinedValueList = [];
-        this.tableData.forEach(item => {
+        tableData.forEach(item => {
           const {recprov, recity, recounty, recstreet, recontact, recphone, helloer, usermobile} = item;
           const combinedValueKey = `${recprov}${recity}${recounty}${recstreet}${recontact}${recphone}${helloer}${usermobile}`;
           let combinedValueKeyIndex = combinedValueKeyList.findIndex(key => key === combinedValueKey);
