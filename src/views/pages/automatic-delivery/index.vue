@@ -310,7 +310,7 @@
                 this.currentIndex++;
               }
             }
-            async function processArray(arr) {
+            const processArray = async arr => {
               for (let pagenum of arr) {
                 let resultData = await webApi.getAutomaticDeliveryOrderList({date: params.date, pagenum});
                 if (resultData.flags === 'success') {
@@ -322,7 +322,7 @@
                   this.$toast(resultData.message, 'error');
                 }
               }
-            }
+            };
             await processArray(promiseList);
             this.getCombinedAndSingleOrderList();
           }
