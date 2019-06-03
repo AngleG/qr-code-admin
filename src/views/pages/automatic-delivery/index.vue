@@ -88,9 +88,10 @@
       <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" clearable>
         <el-option v-for="item in configObject.expressCompanyList" :key="item.value" :label="item.label" :value="item.value"/>
       </el-select>
-      <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
       <el-button size="small" type="primary" @click="setAutomaticDeliveryCombined" round>合并发货</el-button>
       <el-button size="small" type="primary" @click="setAutomaticDeliveryBulkShipment" round>批量发货</el-button>
+      <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
+      <el-button size="small" type="primary" @click="manualDelivery" round>手动发货</el-button>
     </base-item>
     <el-dialog
       title="兑换单详情"
@@ -305,23 +306,25 @@
             const promiseList = [];
             if (this.totalpages > 1) {
               while (this.currentIndex < this.totalpages) {
-                promiseList.push(webApi.getAutomaticDeliveryOrderList({date: params.date, pagenum: this.currentIndex}));
+                promiseList.push(this.currentIndex);
                 this.currentIndex++;
               }
             }
-            Promise.all(promiseList).then(promiseResult => {
-              promiseResult.forEach(item => {
-                if (item.flags === 'success') {
-                  const promiseResultData = item.data;
+            async function processArray(arr) {
+              for (let pagenum of arr) {
+                let resultData = await webApi.getAutomaticDeliveryOrderList({date: params.date, pagenum});
+                if (resultData.flags === 'success') {
+                  const promiseResultData = resultData.data;
                   if (promiseResultData) {
                     this.tableData = [...this.tableData, ...promiseResultData.orders];
                   }
                 } else {
-                  this.$toast(promiseResult.message, 'error');
+                  this.$toast(resultData.message, 'error');
                 }
-              });
-              this.getCombinedAndSingleOrderList();
-            })
+              }
+            }
+            await processArray(promiseList);
+            this.getCombinedAndSingleOrderList();
           }
         } else {
           this.$toast(res.message, 'error');
@@ -402,6 +405,17 @@
         }else {
           this.$toast(res.message, 'error');
         }
+      },
+      //手动发货
+      manualDelivery() {
+        const {delcom, delid} = this.$data;
+        if (!delcom) {
+          return this.$toast('请选择快递公司后手动发货')
+        }
+        if (!delid) {
+          return this.$toast('请输入单号后手动发货')
+        }
+        this.setAutomaticDeliveryCombined();
       },
       //合并发货
       async setAutomaticDeliveryCombined() {
