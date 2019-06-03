@@ -10,13 +10,13 @@
       <base-item label-width="30px" inline>
         <template slot="label">月:</template>
         <el-select placeholder="选择月份" style="width: 180px;" size="small" @change="changeTimeType('month')" v-model="month" :value="month" clearable>
-          <el-option v-for="(item, index) in configObject.months" :key="index" :value="index+1" :label="`${index+1}月订单数${item.totalex} (代发${item.totaltodel})`"/>
+          <el-option v-for="(item, index) in configObject.months" :key="index" :value="index+1" :label="`${index+1}月订单数${item.totalex} (待发${item.totaltodel})`"/>
         </el-select>
       </base-item >
       <base-item label-width="30px" inline>
         <template slot="label">日:</template>
         <el-select placeholder="选择日期" style="width: 180px;" size="small"  @change="changeTimeType('day')" v-model="day" :value="day" clearable>
-          <el-option v-for="(item, index) in configObject.days" :key="index" :value="index+1" :label="`${index+1}日订单数${item.totalex} (代发${item.totaltodel})`"/>
+          <el-option v-for="(item, index) in configObject.days" :key="index" :value="index+1" :label="`${index+1}日订单数${item.totalex} (待发${item.totaltodel})`"/>
         </el-select>
       </base-item>
       <base-item label-width="0" inline>
@@ -36,7 +36,7 @@
       </el-select>
     </base-item>
     <div class="automatic-delivery-content__list">
-      <div class="summary"><span>订单列表：{{summary.currentDate}}</span><span>总兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
+      <div class="summary"><span>订单列表：{{summary.currentDate}}日兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
       <div class="order-table-content">
         <table class="order-table">
           <thead>
@@ -83,52 +83,55 @@
         </table>
       </div>
     </div>
-    <base-item label-width="110px">
-      <template slot="label">发货操作:</template>
-      <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" clearable>
-        <el-option v-for="item in configObject.expressCompanyList" :key="item.value" :label="item.label" :value="item.value"/>
-      </el-select>
-      <el-button size="small" type="primary" @click="setAutomaticDeliveryCombined" round>合并发货</el-button>
-      <el-button size="small" type="primary" @click="setAutomaticDeliveryBulkShipment" round>批量发货</el-button>
-      <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
-      <el-button size="small" type="primary" @click="manualDelivery" round>手动发货</el-button>
-    </base-item>
-    <el-dialog
-      title="兑换单详情"
-      :visible.sync="dialogVisible"
-      :close-on-click-modal="false"
-      @close="closeDialog"
-      width="600px">
-      <div class="exchange-dialog-content" v-if="exchangeDetail">
-        <div class="clearfix">
-          <base-item class="w_50" inline><template slot="label">来源礼券ID:</template>{{ exchangeDetail.fromcouponid }}</base-item>
-          <base-item class="w_50" inline><template slot="label">目标礼券ID:</template>{{ exchangeDetail.tocouponid }}</base-item>
-          <base-item class="w_50" inline><template slot="label">下单时间:</template>{{ exchangeDetail.createtime }}</base-item>
-          <base-item class="w_50" inline><template slot="label">数量:</template>{{ exchangeDetail.couponum }}</base-item>
+    <div  class="automatic-delivery-footer">
+      <p style="color: #fff; text-align: center;line-height: 32px;">{{  totalpages ? pagenum + 1 : 0}}/{{ totalpages }}已加载</p>
+      <base-item label-width="110px">
+        <template slot="label">发货操作:</template>
+        <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" clearable>
+          <el-option v-for="item in configObject.expressCompanyList" :key="item.value" :label="item.label" :value="item.value"/>
+        </el-select>
+        <el-button size="small" type="primary" @click="setAutomaticDeliveryCombined" round>合并发货</el-button>
+        <el-button size="small" type="primary" @click="setAutomaticDeliveryBulkShipment" round>批量发货</el-button>
+        <el-input v-model="delid" placeholder="快递单号" style="width: 200px;"  size="small" clearable/>
+        <el-button size="small" type="primary" @click="manualDelivery" round>手动发货</el-button>
+      </base-item>
+      <el-dialog
+        title="兑换单详情"
+        :visible.sync="dialogVisible"
+        :close-on-click-modal="false"
+        @close="closeDialog"
+        width="600px">
+        <div class="exchange-dialog-content" v-if="exchangeDetail">
+          <div class="clearfix">
+            <base-item class="w_50" inline><template slot="label">来源礼券ID:</template>{{ exchangeDetail.fromcouponid }}</base-item>
+            <base-item class="w_50" inline><template slot="label">目标礼券ID:</template>{{ exchangeDetail.tocouponid }}</base-item>
+            <base-item class="w_50" inline><template slot="label">下单时间:</template>{{ exchangeDetail.createtime }}</base-item>
+            <base-item class="w_50" inline><template slot="label">数量:</template>{{ exchangeDetail.couponum }}</base-item>
+          </div>
+          <base-item><template slot="label">收货地址:</template>{{ exchangeDetail.recprov }}{{exchangeDetail.recity}}{{exchangeDetail.recounty}}{{exchangeDetail.recstreet}}</base-item>
+          <div class="clearfix">
+            <base-item class="w_50" inline><template slot="label">收货人名称:</template>{{ exchangeDetail.recontact }}</base-item>
+            <base-item class="w_50" inline><template slot="label">收货人电话:</template>{{ exchangeDetail.recphone }}</base-item>
+          </div>
+          <base-item><template slot="label">发货地址:</template>{{ exchangeDetail.sendprov }}{{exchangeDetail.sendcity}}{{exchangeDetail.sendcounty}}{{exchangeDetail.sendstreet}}</base-item>
+          <div class="clearfix">
+            <base-item class="w_50" inline><template slot="label">兑换人手机:</template>{{ exchangeDetail.usermobile }}</base-item>
+            <base-item class="w_50" inline><template slot="label">祝福语:</template>{{ exchangeDetail.hello }}</base-item>
+            <base-item class="w_50" inline><template slot="label">发货人名称:</template>{{ exchangeDetail.sendcontact }}</base-item>
+            <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ exchangeDetail.sendphone }}</base-item>
+            <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</base-item>
+            <!--<base-item class="w_50" inline><template slot="label">昵称:</template>{{ exchangeDetail.usernick }}</base-item>-->
+            <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom | formatConfigValueToLabel(configObject.expressCompanyList)}}</template></base-item>
+            <base-item class="w_50" inline><template slot="label">快递单号:</template><template v-if="exchangeDetail.delid">{{ exchangeDetail.delid }}</template></base-item>
+            <!--<base-item class="w_50" inline><template slot="label">性别:</template>{{ exchangeDetail.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>-->
+            <!--<base-item class="w_50" inline><template slot="label">头像:</template><template v-if="exchangeDetail.userhead"><span class="user-head"><img :src="exchangeDetail.userhead" width="100%" height="100%"></span></template></base-item>-->
+          </div>
         </div>
-        <base-item><template slot="label">收货地址:</template>{{ exchangeDetail.recprov }}{{exchangeDetail.recity}}{{exchangeDetail.recounty}}{{exchangeDetail.recstreet}}</base-item>
-        <div class="clearfix">
-          <base-item class="w_50" inline><template slot="label">收货人名称:</template>{{ exchangeDetail.recontact }}</base-item>
-          <base-item class="w_50" inline><template slot="label">收货人电话:</template>{{ exchangeDetail.recphone }}</base-item>
-        </div>
-        <base-item><template slot="label">发货地址:</template>{{ exchangeDetail.sendprov }}{{exchangeDetail.sendcity}}{{exchangeDetail.sendcounty}}{{exchangeDetail.sendstreet}}</base-item>
-        <div class="clearfix">
-          <base-item class="w_50" inline><template slot="label">兑换人手机:</template>{{ exchangeDetail.usermobile }}</base-item>
-          <base-item class="w_50" inline><template slot="label">祝福语:</template>{{ exchangeDetail.hello }}</base-item>
-          <base-item class="w_50" inline><template slot="label">发货人名称:</template>{{ exchangeDetail.sendcontact }}</base-item>
-          <base-item class="w_50" inline><template slot="label">发货人电话:</template>{{ exchangeDetail.sendphone }}</base-item>
-          <base-item class="w_50" inline><template slot="label">来源:</template>{{ exchangeDetail.from | formatConfigValueToLabel(configObject.SOURCE_LIST) }}</base-item>
-          <!--<base-item class="w_50" inline><template slot="label">昵称:</template>{{ exchangeDetail.usernick }}</base-item>-->
-          <base-item class="w_50" inline><template slot="label">快递公司:</template><template v-if="exchangeDetail.delcom">{{ exchangeDetail.delcom | formatConfigValueToLabel(configObject.expressCompanyList)}}</template></base-item>
-          <base-item class="w_50" inline><template slot="label">快递单号:</template><template v-if="exchangeDetail.delid">{{ exchangeDetail.delid }}</template></base-item>
-          <!--<base-item class="w_50" inline><template slot="label">性别:</template>{{ exchangeDetail.usergender | formatConfigValueToLabel(configObject.SEX_LIST)}}</base-item>-->
-          <!--<base-item class="w_50" inline><template slot="label">头像:</template><template v-if="exchangeDetail.userhead"><span class="user-head"><img :src="exchangeDetail.userhead" width="100%" height="100%"></span></template></base-item>-->
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
+        <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="closeDialog" round>关闭</el-button>
       </span>
-    </el-dialog>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -169,7 +172,9 @@
           SOURCE_LIST,
           SEX_LIST
         },
+        pagenum: 0,
         totalpages: 0,
+        isShowProcess: false,
         currentIndex: 1,
         tableColumns: [
           {type: 'selection', width: 55, selectable: row => !(row.delcom || row.delid)},
@@ -296,11 +301,13 @@
         // const params = {date: '2019-05-23', pagenum: 0};
         const params = {date, pagenum: 0};
         let res = await webApi.getAutomaticDeliveryOrderList(params);
+        this.isShowProcess = true;
         if (res.flags === 'success') {
           this.tableData = [];
           this.currentIndex = 1;
           const result = res.data;
           if (result) {
+            this.pagenum = 0;
             this.totalpages = result.totalpages;
             this.tableData = [...this.tableData, ...result.orders];
             const promiseList = [];
@@ -321,6 +328,7 @@
                 } else {
                   this.$toast(resultData.message, 'error');
                 }
+                this.pagenum = pagenum;
               }
             };
             await processArray(promiseList);
@@ -329,6 +337,7 @@
         } else {
           this.$toast(res.message, 'error');
         }
+        this.isShowProcess = false;
       },
       getCombinedAndSingleOrderList(isUnShipped = false) {
         let tableData = this.$_.cloneDeep(this.tableData);
@@ -503,6 +512,15 @@
 <style lang="scss" scoped>
   .automatic-delivery-content{
     min-width: 1400px;
+    height: 100%;
+    padding-bottom: 60px;
+    position: relative;
+    .automatic-delivery-footer{
+      position: absolute;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+    }
     .order-table-content{
       &.order-table-content__scroll{
         max-height: 550px;
