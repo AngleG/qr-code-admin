@@ -9,14 +9,14 @@
       </base-item>
       <base-item label-width="30px" inline>
         <template slot="label">月:</template>
-        <el-select placeholder="选择月份" style="width: 100px;" size="small" @change="changeTimeType('month')" v-model="month" :value="month" clearable>
-          <el-option v-for="(item, index) in configObject.months" :key="index" :value="index+1" :label="`${index+1}月`"/>
+        <el-select placeholder="选择月份" style="width: 180px;" size="small" @change="changeTimeType('month')" v-model="month" :value="month" clearable>
+          <el-option v-for="(item, index) in configObject.months" :key="index" :value="index+1" :label="`${index+1}月订单数${item.totalex} (代发${item.totaltodel})`"/>
         </el-select>
       </base-item >
       <base-item label-width="30px" inline>
         <template slot="label">日:</template>
-        <el-select placeholder="选择日期" style="width: 100px;" size="small"  @change="changeTimeType('day')" v-model="day" :value="day" clearable>
-          <el-option v-for="(item, index) in configObject.days" :key="index" :value="index+1" :label="`${index+1}日`"/>
+        <el-select placeholder="选择日期" style="width: 180px;" size="small"  @change="changeTimeType('day')" v-model="day" :value="day" clearable>
+          <el-option v-for="(item, index) in configObject.days" :key="index" :value="index+1" :label="`${index+1}日订单数${item.totalex} (代发${item.totaltodel})`"/>
         </el-select>
       </base-item>
       <base-item label-width="0" inline>
@@ -246,7 +246,7 @@
           this.getAutomaticDeliveryMonths();
         } else if (type === 'month'){
           this.day = '';
-          configObject.days = this.month ? configObject.months[this.month].days : [];
+          configObject.days = this.month ? configObject.months[this.month - 1].days : [];
         } else if (type === 'day'){
           this.getSummaryData();
           this.getAutomaticDeliveryOrderList();
@@ -394,11 +394,11 @@
       },
       //批量发货
       async setAutomaticDeliveryBulkShipment() {
-        const {selectedRows, delcom, delid} = this.$data;
+        const {selectedRows, delcom} = this.$data;
         if (selectedRows.length === 0) {
           return this.$toast('请勾选订单后批量发货')
         }
-        let res = await webApi.setAutomaticDeliveryBulkShipment({exorderkeys: selectedRows, delcom, delid});
+        let res = await webApi.setAutomaticDeliveryBulkShipment({exorderkeys: selectedRows, delcom});
         if(res.flags === 'success'){
           const result = res.data;
           this.combinedDeliveryAndBulkShipmentCallback(result);
@@ -419,11 +419,11 @@
       },
       //合并发货
       async setAutomaticDeliveryCombined() {
-        const {selectedRows, delcom, delid} = this.$data;
+        const {selectedRows, delcom} = this.$data;
         if (selectedRows.length === 0) {
           return this.$toast('请勾选订单后合并发货')
         }
-        let res = await webApi.setAutomaticDeliveryCombined({exorderkeys: selectedRows, delcom, delid});
+        let res = await webApi.setAutomaticDeliveryCombined({exorderkeys: selectedRows, delcom});
         if(res.flags === 'success'){
           const result = res.data;
           this.combinedDeliveryAndBulkShipmentCallback(result);
@@ -436,9 +436,10 @@
         if (result) {
           if (result.delresult && result.delresult.length) {
             result.delresult.forEach((item, index) => {
-              const {delcom, delid} = result.delresult[index];
+              const {delcom, delcomname, delid} = result.delresult[index];
               const currentOrder = this.tableData.find(order => order.orderkey === item.exorderkey);
               currentOrder.delcom = delcom;
+              currentOrder.delcomname = delcomname;
               currentOrder.delid = delid;
             });
             this.selectedRows = [];
@@ -504,7 +505,7 @@
     min-width: 1400px;
     .order-table-content{
       &.order-table-content__scroll{
-        max-height: 650px;
+        max-height: 550px;
         overflow: hidden;
         overflow-y: auto;
         margin-bottom: 10px;
