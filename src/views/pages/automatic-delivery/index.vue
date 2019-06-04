@@ -38,7 +38,7 @@
     <div class="automatic-delivery-content__list">
       <div class="summary"><span>订单列表：{{summary.currentDate}}日兑换订单数：{{summary.totalex}}</span><span>待发货：{{summary.totaltodel}}</span></div>
       <div class="order-table-content">
-        <table class="order-table">
+        <table :style="{width: tableWidth + 'px'}" class="order-table">
           <thead>
             <tr>
               <th class="order-table-column" v-for="column in tableColumns">
@@ -52,7 +52,7 @@
       </div>
       <div class="order-table--empty" v-if="tableData.length === 0">暂无数据</div>
       <div class="order-table-content order-table-content__scroll">
-        <table class="order-table">
+        <table :style="{width: tableWidth + 'px'}" class="order-table">
           <template v-for="(combinedOrder, index) in combinedOrderList">
             <tbody class="order-table-body">
             <tr v-for="item in filterOrder(combinedOrder, filterOption.fromcouponid, filterOption.tocouponid)">
@@ -196,11 +196,18 @@
         selectedRows: [],
         isSelectedAll: false,
         dialogVisible: false,
-        exchangeDetail: {}
+        exchangeDetail: {},
+        tableWidth: 0
       }
     },
     created() {
       this.init();
+    },
+    mounted() {
+      this.$nextTick(_ => {
+        this.computedTableWidthFn();
+        window.addEventListener("resize", this.computedTableWidthFn);
+      })
     },
     computed: {
       currentDate() {
@@ -211,6 +218,18 @@
       ...mapMutations([
           'changeGlobalLoading'
         ]),
+      //解决ie table 宽度无限拉伸的问题
+      computedTableWidthFn() {
+        return !this.$_.throttle(() => {
+          const bodyWidth = document.body.clientWidth;
+          const siderWidth = document.querySelector('.nav').clientWidth;
+          const contentWidth = bodyWidth - siderWidth;
+          const tableParentDom = this.$el.querySelector('.automatic-delivery-content__list');
+          //vue必须ie8以上，getComputedStyle方法ie8以上全部支持
+          const tableParentCss = getComputedStyle(tableParentDom, null);
+          this.tableWidth = contentWidth - parseInt(tableParentCss['padding-left'], 10) - parseInt(tableParentCss['padding-right'], 10)
+        }, 1000)()
+      },
       init() {
         this.getCouponList();
         this.getExpressCompanyList();
@@ -509,6 +528,9 @@
         }
         return orderList.filter( item => (!fromcouponid || item.fromcouponid === fromcouponid) && (!tocouponid || item.tocouponid === tocouponid));
       }
+    },
+    beforeDestroy() {
+      window.removeEventListener("resize", this.computedTableWidthFn);
     }
 	}
 </script>
@@ -544,8 +566,8 @@
       font-size: 14px;
     }
     .order-table{
-      table-layout: fixed;
       width: 100%;
+      table-layout: fixed;
       color: #fff;
       background-color: #182337;
       font-size: 14px;
@@ -586,8 +608,10 @@
       text-align: left;
     }
     .automatic-delivery-content__list{
+      width: 100%;
       margin-top: 20px;
       padding: 0 40px;
+      overflow: hidden;
     }
     .summary{
       line-height: 30px;
