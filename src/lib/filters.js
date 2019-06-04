@@ -21,6 +21,12 @@ export const filters = {
     let result = configOptions.find(item => item.value === value);
     return result ? result.label : '';
   },
+  formatToFixed(value, len = 2) {
+    if (typeof value !== 'number') {
+      return '';
+    }
+    return value % 1 === 0 ? value : value.toFixed(len);
+  }
 };
 // Vue上全局注册filters
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));

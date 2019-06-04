@@ -84,7 +84,7 @@
       </div>
     </div>
     <div  class="automatic-delivery-footer">
-      <p style="color: #fff; text-align: center;line-height: 32px;">{{  totalpages ? pagenum + 1 : 0}}/{{ totalpages }}已加载</p>
+      <p v-if="isShowProcess" style="color: #fff; text-align: center;line-height: 32px;">{{ (totalpages ? pagenum + 1 : 0)/totalpages * 100 | formatToFixed}}{{ totalpages ? '%' : '' }}已加载</p>
       <base-item label-width="110px">
         <template slot="label">发货操作:</template>
         <el-select @change="delid = null" placeholder="选择快递公司" size="small" v-model="delcom" clearable>
@@ -337,7 +337,10 @@
         } else {
           this.$toast(res.message, 'error');
         }
-        this.isShowProcess = false;
+        const timer = setTimeout(() => {
+          this.isShowProcess = false;
+          clearTimeout(timer)
+        }, 500);
       },
       getCombinedAndSingleOrderList(isUnShipped = false) {
         let tableData = this.$_.cloneDeep(this.tableData);
