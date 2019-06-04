@@ -515,15 +515,18 @@
 
 <style lang="scss" scoped>
   .automatic-delivery-content{
-    min-width: 1400px;
-    height: 100%;
+    /*min-width: 1400px;*/
+    /*height: 100%;*/
     padding-bottom: 60px;
-    position: relative;
+    /*position: relative;*/
     .automatic-delivery-footer{
-      position: absolute;
+      position: fixed;
       width: 100%;
-      left: 0;
+      left: auto;
+      right: auto;
       bottom: 0;
+      z-index: 99;
+      background-color: #060B17;
     }
     .order-table-content{
       &.order-table-content__scroll{
