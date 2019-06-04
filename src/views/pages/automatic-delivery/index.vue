@@ -262,6 +262,7 @@
         this.year = null;
         this.month = null;
         this.day = null;
+        this.$restObjectAttribute(this.summary);
         this.getAutomaticDeliveryYears();
         this.tableData = [];
         this.getCombinedAndSingleOrderList()
