@@ -44,18 +44,28 @@
             menus: [],
             defaultIndex: this.$route.fullPath,
             defaultOpens: [],
-            isCollapse: false
+            isCollapse: false,
+            userInfo: JSON.parse(localStorage.getItem('loginkey'))
           }
         },
         created() {
-          this.setMenusDefault();
-
-            let menuOptions = this.getMenuOptions();
-            if (menuOptions) {
-              Object.keys(menuOptions).forEach(key => {
-                this[key] = menuOptions[key]
-              })
-            }
+          const ownMenus = this.userInfo.menus;
+          this.getMenus();
+          if (ownMenus && ownMenus.length) {
+            let menus = this.$_.cloneDeep(this.menus);
+            menus = menus.filter(menu => menu.type === 0 || (menu.type === 1 && ownMenus.includes(menu.description)));
+            menus.forEach(menu => {
+              menu.subMenuList = menu.subMenuList.filter(item => ownMenus.includes(item.description))
+            });
+            menus = menus.filter(menu => menu.type === 0 && menu.subMenuList.length !== 0);
+            this.menus = menus;
+          }
+          let menuOptions = this.getMenuOptions();
+          if (menuOptions) {
+            Object.keys(menuOptions).forEach(key => {
+              this[key] = menuOptions[key]
+            })
+          }
         },
         computed:{
           env: function(){
@@ -63,15 +73,6 @@
           },
         },
         methods: {
-          setMenusDefault(){
-            let sidebar = localStorage.getItem('sidebar') ? JSON.parse(localStorage.getItem('sidebar')) : null;
-            console.log('sidebar=',sidebar);
-            if(sidebar && sidebar.length){
-
-            }else {
-              this.getMenus();
-            }
-          },
           getMenus() {
             const currentMenus = routes.filter(route => route.children);
             const menus = currentMenus.map(item => {
