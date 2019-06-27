@@ -49,17 +49,9 @@
           }
         },
         created() {
-          const ownMenus = this.userInfo.menus;
           this.getMenus();
-          if (ownMenus && ownMenus.length) {
-            let menus = this.$_.cloneDeep(this.menus);
-            menus = menus.filter(menu => menu.type === 0 || (menu.type === 1 && ownMenus.includes(menu.description)));
-            menus.forEach(menu => {
-              menu.subMenuList = menu.subMenuList.filter(item => ownMenus.includes(item.description))
-            });
-            menus = menus.filter(menu => menu.type === 0 && menu.subMenuList.length !== 0);
-            this.menus = menus;
-          }
+          //获取权限菜单并过滤(当前方法只能处理二级菜单，两级以上菜单需另外修改)
+          this.getAuthMenus();
           let menuOptions = this.getMenuOptions();
           if (menuOptions) {
             Object.keys(menuOptions).forEach(key => {
@@ -114,6 +106,19 @@
                 subMenuList: this.getSubMenuList(child.children)
               }
             })
+          },
+          getAuthMenus() {
+            const ownMenus = this.userInfo.menus;
+            if (ownMenus && Array.isArray(ownMenus) && ownMenus.length) {
+              let menus = this.$_.cloneDeep(this.menus);
+              menus = menus.filter(menu => menu.type === 0 || (menu.type === 1 && ownMenus.includes(menu.description)));
+              menus.forEach(menu => {
+                let  subMenuList = menu.subMenuList;
+                menu.subMenuList = subMenuList&& Array.isArray(subMenuList) ? subMenuList.filter(item => ownMenus.includes(item.description)) : [];
+              });
+              menus = menus.filter(menu => menu.type === 0 && menu.subMenuList.length !== 0 || menu.type === 1);
+              this.menus = menus;
+            }
           },
           resizeHandler() {
             return null;
