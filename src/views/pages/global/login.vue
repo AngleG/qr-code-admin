@@ -36,6 +36,7 @@
           if (res.data) {
             let firstPageRouter =  '/company-info';
             localStorage.setItem('loginkey', JSON.stringify(res.data));
+            localStorage.setItem('sidebar', `${res.data.menus && res.data.menus.length ? JSON.stringify(res.data.menus) : ''}`);
             let currentActiveRouter = sessionStorage.getItem('menuOptions');
             currentActiveRouter = currentActiveRouter ? JSON.parse(currentActiveRouter) : {
               defaultIndex: null,

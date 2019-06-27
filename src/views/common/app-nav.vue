@@ -48,7 +48,8 @@
           }
         },
         created() {
-          this.getMenus();
+          this.setMenusDefault();
+
             let menuOptions = this.getMenuOptions();
             if (menuOptions) {
               Object.keys(menuOptions).forEach(key => {
@@ -62,6 +63,15 @@
           },
         },
         methods: {
+          setMenusDefault(){
+            let sidebar = localStorage.getItem('sidebar') ? JSON.parse(localStorage.getItem('sidebar')) : null;
+            console.log('sidebar=',sidebar);
+            if(sidebar && sidebar.length){
+
+            }else {
+              this.getMenus();
+            }
+          },
           getMenus() {
             const currentMenus = routes.filter(route => route.children);
             const menus = currentMenus.map(item => {
