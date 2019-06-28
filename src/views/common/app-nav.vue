@@ -110,6 +110,7 @@
           getAuthMenus() {
             const ownMenus = this.userInfo.menus;
             if (ownMenus && Array.isArray(ownMenus) && ownMenus.length) {
+              ownMenus.push('欢迎页');
               let menus = this.$_.cloneDeep(this.menus);
               menus = menus.filter(menu => menu.type === 0 || (menu.type === 1 && ownMenus.includes(menu.description)));
               menus.forEach(menu => {
