@@ -1,6 +1,6 @@
 export default {
   BASE_URL:'https://data.jedge.cn:444',
-  DOWNLOAD_URL: 'http://cdn.jedge.cn/download',
+  DOWNLOAD_URL: 'https://cdn.jedge.cn/download',
   FREE_LOGIN_KEY_URL: ['/login', '/mccl', '/mcp', '/rqrcbp', '/upexs'],
   FILE_URL: ['/mccl', '/mcp', '/rqrcbp', '/upexs'],
   DOWNLOAD_FILE_URL: ['/dpo', '/deo'],
