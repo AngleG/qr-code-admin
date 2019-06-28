@@ -15,6 +15,17 @@ export const routes = [
   },
   {
     path: '/',
+    component: Index,
+    children: [
+      {
+        path: '/welcome',
+        name: '欢迎页',
+        component: () => import(/*webpackChunkName: 'welcome'*/'../views/pages/global/welcome.vue')
+      }
+    ]
+  },
+  {
+    path: '/',
     name: '账号管理',
     iconClass: 'iconfont icon-qiye1',
     component: Index,
