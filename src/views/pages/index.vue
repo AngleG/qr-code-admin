@@ -4,7 +4,7 @@
       <side-bar/>
       <ul class="options">
         <li><span @click="loginOutConfirm"><i class="iconfont icon-tuichu"></i>退出登录</span></li>
-        <li @click="dialogVisible = true"><span><i class="iconfont icon-xiugaimima"></i>修改密码</span></li>
+        <!--<li @click="dialogVisible = true"><span><i class="iconfont icon-xiugaimima"></i>修改密码</span></li>-->
       </ul>
     </el-aside>
     <el-container>
