@@ -19,13 +19,17 @@
 .welcome{
   width: 100%;
   height: 100%;
+  position: relative;
   .hello{
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    left: 0;
     padding: 0 20px;
+    text-align: center;
     color: #C8C8C8;
     font-size: 26px;
     line-height: 32px;
-    text-align: center;
-    margin-top: 40%;
   }
 }
 </style>
