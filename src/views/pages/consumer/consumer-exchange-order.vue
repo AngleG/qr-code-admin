@@ -171,11 +171,9 @@
        * 下载全部
        */
       async downloadExchangeOrder(){
-        let params = this.$_.cloneDeep(this.downloadParams);
-        params['startDate'] = params.dateRange ? params.dateRange[0] : null;
-        params['endDate'] = params.dateRange ? params.dateRange[1] : null;
-        delete params.dateRange;
-        window.open(`${config.BASE_URL}/dneos?startDate=${params.startDate}&endDate=${params.endDate}`)
+        const dateRange = this.downloadParams.dateRange;
+        const loginkey = JSON.parse(localStorage.getItem('loginkey'));
+        window.open(`${config.BASE_URL}/dneos?loginkey=${loginkey.loginkey}&eid=${loginkey.eid}${dateRange && dateRange.startDate && dateRange.endDate ? `&startDate=${dateRange.startDate}&endDate=${dateRange.endDate}` : ''}`)
       },
       openDialog() {
         this.dialogVisible = true;
