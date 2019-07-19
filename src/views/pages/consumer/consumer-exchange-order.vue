@@ -80,6 +80,7 @@
 <script>
   import webApi from '../../../lib/api'
   import {SOURCE_LIST, SEX_LIST} from '../../../conf/config-list'
+  import config from '../../../conf/config'
   export default {
     data() {
       return {
@@ -174,12 +175,7 @@
         params['startDate'] = params.dateRange ? params.dateRange[0] : null;
         params['endDate'] = params.dateRange ? params.dateRange[1] : null;
         delete params.dateRange;
-        let res = await webApi.downloadExchangeOrder(params);
-        if(res.flags === 'success'){
-          window.open(res.url)
-        }else {
-          this.$toast(res.message, 'error');
-        }
+        window.open(`${config.BASE_URL}/dneos?startDate=${params.startDate}&endDate=${params.endDate}`)
       },
       openDialog() {
         this.dialogVisible = true;
