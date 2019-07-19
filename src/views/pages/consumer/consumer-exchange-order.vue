@@ -173,7 +173,7 @@
       async downloadExchangeOrder(){
         const dateRange = this.downloadParams.dateRange;
         const loginkey = JSON.parse(localStorage.getItem('loginkey'));
-        window.open(`${config.BASE_URL}/dneos?loginkey=${loginkey.loginkey}&eid=${loginkey.eid}${dateRange && dateRange.startDate && dateRange.endDate ? `&startDate=${dateRange.startDate}&endDate=${dateRange.endDate}` : ''}`)
+        window.open(`${config.BASE_URL}/dneos?loginkey=${loginkey.loginkey}&eid=${loginkey.eid}${dateRange && dateRange[0] && dateRange[1] ? `&startDate=${dateRange[0]}&endDate=${dateRange[1]}` : ''}`)
       },
       openDialog() {
         this.dialogVisible = true;
