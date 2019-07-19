@@ -24,6 +24,14 @@
           :value="item.value" />
       </el-select>
       <el-button @click="getExchangeOrderList" size="small" type="primary" round>过滤</el-button>
+      <el-date-picker
+        v-model="downloadParams.dateRange"
+        type="datetimerange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        format="yyyy-MM-dd HH:mm:ss"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        size="small"/>
       <el-button @click="downloadExchangeOrder" size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
     </div>
     <div class="exchange-order_content">
@@ -85,6 +93,9 @@
           from: 'ALL',
           couponkey: 'ALL',
           pagenum: 0
+        },
+        downloadParams: {
+          dateRange: null
         },
         tableColumns: [
           {title: '兑换来源', align: 'center', key: 'fromcouponname' },
@@ -159,7 +170,11 @@
        * 下载全部
        */
       async downloadExchangeOrder(){
-        let res = await webApi.downloadExchangeOrder();
+        let params = this.$_.cloneDeep(this.downloadParams);
+        params['startDate'] = params.dateRange ? params.dateRange[0] : null;
+        params['endDate'] = params.dateRange ? params.dateRange[1] : null;
+        delete params.dateRange;
+        let res = await webApi.downloadExchangeOrder(params);
         if(res.flags === 'success'){
           window.open(res.url)
         }else {

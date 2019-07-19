@@ -102,7 +102,7 @@ let webApi = {
   },
   //下载兑换订单
   downloadExchangeOrder(data) {
-    return httpRequest(`/deo`, {}, {method: 'get', responseType: 'blob'}, data)
+    return httpRequest(`/dneos`, {}, {method: 'get', responseType: 'blob'}, data)
   },
   //获取礼劵分发和召回列表
   getCouponDistributionList(data) {

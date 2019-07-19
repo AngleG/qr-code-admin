@@ -232,3 +232,16 @@ body,html{
 .el-checkbox__input.is-disabled .el-checkbox__inner{
   background-color: #909399;
 }
+/*修改日期控件默认样式*/
+.el-range-editor.el-input__inner{
+  background-color: #24304A;
+  border-radius: 20px;
+  color: #fff;
+}
+.el-date-editor .el-range-input{
+  background-color: #24304A;
+  color: #fff;
+}
+.el-input.is-disabled .el-input__inner{
+  background-color: #24304A;
+}
