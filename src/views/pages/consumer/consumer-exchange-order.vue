@@ -31,7 +31,7 @@
         end-placeholder="结束日期"
         format="yyyy-MM-dd HH:mm:ss"
         value-format="yyyy-MM-dd HH:mm:ss"
-        size="small"/>
+        size="mini"/>
       <el-button @click="downloadExchangeOrder" size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
     </div>
     <div class="exchange-order_content">
