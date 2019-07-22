@@ -7,7 +7,8 @@
       <el-button @click="getInvoicingReportList" size="small" type="primary" round>查看</el-button>
     </div>
     <div class="exchange-order_content">
-      <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table v-loading="isLoading" :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
+      <element-table v-loading="isLoading2" max-height="500px" :table-columns="tableColumns2" :table-data="tableData2" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
     </div>
   </div>
 </template>
@@ -35,13 +36,24 @@
           {title: '兑换张数', align: 'center', key: 'exnum'},
           {title: '未兑换张数', align: 'center', key: 'unexnum'},
         ],
+        tableColumns2: [
+          {title: '礼券名称', align: 'center', key: 'name'},
+          {title: '总共张数', align: 'center', key: 'total'},
+          {title: '激活张数', align: 'center', key: 'pay'},
+          {title: '未激活张数', align: 'center', key: 'nopay'},
+          {title: '兑换张数', align: 'center', key: 'ex'},
+          {title: '未兑换张数', align: 'center', key: 'noex'},
+        ],
         tableData: [],
-        isLoading: false
+        tableData2: [],
+        isLoading: false,
+        isLoading2: false,
       }
     },
     created() {
       this.getDealerList();
       this.getInvoicingReportList();
+      this.getInvoicingCouponList();
     },
     methods: {
       /**
@@ -75,7 +87,25 @@
           this.$toast(res.message, 'error');
         }
         this.isLoading = false;
-      }
+      },
+      /**
+       * 获取进销存礼券列表
+       * @returns {Promise<void>}
+       */
+      async getInvoicingCouponList() {
+        this.isLoading2 = true;
+        const loginkey = JSON.parse(localStorage.getItem('loginkey'));
+        let res = await webApi.getInvoicingCouponList({loginkey: loginkey.loginkey, eid: loginkey.eid});
+        if (res.flags === 'success') {
+          this.tableData2 = [];
+          if (res.data) {
+            this.tableData2 = res.data;
+          }
+        } else {
+          this.$toast(res.message, 'error');
+        }
+        this.isLoading2 = false;
+      },
     }
   }
 </script>

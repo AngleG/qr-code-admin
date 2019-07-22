@@ -134,6 +134,10 @@ let webApi = {
   getInvoicingReportList(data) {
     return httpRequest(`/repac`, data)
   },
+  //获取进销存礼券列表
+  getInvoicingCouponList(data){
+    return httpRequest(`/rcci`, {}, {method: 'get'}, data)
+  },
   //保存批量兑换
   saveBulkExchange(data) {
     return httpRequest(`/exs`, data)
