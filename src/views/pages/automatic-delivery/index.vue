@@ -98,7 +98,7 @@
       <el-dialog
         title="兑换单详情"
         :visible.sync="dialogVisible"
-        :close-on-click-modal="false"
+        :modal-append-to-body="false"
         @close="closeDialog"
         width="600px">
         <div class="exchange-dialog-content" v-if="exchangeDetail">
