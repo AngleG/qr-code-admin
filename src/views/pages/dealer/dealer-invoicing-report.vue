@@ -105,7 +105,7 @@
           this.$toast(res.message, 'error');
         }
         this.isLoading2 = false;
-      },
+      }
     }
   }
 </script>
