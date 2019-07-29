@@ -134,6 +134,8 @@
           <div>
             <span class="label">祝福语:</span>
             <span class="text-field">{{requestParams.hello}}</span>
+            <span class="label">经销商账户:</span>
+            <span class="text-field">{{requestParams.ageaccount}}</span>
           </div>
         </div>
         <div slot="footer">
