@@ -8,7 +8,8 @@
             v-model="requestParams.couponkeyfrom"
             :value="requestParams.couponkeyfrom"
             placeholder="请选择礼劵"
-          @change="couponkeyfromChange">
+          @change="couponkeyfromChange"
+            clearable>
             <el-option
               v-for="item in configObject.couponList"
               :label="item.label"
@@ -18,11 +19,11 @@
         </base-item>
         <base-item class="w_310">
           <template slot="label">礼券起始编号:</template>
-          <el-input size="small" placeholder="请输入礼券起始编号" v-model="requestParams.serialfrom"></el-input>
+          <el-input size="small" placeholder="请输入礼券起始编号" v-model="requestParams.serialfrom" clearable></el-input>
         </base-item>
         <base-item class="w_310">
           <template slot="label">兑换张数:</template>
-          <el-input size="small" placeholder="请输入兑换张数" v-model="requestParams.num"></el-input>
+          <el-input size="small" placeholder="请输入兑换张数" v-model="requestParams.num" clearable></el-input>
         </base-item>
         <base-item class="w_310">
           <template slot="label">兑换目标礼券:</template>
@@ -30,7 +31,7 @@
             size="small"
             v-model="requestParams.couponkeyto"
             :value="requestParams.couponkeyto"
-            placeholder="请选择礼劵">
+            placeholder="请选择礼劵" clearable>
             <el-option
               v-for="item in configObject.couponList"
               :label="item.label"
@@ -40,41 +41,45 @@
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货省:</template>
-          <el-select placeholder="请选择收货省" @change="changeProvinceFn" size="samll" v-model="requestParams.recprov" :value="requestParams.recprov"><el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/></el-select>
+          <el-select placeholder="请选择收货省" @change="changeProvinceFn" size="samll" v-model="requestParams.recprov" :value="requestParams.recprov" clearable><el-option v-for="province in cityData" :label="province.name" :value="province.name" :key="province.name"/></el-select>
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货市:</template>
-          <el-select placeholder="请选择收货市" @change="changeCityFn" size="samll" v-model="requestParams.recity" :value="requestParams.recity"><el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/></el-select>
+          <el-select placeholder="请选择收货市" @change="changeCityFn" size="samll" v-model="requestParams.recity" :value="requestParams.recity" clearable><el-option v-for="city in configObject.cityList" :label="city.name" :value="city.name" :key="city.name"/></el-select>
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货区县:</template>
-          <el-select placeholder="请选择收货区县" size="samll" v-model="requestParams.recounty" :value="requestParams.recounty"><el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/></el-select>
+          <el-select placeholder="请选择收货区县" size="samll" v-model="requestParams.recounty" :value="requestParams.recounty" clearable><el-option v-for="county in configObject.countyList" :label="county.name" :value="county.name" :key="county.name"/></el-select>
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货街道详细地址 :</template>
-          <el-input size="small" v-model="requestParams.recstreet"  placeholder="请输入收货详细街道地址" maxlength="100" />
+          <el-input size="small" v-model="requestParams.recstreet"  placeholder="请输入收货详细街道地址" maxlength="100" clearable/>
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货人姓名:</template>
-          <el-input size="small" v-model="requestParams.recontact"  placeholder="请输入收货人姓名" maxlength="50" />
+          <el-input size="small" v-model="requestParams.recontact"  placeholder="请输入收货人姓名" maxlength="50" clearable/>
         </base-item>
         <base-item class="w_310">
           <template slot="label">收货人手机:</template>
-          <el-input size="small" v-model="requestParams.recphone"  placeholder="请输入收货人手机" maxlength="11" />
+          <el-input size="small" v-model="requestParams.recphone"  placeholder="请输入收货人手机" maxlength="11" clearable/>
         </base-item>
         <base-item class="w_310">
           <template slot="label">兑换人姓名:</template>
-          <el-input size="small" v-model="requestParams.helloer" placeholder="请输入兑换人姓名" maxlength="11" />
+          <el-input size="small" v-model="requestParams.helloer" placeholder="请输入兑换人姓名" maxlength="11" clearable/>
         </base-item>
         <base-item class="w_310">
           <template slot="label">兑换人手机:</template>
-          <el-input size="small" v-model="requestParams.usermobile" placeholder="请输入兑换人手机" maxlength="11" />
+          <el-input size="small" v-model="requestParams.usermobile" placeholder="请输入兑换人手机" maxlength="11" clearable/>
         </base-item>
         <base-item class="w_310">
           <template slot="label">祝福语:</template>
-          <el-select placeholder="请选择祝福语" v-model="requestParams.hello" size="samll">
-            <el-option v-for="item in configObject.wishList" :label="item.label" :value="item.value" :key="item.name" :disabled="item.isDisabled"></el-option>
+          <el-select placeholder="请选择祝福语" v-model="requestParams.hello" size="samll" clearable>
+            <el-option v-for="item in configObject.wishList" :label="item.label" :value="item.value" :key="item.name" :disabled="item.isDisabled" clearable></el-option>
           </el-select>
+        </base-item>
+        <base-item class="w_310">
+          <template slot="label">经销商账户:</template>
+          <el-input size="small" v-model="requestParams.ageaccount" placeholder="请输入经销商账户" clearable/>
         </base-item>
       </div>
       <p style="margin-top: 30px; line-height: 30px;">
@@ -179,7 +184,8 @@
           recphone: null,
           usermobile: null,
           helloer: null,
-          hello: null
+          hello: null,
+          ageaccount: null
         },
         dialogOption: {
           visible: false
