@@ -32,7 +32,7 @@
         format="yyyy-MM-dd HH:mm:ss"
         value-format="yyyy-MM-dd HH:mm:ss"
         size="mini"/>
-      <el-button @click="downloadExchangeOrder" size="small" type="primary" round>下载全部（每周一三五更新）</el-button>
+      <el-button @click="downloadExchangeOrder" size="small" type="primary" round>下载（每周一三五更新）</el-button>
     </div>
     <div class="exchange-order_content">
       <element-table :table-columns="tableColumns" :table-data="tableData" element-loading-background="rgba(0, 0, 0, 0.5)"></element-table>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+  import moment from 'dayjs'
   import webApi from '../../../lib/api'
   import {SOURCE_LIST, SEX_LIST} from '../../../conf/config-list'
   import config from '../../../conf/config'
@@ -96,7 +97,7 @@
           pagenum: 0
         },
         downloadParams: {
-          dateRange: null
+          dateRange: ''
         },
         tableColumns: [
           {title: '兑换来源', align: 'center', key: 'fromcouponname' },
@@ -171,9 +172,16 @@
        * 下载全部
        */
       async downloadExchangeOrder(){
-        const dateRange = this.downloadParams.dateRange;
+        const dateRange = JSON.parse(JSON.stringify(this.downloadParams.dateRange));
+        const diffDays = (dateRange && dateRange[0] && dateRange[1]) ? moment(dateRange[1]).diff(dateRange[0], 'day') : null;
+        if(!dateRange){
+          return this.$toast('请选择日期！', 'error');
+        }
+        if(diffDays && diffDays >= 2) {
+          return this.$toast('请选择日期范围在2天之内的日期', 'error');
+        }
         const loginkey = JSON.parse(localStorage.getItem('loginkey'));
-        window.open(`${config.BASE_URL}/dneos?loginkey=${loginkey.loginkey}&eid=${loginkey.eid}${dateRange && dateRange[0] && dateRange[1] ? `&startDate=${dateRange[0]}&endDate=${dateRange[1]}` : ''}`)
+        window.open(`${config.BASE_URL}/DownExorderRangeTime?loginkey=${loginkey.loginkey}&eid=${loginkey.eid}${dateRange && dateRange[0] && dateRange[1] ? `&startDate=${dateRange[0]}&endDate=${dateRange[1]}` : ''}`)
       },
       openDialog() {
         this.dialogVisible = true;
